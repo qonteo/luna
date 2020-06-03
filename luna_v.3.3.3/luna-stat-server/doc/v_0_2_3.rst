@@ -1,0 +1,17 @@
+=======
+v.0.2.3
+=======
+
+-------------
+Improvements:
+-------------
+
+1) CI-worker was added to this project;
+
+2) f-strings usage removed from the documentation.
+
+-----------
+Bugs fixed:
+-----------
+
+None.

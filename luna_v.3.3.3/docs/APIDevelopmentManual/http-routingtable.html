@@ -1,0 +1,277 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>HTTP Routing Table &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+ 
+
+    <script type="text/javascript">
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>HTTP Routing Table</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+
+   <h1>HTTP Routing Table</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-/"><strong>/</strong></a> | 
+   <a href="#cap-/account"><strong>/account</strong></a> | 
+   <a href="#cap-/accounts"><strong>/accounts</strong></a> | 
+   <a href="#cap-/login"><strong>/login</strong></a> | 
+   <a href="#cap-/matching"><strong>/matching</strong></a> | 
+   <a href="#cap-/storage"><strong>/storage</strong></a> | 
+   <a href="#cap-/version"><strong>/version</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/"><td></td><td>
+       <strong>/</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="storage_api.html#any--"><code class="xref">ANY /</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/account"><td></td><td>
+       <strong>/account</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="account_api.html#get--account"><code class="xref">GET /account</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="account_api.html#get--account-statistics"><code class="xref">GET /account/statistics</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tokens.html#get--account-tokens"><code class="xref">GET /account/tokens</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="token.html#get--account-tokens-token_id"><code class="xref">GET /account/tokens/{token_id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tokens.html#post--account-tokens"><code class="xref">POST /account/tokens</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tokens.html#delete--account-tokens"><code class="xref">DELETE /account/tokens</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="token.html#delete--account-tokens-token_id"><code class="xref">DELETE /account/tokens/{token_id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="token.html#patch--account-tokens-token_id"><code class="xref">PATCH /account/tokens/{token_id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/accounts"><td></td><td>
+       <strong>/accounts</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="registration.html#post--accounts"><code class="xref">POST /accounts</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/login"><td></td><td>
+       <strong>/login</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="storage_api.html#get--login"><code class="xref">GET /login</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="storage_api.html#post--login"><code class="xref">POST /login</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="storage_api.html#delete--login"><code class="xref">DELETE /login</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/matching"><td></td><td>
+       <strong>/matching</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="matching.html#post--matching-identify?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&limit=1&person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1"><code class="xref">POST /matching/identify?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="matching.html#post--matching-match?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&limit=1&person_id=22fd2706        -8baf-433b-82eb-8c7fada847d1"><code class="xref">POST /matching/match?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706        -8baf-433b-82eb-8c7fada847d1</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="matching.html#post--matching-search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&limit=1"><code class="xref">POST /matching/search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="matching.html#post--matching-verify?descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847d1&person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1"><code class="xref">POST /matching/verify?descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/storage"><td></td><td>
+       <strong>/storage</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="descriptor.html#get--storage-descriptors-descriptor_id"><code class="xref">GET /storage/descriptors/{descriptor_id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="person_link_list.html#get--storage-descriptors-person_id-linked_lists"><code class="xref">GET /storage/descriptors/{person_id}/linked_lists</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="link_descriptor_to_list.html#get--storage-descriptors-photo_id-linked_lists"><code class="xref">GET /storage/descriptors/{photo_id}/linked_lists</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists.html#get--storage-lists"><code class="xref">GET /storage/lists</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists.html#get--storage-lists-listId"><code class="xref">GET /storage/lists/{listId}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="person_link_descriptor.html#get--storage-persons-person_id-linked_descriptor"><code class="xref">GET /storage/persons/{person_id}/linked_descriptor</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="photo.html#post--storage-descriptors?estimate_attributes=1&estimate_quality=1&quality_threshold=1&warped_image=1&extract_descriptor=1&extract_exif=1"><code class="xref">POST /storage/descriptors?estimate_attributes=1&amp;estimate_quality=1&amp;quality_threshold=1&amp;warped_image=1&amp;extract_descriptor=1&amp;extract_exif=1</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="photo.html#post--storage-descriptors?page=1&page_size=10"><code class="xref">POST /storage/descriptors?page=1&amp;page_size=10</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists.html#post--storage-lists?type=descriptors"><code class="xref">POST /storage/lists?type=descriptors</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="persons.html#post--storage-persons"><code class="xref">POST /storage/persons</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="persons.html#post--storage-persons?page=1&page_size=10"><code class="xref">POST /storage/persons?page=1&amp;page_size=10</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="photo.html#post--storage-portraits-id"><code class="xref">POST /storage/portraits/{id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists.html#delete--storage-lists"><code class="xref">DELETE /storage/lists</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists.html#delete--storage-lists-listId"><code class="xref">DELETE /storage/lists/{listId}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="link_descriptor_to_list.html#patch--storage-descriptors-photo_id-linked_lists?do=attach&list_id=16fd2706-8baf-433b-82eb-8c7fada847da"><code class="xref">PATCH /storage/descriptors/{photo_id}/linked_lists?do=attach&amp;list_id=16fd2706-8baf-433b-82eb-8c7fada847da</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists.html#patch--storage-lists-listId"><code class="xref">PATCH /storage/lists/{listId}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="person_api.html#patch--storage-persons-person_id"><code class="xref">PATCH /storage/persons/{person_id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="person_link_descriptor.html#patch--storage-persons-person_id-linked_descriptors?do=attach&descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847da"><code class="xref">PATCH /storage/persons/{person_id}/linked_descriptors?do=attach&amp;descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847da</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="person_link_list.html#patch--storage-persons-person_id-linked_lists?do=attach&list_id=16fd2706-8baf-433b-82eb-8c7fada847da"><code class="xref">PATCH /storage/persons/{person_id}/linked_lists?do=attach&amp;list_id=16fd2706-8baf-433b-82eb-8c7fada847da</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/version"><td></td><td>
+       <strong>/version</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="version.html#get--version"><code class="xref">GET /version</code></a></td><td>
+       <em></em></td></tr>
+   </table>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

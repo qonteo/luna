@@ -1,0 +1,459 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.app.rest_handlers.storage_handlers &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.app.rest_handlers.storage_handlers</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.app.rest_handlers.storage_handlers</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">ujson</span> <span class="k">as</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span><span class="p">,</span> <span class="n">web</span><span class="p">,</span> <span class="n">httpclient</span>
+<span class="kn">from</span> <span class="nn">tornado.httpclient</span> <span class="k">import</span> <span class="n">HTTPRequest</span>
+
+<span class="kn">from</span> <span class="nn">app.admin_stats</span> <span class="k">import</span> <span class="n">AdminStats</span>
+<span class="kn">from</span> <span class="nn">app.common</span> <span class="k">import</span> <span class="n">ACCOUNT_STATISTICS_PLUGINS</span>
+<span class="kn">from</span> <span class="nn">app.functions</span> <span class="k">import</span> <span class="n">generateStatsTornadoRequestError</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.account_handler</span> <span class="k">import</span> <span class="n">AccountHandlerBase</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.authorization</span> <span class="k">import</span> <span class="n">tokenAuth</span><span class="p">,</span> <span class="n">basicAuth</span><span class="p">,</span> <span class="n">accountIsActive</span>
+<span class="kn">from</span> <span class="nn">app.tornado_request_function</span> <span class="k">import</span> <span class="n">queryExtractImgParam</span>
+<span class="kn">from</span> <span class="nn">configs.config</span> <span class="k">import</span> <span class="n">ADMIN_STATISTICS_SERVER_ORIGIN</span><span class="p">,</span> <span class="n">ADMIN_STATISTICS_DB</span><span class="p">,</span> <span class="n">ACCOUNTS_STATISTICS_SERVER</span><span class="p">,</span> \
+    <span class="n">SEND_ACCOUNT_STATS</span><span class="p">,</span> <span class="n">SEND_ADMIN_STATS</span><span class="p">,</span> <span class="n">SERVER_IP</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.exception</span> <span class="k">import</span> <span class="n">VLException</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.utils.timer</span> <span class="k">import</span> <span class="n">timer</span>
+
+
+<div class="viewcode-block" id="StorageHandlerBase"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandlerBase">[docs]</a><span class="k">class</span> <span class="nc">StorageHandlerBase</span><span class="p">(</span><span class="n">AccountHandlerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bases class for authorization by token an login/password.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StorageHandlerBase.prepare"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandlerBase.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;OPTIONS&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">):</span>
+                <span class="n">cookie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
+                <span class="n">authRes</span> <span class="o">=</span> <span class="n">cookie</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">cookie</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+                <span class="n">authHeaderToken</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">authHeaderBasic</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="k">if</span> <span class="n">cookie</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;token&quot;</span><span class="p">:</span>
+                    <span class="n">authHeaderToken</span> <span class="o">=</span> <span class="n">authRes</span>
+                <span class="k">elif</span> <span class="n">cookie</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Basic&quot;</span><span class="p">:</span>
+                    <span class="n">authHeaderBasic</span> <span class="o">=</span> <span class="n">authRes</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">authHeaderToken</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;X-Auth-Token&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">authHeaderBasic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Authorization&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">authHeaderToken</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="n">authHeaderToken</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span> <span class="o">=</span> <span class="n">tokenAuth</span><span class="p">(</span><span class="n">authHeaderToken</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">authHeaderBasic</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="s2">&quot;basic&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span> <span class="o">=</span> <span class="n">basicAuth</span><span class="p">(</span><span class="n">authHeaderBasic</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">BadHeaderAuth</span><span class="p">,</span> <span class="s1">&#39;X-Auth-Token or Authorization&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">VLException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadHeaderAuth</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">badAuth</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span>
+                                    <span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;X-Auth-Token or Authorization&#39;</span><span class="p">),</span>
+                                    <span class="s1">&#39;Basic realm=&quot;login:password&quot; or token&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">Error</span><span class="o">.</span><span class="n">AccountNotFound</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">badAuth</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">detail</span><span class="p">,</span>
+                                    <span class="s1">&#39;Basic realm=&quot;login:password&quot; or token&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadFormatUUID</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">badAuth</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">detail</span><span class="p">,</span>
+                                    <span class="s1">&#39;Basic realm=&quot;login:password&quot; or token&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">AuthFailedError</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="LoginHandler"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.LoginHandler">[docs]</a><span class="k">class</span> <span class="nc">LoginHandler</span><span class="p">(</span><span class="n">StorageHandlerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler for installation of cookies and for account id receipt.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LoginHandler.prepare"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.LoginHandler.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">prepare</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LoginHandler.get"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.LoginHandler.get">[docs]</a>    <span class="nd">@web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@StorageHandlerBase</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get account id.</span>
+
+<span class="sd">        .. http:get:: /login</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 200 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: text/html</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/html&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LoginHandler.post"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.LoginHandler.post">[docs]</a>    <span class="nd">@web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@StorageHandlerBase</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Install cookies for authorization.</span>
+
+<span class="sd">        .. http:post:: /login</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 200: cookie is successfully installed</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 200 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+
+<span class="sd">            :statuscode 204: cookies are already installed</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 204 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#: TODO cookies for token</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cookie</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Authorization&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Created&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/html&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="mi">201</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LoginHandler.delete"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.LoginHandler.delete">[docs]</a>    <span class="nd">@web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@StorageHandlerBase</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete cookies</span>
+
+<span class="sd">        .. http:delete:: /login</span>
+
+<span class="sd">        :reqheader Authorization: basic authorization</span>
+
+<span class="sd">        **Example response**:</span>
+
+<span class="sd">        :statuscode 204: cookies are deleted successfully</span>
+
+<span class="sd">        .. sourcecode:: http</span>
+
+<span class="sd">            HTTP/1.1 204 Ok</span>
+<span class="sd">            Vary: Accept</span>
+<span class="sd">            Content-Type: application/json</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_cookie</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="StorageHandler"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler">[docs]</a><span class="k">class</span> <span class="nc">StorageHandler</span><span class="p">(</span><span class="n">StorageHandlerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Authentication for accessing account data (such as lists, persons, descriptors) and matching.</span>
+<span class="sd">    This method is called before any client request associated with account data.</span>
+<span class="sd">    This method does installation in case of successful authentication *self.accountId*.</span>
+
+<span class="sd">    For authentication you can use basic authorization or authentication by token.</span>
+
+<span class="sd">    Basic authorization. In header you need to put field *Authorization*</span>
+<span class="sd">    with value *&#39;Basic login:password&#39;*. String *&#39;login:password&#39;* contains login/password for access to account, whole</span>
+<span class="sd">    string must be converted to base64.</span>
+
+<span class="sd">    Authentication by token. In header you need to put field  *X-Auth-Token*</span>
+<span class="sd">    with value of token from this account.</span>
+
+<span class="sd">    .. http:any:: /</span>
+
+<span class="sd">        :reqheader Authorization: basic authorization</span>
+
+<span class="sd">        **Example response**:</span>
+
+<span class="sd">        .. sourcecode:: http</span>
+
+<span class="sd">            HTTP/1.1 401 Unauthorized</span>
+<span class="sd">            Vary: Reject</span>
+<span class="sd">            Content-Type: application/json</span>
+<span class="sd">            &#39;WWW-Authenticate&#39;: &#39;Basic realm=&quot;login:password&quot; or token&#39;</span>
+
+<span class="sd">        Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">        :statuscode 401: no authorization header</span>
+<span class="sd">        :statuscode 401: authorization header is not basic authorization</span>
+<span class="sd">        :statuscode 401: account not found for these login/password</span>
+<span class="sd">        :statuscode 403: account is currently inactive</span>
+<span class="sd">        :statuscode 500: internal server error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StorageHandler.prepare"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;OPTIONS&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">prepare</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;accountId&quot;</span><span class="p">):</span>
+                <span class="n">accActive</span> <span class="o">=</span> <span class="n">accountIsActive</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">accActive</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">AccountIsNotActive</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">AuthFailedError</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StorageHandler.fillQueryParams"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.fillQueryParams">[docs]</a>    <span class="k">def</span> <span class="nf">fillQueryParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fill the parameter structure to extract from query.</span>
+<span class="sd">         </span>
+<span class="sd">        :return: structure with parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qParams</span> <span class="o">=</span> <span class="n">queryExtractImgParam</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">qParams</span><span class="o">.</span><span class="n">getStore</span><span class="p">():</span>
+            <span class="n">queryParam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_query_argument</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">queryParam</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">qParams</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">qParams</span><span class="p">[</span><span class="n">param</span><span class="p">])(</span><span class="n">queryParam</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;failed convert param </span><span class="si">{}</span><span class="s2"> to int&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">qParams</span></div>
+
+<div class="viewcode-block" id="StorageHandler.setAdditionalDataToAccountStatistic"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAccountStatistic">[docs]</a>    <span class="k">def</span> <span class="nf">setAdditionalDataToAccountStatistic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accountStats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For childes of  *StorageHandler* method of set additional account stats</span>
+
+<span class="sd">        :param accountStats: common stats</span>
+<span class="sd">        :return: new stats</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">accountStats</span></div>
+
+<div class="viewcode-block" id="StorageHandler.getAuthForStats"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.getAuthForStats">[docs]</a>    <span class="k">def</span> <span class="nf">getAuthForStats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get authorization for account stats.</span>
+
+<span class="sd">        :return: if success &quot;basic&quot; or :json:object:`auth_token`, if failed None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">==</span> <span class="s2">&quot;basic&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span>
+
+        <span class="n">tokenRes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">getTokenById</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;token_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">,</span> <span class="s2">&quot;token_data&quot;</span><span class="p">:</span> <span class="n">tokenRes</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="StorageHandler.generateAccountStats"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAccountStats">[docs]</a>    <span class="k">def</span> <span class="nf">generateAccountStats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate common json-dict to send client statistics.</span>
+
+<span class="sd">        :return: in case of exception None is returned, in other cases:</span>
+
+<span class="sd">            .. json:object:: client_stats</span>
+<span class="sd">                :showexample:</span>
+<span class="sd">            </span>
+<span class="sd">                :property result: json with request results.</span>
+<span class="sd">                :proptype result: :json:object:`identify_result`</span>
+<span class="sd">                :property account_id: id account</span>
+<span class="sd">                :proptype account_id: uuid4</span>
+<span class="sd">                :property event_type: type of event (&quot;match&quot;, &quot;extract&quot;)</span>
+<span class="sd">                :proptype event_type: &quot;match&quot;</span>
+<span class="sd">                :property authorization: authorization, &quot;basic&quot; or :json:object:`auth_token`</span>
+<span class="sd">                :proptype authorization: :json:object:`auth_token`</span>
+<span class="sd">                :property source: request resource (&quot;match&quot;, &quot;descriptors&quot;)</span>
+<span class="sd">                :proptype source: &#39;match&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">statistiData</span><span class="o">.</span><span class="n">responseJson</span><span class="p">}</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;account_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResource</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="s2">&quot;identify&quot;</span><span class="p">,</span> <span class="s2">&quot;verify&quot;</span><span class="p">]:</span>
+                <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;event_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;match&quot;</span>
+            <span class="k">elif</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]:</span>
+                <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;event_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;extract&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;event_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;unknown event type&quot;</span><span class="p">)</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAuthForStats</span><span class="p">()</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setAdditionalDataToAccountStatistic</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">payload</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="StorageHandler.generateAdminStatisticsRequestBody"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAdminStatisticsRequestBody">[docs]</a>    <span class="k">def</span> <span class="nf">generateAdminStatisticsRequestBody</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate body request to send admin statistics.</span>
+
+
+<span class="sd">        :return: 1) in case of success following string is generated *&quot;extract_success,resource=/descriptors,\</span>
+<span class="sd">         server=127.0.0.1,account_id=16fd2706-8baf-433b-82eb-8c7fada847da,count_faces=1 value_time=0.33&quot;*</span>
+<span class="sd">                 #) in case of failure following string is generated *&quot;errors,resource=/descriptors,server=127.0.0.1,\</span>
+<span class="sd">         account_id=16fd2706-8baf-433b-82eb-8c7fada847da,error=2 value=2&quot;*</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">statistiData</span><span class="o">.</span><span class="n">isSuccess</span><span class="p">:</span>
+            <span class="n">resource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResource</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">resource</span> <span class="o">==</span> <span class="s2">&quot;descriptors&quot;</span><span class="p">:</span>
+                <span class="n">adminStats</span> <span class="o">=</span> <span class="n">AdminStats</span><span class="p">(</span><span class="s2">&quot;extract_success&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">resource</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="s2">&quot;identify&quot;</span><span class="p">,</span> <span class="s2">&quot;verify&quot;</span><span class="p">]:</span>
+                <span class="n">adminStats</span> <span class="o">=</span> <span class="n">AdminStats</span><span class="p">(</span><span class="s2">&quot;matching_success&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">adminStats</span> <span class="o">=</span> <span class="n">AdminStats</span><span class="p">(</span><span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+
+            <span class="n">tags</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResource</span><span class="p">(),</span>
+                    <span class="s2">&quot;server&quot;</span><span class="p">:</span> <span class="n">SERVER_IP</span><span class="p">,</span>
+                    <span class="s2">&quot;account_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">}</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value_time&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistiData</span><span class="o">.</span><span class="n">requestTime</span><span class="p">)}</span>
+            <span class="n">adminStats</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+            <span class="n">adminStats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setAdditionalDataToAdminStatistic</span><span class="p">(</span><span class="n">adminStats</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">adminStats</span><span class="o">.</span><span class="n">getStrToInfluxRequest</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateErrorStatisticsRequestBody</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StorageHandler.setAdditionalDataToAdminStatistic"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAdminStatistic">[docs]</a>    <span class="k">def</span> <span class="nf">setAdditionalDataToAdminStatistic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adminStats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For childes of  *StorageHandler* method of set additional admin stats</span>
+
+<span class="sd">        :param adminStats: common stats</span>
+<span class="sd">        :return: new stats</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">adminStats</span></div>
+
+<div class="viewcode-block" id="StorageHandler.setListDataToAccountStats"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setListDataToAccountStats">[docs]</a>    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">setListDataToAccountStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stats</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add list data to matching statistics.</span>
+
+<span class="sd">        :param stats: account statistics</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="s2">&quot;identify&quot;</span><span class="p">,</span> <span class="s2">&quot;match&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;list_id&quot;</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;candidate&quot;</span><span class="p">]:</span>
+                <span class="n">lunsList</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getList</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;candidate&quot;</span><span class="p">][</span><span class="s2">&quot;list_id&quot;</span><span class="p">],</span> <span class="n">pageSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                                                    <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;candidate&quot;</span><span class="p">][</span><span class="s1">&#39;list_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lunsList</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;user_data&quot;</span><span class="p">]</span>
+                <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;candidate&quot;</span><span class="p">][</span><span class="s1">&#39;list_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lunsList</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="StorageHandler.sendStats"><a class="viewcode-back" href="../../../../storage_api.html#luna_api.app.rest_handlers.storage_handlers.StorageHandler.sendStats">[docs]</a>    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">sendStats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to send statistics. Called, when account has already received answer in method *on_finish*.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">accountStats</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">SEND_ADMIN_STATS</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">ACCOUNT_STATISTICS_PLUGINS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">accountStats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateAccountStats</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">accountStats</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">setListDataToAccountStats</span><span class="p">(</span><span class="n">accountStats</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">http_client</span> <span class="o">=</span> <span class="n">httpclient</span><span class="o">.</span><span class="n">AsyncHTTPClient</span><span class="p">()</span>
+            <span class="n">statisticRequests</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">SEND_ADMIN_STATS</span><span class="p">:</span>
+                <span class="n">influxRequest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateAdminStatisticsRequestBody</span><span class="p">()</span>
+                <span class="n">request</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span><span class="n">ADMIN_STATISTICS_SERVER_ORIGIN</span> <span class="o">+</span> <span class="s2">&quot;/write?db=&quot;</span> <span class="o">+</span> <span class="n">ADMIN_STATISTICS_DB</span><span class="p">,</span>
+                                      <span class="n">body</span><span class="o">=</span><span class="n">influxRequest</span><span class="p">,</span>
+                                      <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+                                      <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">})</span>
+                <span class="n">statisticRequests</span> <span class="o">=</span> <span class="p">[(</span><span class="n">http_client</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="s2">&quot;admin&quot;</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">SEND_ACCOUNT_STATS</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">accountStats</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">requestAccountStatistics</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span><span class="n">ACCOUNTS_STATISTICS_SERVER</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+                                                           <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">accountStats</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                                                           <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+                                                           <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+                                                                    <span class="s2">&quot;LUNA-Request-Id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestId</span><span class="p">})</span>
+
+                    <span class="n">statisticRequests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">http_client</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">requestAccountStatistics</span><span class="p">,</span> <span class="n">raise_error</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="s2">&quot;account&quot;</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">statisticRequests</span><span class="p">:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">request</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">200</span> <span class="o">&lt;=</span> <span class="n">reply</span><span class="o">.</span><span class="n">code</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed send </span><span class="si">{}</span><span class="s2"> statistics&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="n">reply</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">599</span><span class="p">:</span>
+                        <span class="n">generateStatsTornadoRequestError</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> stats server&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                                <span class="s2">&quot;Send statistics </span><span class="si">{}</span><span class="s2"> error, status code: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">code</span><span class="p">)))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Response body: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)))</span>
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">plugin</span> <span class="ow">in</span> <span class="n">ACCOUNT_STATISTICS_PLUGINS</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">accountStats</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">yield</span> <span class="n">plugin</span><span class="p">(</span><span class="n">accountStats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exception in account statistics plugin&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

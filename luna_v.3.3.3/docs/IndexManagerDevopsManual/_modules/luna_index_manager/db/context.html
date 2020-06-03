@@ -1,0 +1,387 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_index_manager.db.context &#8212; luna-index-manager v.0.0.3 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>luna-index-manager v.0.0.3 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_index_manager.db.context</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_index_manager.db.context</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="k">import</span> <span class="n">and_</span><span class="p">,</span> <span class="n">insert</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">func</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="k">import</span> <span class="n">Query</span>
+
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.exception</span> <span class="k">import</span> <span class="n">VLException</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.utils.functions</span> <span class="k">import</span> <span class="n">convertTimeToString</span>
+<span class="kn">from</span> <span class="nn">db</span> <span class="k">import</span> <span class="n">engine</span><span class="p">,</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">db.models</span> <span class="k">import</span> <span class="n">IndexTaskLog</span><span class="p">,</span> <span class="n">TaskStatus</span>
+<span class="kn">from</span> <span class="nn">logbook</span> <span class="k">import</span> <span class="n">Logger</span>
+
+<span class="n">ALL_LISTS</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+
+<div class="viewcode-block" id="exceptionWrap"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.exceptionWrap">[docs]</a><span class="k">def</span> <span class="nf">exceptionWrap</span><span class="p">(</span><span class="n">wrapFunc</span><span class="p">:</span> <span class="n">callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">callable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decorator for catching exceptions when composing queries to the database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wrapFunc: function</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        If exception is not caught, function result is returned, else Result\</span>
+<span class="sd">        with value of exception is returned</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">wrapFunc</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">wrapFunc</span><span class="p">(</span><span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">VLException</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">func_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">ExecuteError</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrap</span></div>
+
+
+<div class="viewcode-block" id="getTaskInfoAsDict"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.getTaskInfoAsDict">[docs]</a><span class="k">def</span> <span class="nf">getTaskInfoAsDict</span><span class="p">(</span><span class="n">taskRow</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert task tuple from db to dict</span>
+<span class="sd">    Args:</span>
+<span class="sd">        taskRow: task row (with error_time, message and error_id)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict, keys are IndexTaskLog column name + error, values are value of corresponding column  from IndexTaskLog +</span>
+<span class="sd">        dict with error</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">getColumnNames</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;error_time&quot;</span><span class="p">,</span> <span class="s2">&quot;error_message&quot;</span><span class="p">],</span> <span class="n">taskRow</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">taskRow</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="s2">&quot;error_time&quot;</span><span class="p">,</span> <span class="s2">&quot;error_message&quot;</span><span class="p">],</span> <span class="n">taskRow</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]))</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">][</span><span class="s2">&quot;error_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">convertTimeToString</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">][</span><span class="s2">&quot;error_time&quot;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">convertTimeToString</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="DBContext"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext">[docs]</a><span class="k">class</span> <span class="nc">DBContext</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DB context</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        logger: request logger</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+<div class="viewcode-block" id="DBContext.createNewTask"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.createNewTask">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">createNewTask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create new task in db</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            listId: indexed list id</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            task id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">createTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">lastUpdate</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">insertSt</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">list_id</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="n">createTime</span><span class="p">,</span>
+                                                          <span class="n">last_update_time</span><span class="o">=</span><span class="n">lastUpdate</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">insertSt</span><span class="p">)</span>
+            <span class="n">taskId</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">inserted_primary_key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">taskId</span></div>
+
+<div class="viewcode-block" id="DBContext.updateTaskData"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.updateTaskData">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">updateTaskData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taskId</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update task data.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            taskId: task id</span>
+
+<span class="sd">        Keyword Args:</span>
+<span class="sd">            generation (str): generation name from indexer</span>
+<span class="sd">            status (int): status of task 0 - success done, 1 - failed, 2 - cancelled</span>
+<span class="sd">            start_index_time (datetime): start time of the index step</span>
+<span class="sd">            end_index_time (datetime): end time of the index step</span>
+<span class="sd">            start_upload_index_time (datetime): start time of the index upload step</span>
+<span class="sd">            end_upload_index_time (datetime): end time of the index upload  step</span>
+<span class="sd">            start_reload_index_time (datetime): end time of the index reload step</span>
+<span class="sd">            end_reload_index_time (datetime): end time of the index reload step</span>
+<span class="sd">            end_time (datetime): task end time</span>
+<span class="sd">            last_update_time (datetime): task last update time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lastUpdate</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;last_update_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lastUpdate</span>
+            <span class="n">updateFaceSt</span> <span class="o">=</span> <span class="n">update</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">task_id</span> <span class="o">==</span> <span class="n">taskId</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">updateFaceSt</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DBContext.putError"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.putError">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">putError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taskId</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Put task error</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            taskId: task id</span>
+<span class="sd">            msg: error message</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            error id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">errorTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">insertSt</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">taskId</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">error_time</span><span class="o">=</span><span class="n">errorTime</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">insertSt</span><span class="p">)</span>
+            <span class="n">taskId</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">inserted_primary_key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">taskId</span></div>
+
+<div class="viewcode-block" id="DBContext.getTask"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.getTask">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getTask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taskId</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get task by id</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            taskId: task id</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict, keys are IndexTaskLog column name + error, values are value of corresponding column  from IndexTaskLog +</span>
+<span class="sd">            dict with error</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(Error.IndexTaskNotFouns, 404, isCriticalError=False): if task not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span> <span class="o">+</span> <span class="p">[</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">error_id</span><span class="p">,</span>
+                                                                   <span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">error_time</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">message</span><span class="p">])</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">outerjoin</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">task_id</span> <span class="o">==</span> <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">task_id</span> <span class="o">==</span> <span class="n">taskId</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span>
+            <span class="n">taskRow</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">taskRow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">IndexTaskNotFound</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">getColumnNames</span><span class="p">(),</span> <span class="n">taskRow</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DBContext.isTaskForListInProgress"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.isTaskForListInProgress">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">isTaskForListInProgress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check that current task works with listId</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            true if current task works with list else false</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">list_id</span> <span class="o">==</span> <span class="n">listId</span><span class="p">,</span>
+                                                                   <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="DBContext.searchTasks"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.searchTasks">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">searchTasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pageSize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">generations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">listIds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search tasks</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            page: page number</span>
+<span class="sd">            pageSize: page size</span>
+<span class="sd">            generations: list of generations</span>
+<span class="sd">            listIds: list ids</span>
+<span class="sd">            status: status of rask</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list of dict (keys are IndexTaskLog column name + error, values are value of corresponding column  from IndexTaskLog +</span>
+<span class="sd">            dict with error) and task count</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">filters</span> <span class="o">=</span> <span class="n">and_</span><span class="p">(</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">listIds</span><span class="p">)</span> <span class="k">if</span> <span class="n">listIds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">generations</span><span class="p">)</span> <span class="k">if</span> <span class="n">generations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">status</span> <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span> <span class="o">+</span> <span class="p">[</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">error_id</span><span class="p">,</span>
+                                                                   <span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">error_time</span><span class="p">,</span>
+                                                                   <span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">message</span><span class="p">])</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">outerjoin</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
+
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span><span class="o">.</span><span class="n">offset</span><span class="p">((</span><span class="n">page</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">pageSize</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">pageSize</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span>
+            <span class="n">taskRows</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="n">queryCount</span> <span class="o">=</span> <span class="n">Query</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">)])</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">queryCount</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="p">[</span><span class="n">getTaskInfoAsDict</span><span class="p">(</span><span class="n">taskRow</span><span class="p">)</span> <span class="k">for</span> <span class="n">taskRow</span> <span class="ow">in</span> <span class="n">taskRows</span><span class="p">],</span> <span class="n">count</span></div>
+
+<div class="viewcode-block" id="DBContext.getTaskError"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.getTaskError">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getTaskError</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taskId</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get task error.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            taskId: task id</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             dict, keys are Error column name, values are value of corresponding column if error exist otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">task_id</span> <span class="o">==</span> <span class="n">taskId</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span>
+            <span class="n">errorRow</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">errorRow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">getColumnNames</span><span class="p">(),</span> <span class="n">errorRow</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DBContext.getCurrentGenerations"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.getCurrentGenerations">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getCurrentGenerations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get list ids and last successful generations for them.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict, key - list id, value - generations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">([</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">list_id</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">)])</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                      <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">generation</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">))</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span>
+                <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">list_id</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span>
+            <span class="n">generationAndLists</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">generationAndLists</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DBContext.getStartAndUploadIndexTime"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.getStartAndUploadIndexTime">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getStartAndUploadIndexTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get start index time and upload index time for list with listId</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            listId: list id</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple with start index time and upload index time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">([</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">start_index_time</span><span class="p">,</span>
+                           <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">start_upload_index_time</span><span class="p">])</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">list_id</span> <span class="o">==</span> <span class="n">listId</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+                <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="DBContext.getSuccessStartIndexTimeOfList"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.getSuccessStartIndexTimeOfList">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getSuccessStartIndexTimeOfList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get start index time of last success upload to matchers index.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            listId: list id</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            start index time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">([</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">__table__</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">start_index_time</span><span class="p">])</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">list_id</span> <span class="o">==</span> <span class="n">listId</span><span class="p">,</span>
+                     <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="o">.</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+                <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DBContext.isIndexesUploadToMatcher"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.isIndexesUploadToMatcher">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">isIndexesUploadToMatcher</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determinate if there are matchers with indexes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            true if last time success reloaded indexes is greater than last failed reload indexes time otherwise false</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">end_index_time</span><span class="p">)</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">))</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                      <span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">end_index_time</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">))</span>
+
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span>
+            <span class="n">lastFailedReloadIndexesTime</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">end_index_time</span><span class="p">)</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">))</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span>
+            <span class="n">lastSuccessReloadIndexesTime</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">lastSuccessReloadIndexesTime</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lastSuccessReloadIndexesTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">lastFailedReloadIndexesTime</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lastFailedReloadIndexesTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="n">lastSuccessReloadIndexesTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">lastFailedReloadIndexesTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DBContext.updateTasksNullStatus"><a class="viewcode-back" href="../../../db_functions.html#luna_index_manager.db.context.DBContext.updateTasksNullStatus">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">updateTasksNullStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set &#39;failed&#39; status to tasks with &#39;null&#39; status after statring service</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">taskIds</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="n">errorTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">taskId</span> <span class="ow">in</span> <span class="n">taskIds</span><span class="p">:</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Error</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">taskId</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Service stoped while indexing&#39;</span><span class="p">,</span>
+                                                    <span class="n">error_time</span><span class="o">=</span><span class="n">errorTime</span><span class="p">)</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+            <span class="n">query</span> <span class="o">=</span> <span class="n">update</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">IndexTaskLog</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+========
+v.0.2.11
+========
+
+-------------
+Improvements:
+-------------
+
+1) Proxy "list data" and "list type" in section candidates for match events.
+
+-----------
+Bugs fixed:
+-----------
+
+None.

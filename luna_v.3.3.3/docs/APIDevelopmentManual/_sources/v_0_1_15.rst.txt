@@ -1,0 +1,28 @@
+v.0.1.15
+========
+
+Improvements:
+-------------
+
+	1) Change  method of checking database. Now we are using select by account.
+
+	#) Return in all method PATCH status code 204.
+
+	#) Handle of exception in parsing query params for matching.
+
+	#) Update *last_update* time for descriptor in process of checking exist descriptor or not when it is attach.
+
+	#) Set require version for postgres and influx.
+
+Bugs fixed:
+-----------
+
+	1) Fix status code in raml resource */storage/lists/{list_id}* method PATCH: 200->204.
+
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

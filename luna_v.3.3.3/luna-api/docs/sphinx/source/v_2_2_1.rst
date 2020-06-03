@@ -1,0 +1,34 @@
+v.2.2.1
+=======
+
+Improvements:
+-------------
+
+    1) For script, that using for migration from luna 2.7.2 to 3.3.*, make accounts migration enabled for default
+
+    #) Add script for pictures migration from luna-api to luna-image-store
+
+Bugs fixed:
+-----------
+
+    1) Fixed misprints in sphinx-docs.
+
+    #) For script, that using for migration from luna 2.7.2 to 3.3.*, add migration for persons' faces,
+       where persons link to list
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *luna_admin, tests, docs* and update dependencies from
+requirements.txt.
+
+To migrate faces' pictures from Luna-Api (only if portraits stored on hard drive using plugin) to Luna-Image-Store,
+use script from *base_scripts/pictures_migration*. There is config file named *config.conf* in *pictures_migration*
+with parameters, that needs by Luna-Image-Store and path with pictures.
+To run migration use:
+
+    .. code-block:: bash
+
+        python run.py
+
+To use another config, use *--config=./path_to_config/config.conf*.

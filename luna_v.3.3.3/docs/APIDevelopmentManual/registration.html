@@ -1,0 +1,216 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Registration &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Storage API" href="storage_api.html" />
+    <link rel="prev" title="Versioning" href="version.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Registration</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="version.html">Versioning</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="storage_api.html">Storage API</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_api.app.rest_handlers.registration_handler">
+<span id="registration"></span><h1>Registration<a class="headerlink" href="#module-luna_api.app.rest_handlers.registration_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.registration_handler.RegistrationHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.registration_handler.</code><code class="descname">RegistrationHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/registration_handler.html#RegistrationHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.registration_handler.RegistrationHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler to register accounts</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.registration_handler.RegistrationHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/registration_handler.html#RegistrationHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.registration_handler.RegistrationHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource is available at ‘/accounts’</p>
+<dl class="post">
+<dt id="post--accounts">
+<code class="descname">POST </code><code class="descname">/accounts</code><a class="headerlink" href="#post--accounts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request for registration.</p>
+<p><strong>Example request</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/accounts</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="json-for-registration">
+<!--[json-for-registration]--><code class="descname">json for registration</code><a class="headerlink" href="#json-for-registration" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>organization_name</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – name of registration organization</li>
+<li><strong>email</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc2822#section-3.4.1" title="Email Address"><em>email</em></a>) – email of registration organization</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>string</em></a>) – password for access to account<span> (</span><em>minlength=8</em><span>, </span><em>maxlength=32</em><span>)</span></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;organization_name&quot;</span><span class="p">:</span> <span class="s2">&quot;john37&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;sean11@turner.com&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;DgFIXkSMclPFZiJcupgm&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="response">
+<!--[response]--><code class="descname">response</code><a class="headerlink" href="#response" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>token</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – token for access</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;9dcd5870-411e-4a35-8c63-d50c8afc2738&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – registration is successful</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10">409 Conflict</a> – e-mail is already taken</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – request does not contain json</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – password is too short or too long</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – password field was not found in json</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – password is empty</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – email could not be parsed</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – email was not found in json</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – email is empty</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – organization_name could not be parsed</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – organization name is empty</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.rest_handlers.registration_handler.parseJsonArg">
+<code class="descclassname">luna_api.app.rest_handlers.registration_handler.</code><code class="descname">parseJsonArg</code><span class="sig-paren">(</span><em>inputJson: dict</em>, <em>field: str</em><span class="sig-paren">)</span> &#x2192; Union[str, dict, list, int, float]<a class="reference internal" href="_modules/luna_api/app/rest_handlers/registration_handler.html#parseJsonArg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.registration_handler.parseJsonArg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get arguments from JSON.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>inputJson: input json(dict)
+field: required field.</dd>
+<dt>Returns:</dt>
+<dd>getting value</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.rest_handlers.registration_handler.validateEmail">
+<code class="descclassname">luna_api.app.rest_handlers.registration_handler.</code><code class="descname">validateEmail</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/registration_handler.html#validateEmail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.registration_handler.validateEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>E-mail validation function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>email</strong> – str with email</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True, if validation is successful, else False.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.rest_handlers.registration_handler.validatePassword">
+<code class="descclassname">luna_api.app.rest_handlers.registration_handler.</code><code class="descname">validatePassword</code><span class="sig-paren">(</span><em>password: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/app/rest_handlers/registration_handler.html#validatePassword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.registration_handler.validatePassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate length of password.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>password: password</dd>
+<dt>Returns:</dt>
+<dd>True if length of password  is correct otherwise False</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="version.html">Versioning</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="storage_api.html">Storage API</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

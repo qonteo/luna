@@ -1,0 +1,35 @@
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>Token id</th>
+        <th>Token info</th>
+    </tr>
+    <tbody>
+    {% for item in tokens %}
+    <tr>
+        <td id='{{ "token_id_" +  escape(item["token_id"])}}'>{{ escape(item["token_id"]) }}</td>
+        <td id='{{ "token_info_" +  escape(item["token_id"])}}'>{{ escape(item["token_data"]) }}</td>
+
+    </tr>
+    {% end %}
+    </tbody>
+</table>
+<div class="card-footer p-0">
+    <nav aria-label="...">
+        <ul class="pagination justify-content-end mt-3 mr-3">
+            <li class="page-item"><a onclick="getTokens('{{account_id}}', '{{prev_page}}', '{{page_size}}')">
+                Previous
+            </a>
+            </li>
+            <li class="page-item"><a onclick="getTokens('{{account_id}}',1, '{{page_size}}')">1</a></li>
+            <li class="page-item active">
+                        <span class="page-link"> {{escape(page)}}<span class="sr-only">(current)</span>
+                        </span>
+            </li>
+            <li class="page-item"><a onclick="getTokens('{{account_id}}', '{{max_page}}', '{{page_size}}')">{{escape(max_page)}}</a>
+            </li>
+            <li class="page-item">
+                <a onclick="getTokens('{{account_id}}', '{{next_page}}', '{{page_size}}')">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

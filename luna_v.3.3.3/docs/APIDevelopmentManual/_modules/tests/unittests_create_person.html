@@ -1,0 +1,273 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tests.unittests_create_person &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>tests.unittests_create_person</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for tests.unittests_create_person</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">tests.classes</span> <span class="k">import</span> <span class="n">TestBase</span><span class="p">,</span> <span class="n">authStr</span>
+<span class="kn">from</span> <span class="nn">tests.functions</span> <span class="k">import</span> <span class="n">checkUUID4</span>
+<span class="kn">from</span> <span class="nn">tests</span> <span class="k">import</span> <span class="n">luna_api_functions</span>
+
+
+<div class="viewcode-block" id="TestCreatePerson"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson">[docs]</a><span class="k">class</span> <span class="nc">TestCreatePerson</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests creating person</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestCreatePerson.setUp"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createAccountAndToken</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: success creating person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPersonTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;person_id&quot;</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">checkUUID4</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">createPersonTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_data"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_data">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_data</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: success creating person with user_data</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPersonTest_withData</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="s2">&quot;petya 123&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;person_id&quot;</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">checkUUID4</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">createPersonTest_withData</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_with_too_long_external_id"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_with_too_long_external_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_with_too_long_external_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_with_too_long_external_id</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: failure create person with too long external id</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPersonTest_withExternalId</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">userData</span><span class="o">=</span><span class="s2">&quot;petya 123&quot;</span><span class="p">,</span> <span class="n">externalId</span><span class="o">=</span><span class="s2">&quot;x&quot;</span> <span class="o">*</span> <span class="mi">37</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;error_code&#39;</span><span class="p">],</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadInputJson</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">createPersonTest_withExternalId</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_maximum_data"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_maximum_data">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_maximum_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_maximum_data</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: try creating person with maximum user_data length</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPerson_maxUserInfoTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">userData</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span> <span class="o">*</span> <span class="mi">128</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">userData</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;person_id&quot;</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">checkUUID4</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">createPerson_maxUserInfoTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_large_data"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_large_data">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_large_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_large_data</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: try creating person with big user_data</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPerson_bigUserInfoTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">userData</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span> <span class="o">*</span> <span class="mi">129</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">userData</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BigUserData</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">createPerson_bigUserInfoTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_bad_type_data"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_bad_type_data">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_bad_type_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_bad_type_data</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: try creating person with bad type of user data (int)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPerson_bigUserInfoTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">userData</span> <span class="o">=</span> <span class="mi">123</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">userData</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadTypeOfFieldInJSON</span><span class="p">,</span>
+                                       <span class="n">msgFormat</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;user_data&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">],</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">createPerson_bigUserInfoTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_external_id"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_external_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_external_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_external_id</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: success creating person with external_id</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPersonTest_withExternalId</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">externalId</span><span class="o">=</span><span class="s2">&quot;test external id&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;person_id&quot;</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">checkUUID4</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">createPersonTest_withExternalId</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_maximum_external_id"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_maximum_external_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_maximum_external_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_maximum_external_id</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: try creating person with maximum external_id length</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPerson_maxExternalIdTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">externalId</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span> <span class="o">*</span> <span class="mi">36</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">externalId</span><span class="o">=</span><span class="n">externalId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;person_id&quot;</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">checkUUID4</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">createPerson_maxExternalIdTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_large_external_id"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_large_external_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_large_external_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_large_external_id</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: try creating person with big external_id</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPerson_bigExternalIdTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">externalId</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span> <span class="o">*</span> <span class="mi">129</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">externalId</span><span class="o">=</span><span class="n">externalId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BigExternalId</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">createPerson_bigExternalIdTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_with_bad_type_external_id"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_with_bad_type_external_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_with_bad_type_external_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_with_bad_type_external_id</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: try creating person with bad type of external_id (int)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPerson_bigUserInfoTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">externalId</span> <span class="o">=</span> <span class="mi">123</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">externalId</span><span class="o">=</span><span class="n">externalId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadTypeOfFieldInJSON</span><span class="p">,</span>
+                                       <span class="n">msgFormat</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;external_id&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">],</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">createPerson_bigUserInfoTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestCreatePerson.test_person_create_person_without_user_data_and_external_id"><a class="viewcode-back" href="../../testing.html#tests.unittests_create_person.TestCreatePerson.test_person_create_person_without_user_data_and_external_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_person_create_person_without_user_data_and_external_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_person_create_person_without_user_data_and_external_id</span>
+
+<span class="sd">            :resources: &quot;/storage/persons&quot;</span>
+<span class="sd">            :description: try creating person without user data and external id</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Person action</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">createPerson_WithoutDataAndExternalIdTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+            <span class="n">personId</span> <span class="o">=</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;person_id&#39;</span><span class="p">]</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="o">=</span><span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;user_data&#39;</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;external_id&#39;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">createPerson_WithoutDataAndExternalIdTest</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

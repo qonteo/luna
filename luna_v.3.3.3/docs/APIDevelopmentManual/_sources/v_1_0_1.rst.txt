@@ -1,0 +1,31 @@
+v.1.0.1
+========
+
+Improvements:
+-------------
+
+    1) Added reconnecting to postgres
+
+    2) Default LUNA Core API version in configs is 12
+
+Bugs fixed:
+-----------
+
+    1) Set correct content-type for portraits from S3.
+    
+    #) Added checking of format of uuid in input json for deleting tokens and lists.
+    
+    #) Processed *page < 0* in getting persons.
+
+    #) Fixed mistake in matching by *list_id* and *descriptor_ids* simultaneously
+
+    #) Fix description of error *BigUserData*.
+
+    #) Added catching of errors when token json is not iterable, return *RequestNotContainsJson* error.
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

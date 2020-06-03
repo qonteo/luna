@@ -1,0 +1,11 @@
+@font-face {
+	font-family: 'SFNS Display';
+	src: url('../fonts/SFNSDisplay/HelveticaNeueDeskInterface-Regular.eot');
+	src: url('../fonts/SFNSDisplay/HelveticaNeueDeskInterface-Regular.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/SFNSDisplay/HelveticaNeueDeskInterface-Regular.woff') format('woff'),
+		url('../fonts/SFNSDisplay/HelveticaNeueDeskInterface-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+};
+
+$base-font : 'SFNS Display';

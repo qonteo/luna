@@ -1,0 +1,27 @@
+=======
+v.1.2.0
+=======
+
+-------------
+Improvements:
+-------------
+
+    #) Add similarity__lt - upper similarity boundary filter - to events and groups search, task filters.
+
+    #) Add similarity threshold for clusterization tasks.
+
+-----------
+Bugs fixed:
+-----------
+
+    #) Fix first task create bug.
+
+    #) Fix redirect Location for done reporter task.
+
+    #) Fix reporter to work without objects' attributes.
+
+------------------------------------
+How to update from previous version:
+------------------------------------
+
+Copy project to directory with current project. Update dependencies from requirements.txt.

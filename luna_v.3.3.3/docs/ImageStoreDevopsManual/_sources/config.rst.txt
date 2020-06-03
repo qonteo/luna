@@ -1,0 +1,14 @@
+Configuration
+=============
+
+Configuration files for administrator
+-------------------------------------
+
+.. literalinclude:: ../../../luna_image_store/configs/config.conf
+.. literalinclude:: ../../../luna_image_store/configs/s3_example_conf.conf
+
+Extended administrator configuration
+------------------------------------
+
+.. automodule:: configs.config
+	:members:

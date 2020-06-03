@@ -1,0 +1,15 @@
+v.1.0.6
+=======
+
+Improvements:
+-------------
+
+Bugs fixed:
+-----------
+
+    1) Fixed misprints in sphinx-docs.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests* and update dependencies from requirements.txt.

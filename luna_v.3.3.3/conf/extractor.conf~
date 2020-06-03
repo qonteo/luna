@@ -1,0 +1,31 @@
+{
+d
+  "include": ["aerospike.conf", "rabbitmq-extractor.conf"],
+
+  "worker" : {
+    "connection": {
+      "routingKey": "extractor",
+      "enableDLQ" : false
+    }
+  },
+
+  "fsdk" : {
+    "configPath": "/var/lib/luna/current/data/faceengine.conf",
+    "dataPath": "/var/lib/luna/current/data"
+  },
+
+  "imageDump" : {
+    "skipErrors" : false,
+    "createBucket" : true,
+    "encoder" : "jpg",
+    "bucket" : "visionlabs-warps",
+    "address" : "127.0.0.1",
+    "port" : 5020,
+    "protocol": "http",
+    "httpClient": {
+      "requestTimeoutMs": 5000,
+      "connectTimeoutMs": 2000
+    }
+  }
+
+}

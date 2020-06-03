@@ -1,0 +1,344 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuration file &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Service launch" href="run.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Configuration file</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="run.html">Service launch</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="configuration-file">
+<h1>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="configuration-file-for-administrator">
+<h2>Configuration file for administrator<a class="headerlink" href="#configuration-file-for-administrator" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DB</span> <span class="o">=</span> <span class="s2">&quot;postgres&quot;</span>                                                          <span class="c1">#: type of database: postgres, oracle, default postgres</span>
+<span class="n">DB_USER_NAME</span> <span class="o">=</span> <span class="s2">&quot;faceis&quot;</span>                                                  <span class="c1">#: database login</span>
+<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;faceis&quot;</span>                                                   <span class="c1">#: database password</span>
+<span class="n">DB_NAME</span> <span class="o">=</span> <span class="s2">&quot;faceis_db&quot;</span>                                                    <span class="c1">#: name of database for postgres, sid name for oracle</span>
+<span class="n">DB_HOST</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>                                                    <span class="c1">#: ip-address of database</span>
+<span class="n">DB_PORT</span> <span class="o">=</span> <span class="mi">5432</span>                                                           <span class="c1">#: database listener port, 5432 - default port of postgres, 1521 - default port of oracle</span>
+
+<span class="n">LUNA_CORE_ORIGIN</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8083&quot;</span>                               <span class="c1">#: LUNA Core origin</span>
+<span class="n">LUNA_CORE_API_VERSION</span> <span class="o">=</span> <span class="mi">14</span>                                               <span class="c1">#: LUNA Core api version</span>
+
+<span class="n">USE_INDEX_MANAGER</span> <span class="o">=</span> <span class="mi">0</span>                                                    <span class="c1">#: parameter, which indicates whether to use Index Manager</span>
+<span class="n">LUNA_INDEX_MANAGER_ORIGIN</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:5060&quot;</span>                      <span class="c1">#: LUNA Index Manager origin</span>
+<span class="n">LUNA_INDEX_MANAGER_API_VERSION</span> <span class="o">=</span> <span class="mi">1</span>                                       <span class="c1">#: LUNA Index Manager api version</span>
+
+<span class="n">SEND_TO_LUNA_IMAGE_STORE</span> <span class="o">=</span> <span class="mi">1</span>                                             <span class="c1">#: flag, which indicates whether to send portraits to LUNA Image Store or not</span>
+<span class="n">LUNA_IMAGE_STORE_ORIGIN</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:5020&quot;</span>                        <span class="c1">#: LUNA Image Store origin</span>
+<span class="n">LUNA_IMAGE_STORE_API_VERSION</span> <span class="o">=</span> <span class="mi">1</span>                                         <span class="c1">#: LUNA Image Store api version</span>
+<span class="n">LUNA_IMAGE_STORE_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;portraits&quot;</span>                                    <span class="c1">#: *bucket* name, where portraits will be stored</span>
+
+<span class="n">LUNA_FACES_ORIGIN</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:5030&quot;</span>                              <span class="c1">#: LUNA Faces Store origin</span>
+<span class="n">LUNA_FACES_API_VERSION</span> <span class="o">=</span> <span class="mi">1</span>                                               <span class="c1">#: LUNA Faces Store api version</span>
+
+<span class="n">SEND_ADMIN_STATS</span> <span class="o">=</span> <span class="mi">1</span>                                                     <span class="c1">#: parameter, which indicates whether to send admin statistics or not</span>
+<span class="n">ADMIN_STATISTICS_SERVER_ORIGIN</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8086&quot;</span>                 <span class="c1">#: Influxdb server origin, where statistics is collected</span>
+<span class="n">ADMIN_STATISTICS_DB</span> <span class="o">=</span> <span class="s2">&quot;luna_api_admin&quot;</span>                                   <span class="c1">#: *database* name with time series for administrator statistics</span>
+
+<span class="n">SEND_ACCOUNT_STATS</span> <span class="o">=</span> <span class="mi">1</span>                                                   <span class="c1">#: parameter, which indicates whether to send client statistics or not</span>
+<span class="n">ACCOUNTS_STATISTICS_SERVER</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:5009/internal/lps_event&quot;</span>  <span class="c1">#: service address, where client statistics is collected</span>
+
+<span class="n">MAX_CANDIDATE_IN_RESPONSE</span> <span class="o">=</span> <span class="mi">5</span>                                            <span class="c1">#: max result count in response for match</span>
+
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="s2">&quot;DEBUG&quot;</span>                                                      <span class="c1">#: level of debug print, by priority: ERROR, WARNING, INFO, DEBUG</span>
+<span class="n">LOG_TIME</span> <span class="o">=</span> <span class="s2">&quot;LOCAL&quot;</span>                                                       <span class="c1">#: time for records in logs: LOCAL or UTC</span>
+<span class="n">FOLDER_WITH_LOGS</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span>                                                  <span class="c1">#: folder, where logs are saved</span>
+
+<span class="n">ENABLE_PLUGINS</span> <span class="o">=</span> <span class="mi">0</span>                                                       <span class="c1">#: flag to enable plug-ins</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-luna_api.configs.config">
+<span id="extended-administrator-configuration"></span><h2>Extended administrator configuration<a class="headerlink" href="#module-luna_api.configs.config" title="Permalink to this headline">¶</a></h2>
+<p>This file contains configurations for system functioning.</p>
+<dl class="data">
+<dt id="luna_api.configs.config.ACCESS_CONTROL_ALLOW_ORIGIN">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">ACCESS_CONTROL_ALLOW_ORIGIN</code><em class="property"> = '*'</em><a class="headerlink" href="#luna_api.configs.config.ACCESS_CONTROL_ALLOW_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of header “Access-Control-Allow-Origin”</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.ACCOUNTS_STATISTICS_SERVER">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">ACCOUNTS_STATISTICS_SERVER</code><em class="property"> = 'http://127.0.0.1:5009/internal/lps_event'</em><a class="headerlink" href="#luna_api.configs.config.ACCOUNTS_STATISTICS_SERVER" title="Permalink to this definition">¶</a></dt>
+<dd><p>client address to send statistics</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.ADMIN_STATISTICS_DB">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">ADMIN_STATISTICS_DB</code><em class="property"> = 'luna_api_admin'</em><a class="headerlink" href="#luna_api.configs.config.ADMIN_STATISTICS_DB" title="Permalink to this definition">¶</a></dt>
+<dd><p>database name of influxdb</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.ADMIN_STATISTICS_SERVER_ORIGIN">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">ADMIN_STATISTICS_SERVER_ORIGIN</code><em class="property"> = 'http://127.0.0.1:8086'</em><a class="headerlink" href="#luna_api.configs.config.ADMIN_STATISTICS_SERVER_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>influxdb server to collect statistics</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.APP_NAME">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">APP_NAME</code><em class="property"> = 'luna-api'</em><a class="headerlink" href="#luna_api.configs.config.APP_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>application mame</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.CHECK_INDEX_DELTA">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">CHECK_INDEX_DELTA</code><em class="property"> = 60</em><a class="headerlink" href="#luna_api.configs.config.CHECK_INDEX_DELTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>time delta in seconds to store list of indexed lists in cache</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.CONNECT_TIMEOUT">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">CONNECT_TIMEOUT</code><em class="property"> = 20</em><a class="headerlink" href="#luna_api.configs.config.CONNECT_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>timeout for connect to external services (LUNA, statistics)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.DB">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">DB</code><em class="property"> = 'postgres'</em><a class="headerlink" href="#luna_api.configs.config.DB" title="Permalink to this definition">¶</a></dt>
+<dd><p>type of database: oracle or postgres</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.DB_HOST">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">DB_HOST</code><em class="property"> = '127.0.0.1'</em><a class="headerlink" href="#luna_api.configs.config.DB_HOST" title="Permalink to this definition">¶</a></dt>
+<dd><p>database ip-address</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.DB_NAME">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">DB_NAME</code><em class="property"> = 'faceis_db'</em><a class="headerlink" href="#luna_api.configs.config.DB_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>database name, where all schemes are created</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.DB_PASSWORD">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">DB_PASSWORD</code><em class="property"> = 'faceis'</em><a class="headerlink" href="#luna_api.configs.config.DB_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>database password</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.DB_PORT">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">DB_PORT</code><em class="property"> = '5432'</em><a class="headerlink" href="#luna_api.configs.config.DB_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>database listener port</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.DB_USER_NAME">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">DB_USER_NAME</code><em class="property"> = 'faceis'</em><a class="headerlink" href="#luna_api.configs.config.DB_USER_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>database login</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.DNS_SERVER">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">DNS_SERVER</code><em class="property"> = '8.8.8.8'</em><a class="headerlink" href="#luna_api.configs.config.DNS_SERVER" title="Permalink to this definition">¶</a></dt>
+<dd><p>dns-server for detection ip address of the machine, by default using google dns server (need connection to internet)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.ENABLE_PLUGINS">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">ENABLE_PLUGINS</code><em class="property"> = 0</em><a class="headerlink" href="#luna_api.configs.config.ENABLE_PLUGINS" title="Permalink to this definition">¶</a></dt>
+<dd><p>enable plug-ins</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.FOLDER_WITH_LOGS">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">FOLDER_WITH_LOGS</code><em class="property"> = './'</em><a class="headerlink" href="#luna_api.configs.config.FOLDER_WITH_LOGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>folder to save logs</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LOG_LEVEL">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LOG_LEVEL</code><em class="property"> = 'DEBUG'</em><a class="headerlink" href="#luna_api.configs.config.LOG_LEVEL" title="Permalink to this definition">¶</a></dt>
+<dd><p>level of debug printing, by priority: ERROR, WARNING, INFO, DEBUG</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LOG_TIME">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LOG_TIME</code><em class="property"> = 'LOCAL'</em><a class="headerlink" href="#luna_api.configs.config.LOG_TIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>“time for records in logs</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_CORE_API_VERSION">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_CORE_API_VERSION</code><em class="property"> = 14</em><a class="headerlink" href="#luna_api.configs.config.LUNA_CORE_API_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Core api version</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_CORE_ORIGIN">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_CORE_ORIGIN</code><em class="property"> = 'http://127.0.0.1:8083'</em><a class="headerlink" href="#luna_api.configs.config.LUNA_CORE_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Core origin</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_FACES_API_VERSION">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_FACES_API_VERSION</code><em class="property"> = 1</em><a class="headerlink" href="#luna_api.configs.config.LUNA_FACES_API_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Faces Store api version</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_FACES_ORIGIN">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_FACES_ORIGIN</code><em class="property"> = 'http://127.0.0.1:5030'</em><a class="headerlink" href="#luna_api.configs.config.LUNA_FACES_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Faces Store origin</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_IMAGE_STORE_API_VERSION">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_IMAGE_STORE_API_VERSION</code><em class="property"> = 1</em><a class="headerlink" href="#luna_api.configs.config.LUNA_IMAGE_STORE_API_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Image Store api versio</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_IMAGE_STORE_BUCKET">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_IMAGE_STORE_BUCKET</code><em class="property"> = 'portraits'</em><a class="headerlink" href="#luna_api.configs.config.LUNA_IMAGE_STORE_BUCKET" title="Permalink to this definition">¶</a></dt>
+<dd><p>name <em>bucket</em>, where portraits will be stored</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_IMAGE_STORE_ORIGIN">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_IMAGE_STORE_ORIGIN</code><em class="property"> = 'http://127.0.0.1:5020'</em><a class="headerlink" href="#luna_api.configs.config.LUNA_IMAGE_STORE_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Image Store origin</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_INDEX_MANAGER_API_VERSION">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_INDEX_MANAGER_API_VERSION</code><em class="property"> = 1</em><a class="headerlink" href="#luna_api.configs.config.LUNA_INDEX_MANAGER_API_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>api of LUNA Index Manager</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.LUNA_INDEX_MANAGER_ORIGIN">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">LUNA_INDEX_MANAGER_ORIGIN</code><em class="property"> = 'http://127.0.0.1:5060'</em><a class="headerlink" href="#luna_api.configs.config.LUNA_INDEX_MANAGER_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Index Manager url</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.MAX_CANDIDATE_IN_RESPONSE">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">MAX_CANDIDATE_IN_RESPONSE</code><em class="property"> = 5</em><a class="headerlink" href="#luna_api.configs.config.MAX_CANDIDATE_IN_RESPONSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>maximum number of candidates in matching response</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.REQUEST_TIMEOUT">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">REQUEST_TIMEOUT</code><em class="property"> = 60</em><a class="headerlink" href="#luna_api.configs.config.REQUEST_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>timeout for http-request to external services (LUNA, statistics)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.SEND_ACCOUNT_STATS">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">SEND_ACCOUNT_STATS</code><em class="property"> = 1</em><a class="headerlink" href="#luna_api.configs.config.SEND_ACCOUNT_STATS" title="Permalink to this definition">¶</a></dt>
+<dd><p>parameter, which indicates whether tj send client statistics or not</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.SEND_ADMIN_STATS">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">SEND_ADMIN_STATS</code><em class="property"> = 1</em><a class="headerlink" href="#luna_api.configs.config.SEND_ADMIN_STATS" title="Permalink to this definition">¶</a></dt>
+<dd><p>parameter, which indicates whether to send admin statistics or not</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.SEND_TO_LUNA_IMAGE_STORE">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">SEND_TO_LUNA_IMAGE_STORE</code><em class="property"> = 1</em><a class="headerlink" href="#luna_api.configs.config.SEND_TO_LUNA_IMAGE_STORE" title="Permalink to this definition">¶</a></dt>
+<dd><p>flag, which indicates whether send portraits to LUNA Image Store or not</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.SERVER_IP">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">SERVER_IP</code><em class="property"> = '10.0.4.158'</em><a class="headerlink" href="#luna_api.configs.config.SERVER_IP" title="Permalink to this definition">¶</a></dt>
+<dd><p>ip-address of the server, you can this parameter manually</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.SQLALCHEMY_DATABASE_URI">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">SQLALCHEMY_DATABASE_URI</code><em class="property"> = 'postgresql://faceis:faceis&#64;127.0.0.1:5432/faceis_db'</em><a class="headerlink" href="#luna_api.configs.config.SQLALCHEMY_DATABASE_URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>oracle address</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.configs.config.USE_INDEX_MANAGER">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">USE_INDEX_MANAGER</code><em class="property"> = 0</em><a class="headerlink" href="#luna_api.configs.config.USE_INDEX_MANAGER" title="Permalink to this definition">¶</a></dt>
+<dd><p>parameter indicates whether to use Luna Index Manager</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.configs.config.get_ip_address">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">get_ip_address</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/configs/config.html#get_ip_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.configs.config.get_ip_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get server ip-address, where service is launched, need internet for correct work</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">IP-address or “127.0.0.1”</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.configs.config.replacePythonPathIfNeed">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">replacePythonPathIfNeed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/configs/config.html#replacePythonPathIfNeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.configs.config.replacePythonPathIfNeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determinate need set python path to root or not</p>
+<p>If run sphinx, db_create, influx_db_create, lis_bucket_create, db_migrate set python path to root app.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.configs.config.setPythonPathToAPP">
+<code class="descclassname">luna_api.configs.config.</code><code class="descname">setPythonPathToAPP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/configs/config.html#setPythonPathToAPP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.configs.config.setPythonPathToAPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set python path to root of app.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="run.html">Service launch</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

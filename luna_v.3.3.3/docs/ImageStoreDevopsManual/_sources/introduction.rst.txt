@@ -1,0 +1,42 @@
+Introduction
+============
+
+
+Service for storing images and objects.
+
+The service is an abstraction for storing pictures and objects (currently supported objects types are plain/text
+and application/json) in some database. Now two types of databases are supported: *aws S3* and a hard disk.
+All images and objects are stored in *buckets*. Thus, to save a picture or an object, create a *bucket* and then
+put a picture or object into it. *Buckets* are disjoint namespaces.
+
+There are two ways to save the image in the system:
+
+1. Make the request by the `POST` method to the resource `/$api/buckets/{bucket}/images`, put an image to the
+   body of request. For the image, *id* will be generated in the *uuid4* format, on which it will be possible in
+   the future to receive this image.
+
+2. Make a request using the `PUT` method to the resource `/$api/buckets/{bucket}/image/{id}`, put an image to the
+   body of request. Further on the transmitted *id*, you can get this image.
+
+All pictures are converted to jpg format if they were not.
+
+There are two ways to save an object in the system:
+
+1. Make a request by the `POST` method to the resource `/$api/buckets/{bucket}/objects`, put an object to the
+   body of request. For the object, *id* will be generated in the *uuid4* format, on which it will be possible in
+   the future to receive this object.
+
+2. Make a request using the `PUT` method on the resource`/$api/buckets/{bucket}/object/{id}`, put an object to the
+   body of request. Further on the passed *id* it is possible to receive this object.
+
+At the moment, the following types of objects are supported: plain/text and application/json.
+
+The service provides following options:
+  1. create *bucket*;
+  2. save the image under your *id* in *uuid4* format or under *id* issued by the system in the specified *bucket*;
+  3. get the picture by it's id from the specified *bucket*;
+  4. generate small copies of the images for preview mappings during the image saving phase;
+  5. delete a single image or several (up to 1000) together with small copies of the specified *bucket*.
+  6. save the object under your *id* in *uuid4* format or under *id* issued by the system in the specified *bucket*;
+  7. get the object by it's id from the specified *bucket*;
+  8. delete an individual object or several (up to 1000) from the specified *bucket*.

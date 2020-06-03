@@ -1,0 +1,19 @@
+v.2.0.2
+=======
+
+Improvements:
+-------------
+
+    1) Up luna3 version.
+
+    #) Increase matching/verify/identify speed.
+
+Bugs fixed:
+-----------
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_api, tests, uploads_scripts*
+and update dependencies from requirements.txt.

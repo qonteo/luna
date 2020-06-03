@@ -1,0 +1,19 @@
+v.1.0.1
+========
+
+Improvements:
+-------------
+
+    1) Update version of api 3.
+
+
+Bugs fixed:
+-----------
+
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

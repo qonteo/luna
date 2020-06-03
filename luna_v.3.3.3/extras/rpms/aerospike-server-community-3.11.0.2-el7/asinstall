@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+################################################################################
+# Install Aerospike Server packages and dependencies
+################################################################################
+
+if [ $EUID -ne 0 ]; then
+	echo "This script requires root or sudo privileges."
+	exit 1
+fi
+
+################################################################################
+# Install tools dependencies
+
+if [ -f aerospike-tools-deps/install.sh ]; then
+	echo Installing tools dependencies
+	aerospike-tools-deps/install.sh
+fi
+
+################################################################################
+# Install tools
+
+if [ -f aerospike-tools-*.rpm ]; then
+	echo Installing tools
+	
+	# Use default arguments if none passed in.
+	if [ $# -eq 0 ]; then
+		echo rpm -Uvh aerospike-tools-*.rpm
+		rpm -Uvh aerospike-tools-*.rpm
+	else
+		echo rpm "$@" aerospike-tools-*.rpm
+		rpm "$@" aerospike-tools-*.rpm
+	fi
+fi
+
+################################################################################
+# Install server
+
+if [ -f aerospike-server-*.rpm ]; then
+	echo Installing server
+	
+	# Use default arguments if none passed in.
+	if [ $# -eq 0 ]; then
+		echo rpm -Uvh aerospike-server-*.rpm
+		rpm -Uvh aerospike-server-*.rpm
+	else
+		echo rpm "$@" aerospike-server-*.rpm
+		rpm "$@" aerospike-server-*.rpm
+	fi
+fi

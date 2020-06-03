@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    html {
+        font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .table {
+        border: none;
+    }
+
+    .table-definition thead th:first-child {
+        pointer-events: none;
+        background: white;
+        border: none;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .page-item > * {
+        border: none;
+    }
+
+    .custom-checkbox {
+        min-height: 1rem;
+        padding-left: 0;
+        margin-right: 0;
+        cursor: pointer;
+    }
+
+    .custom-checkbox .custom-control-indicator {
+        content: "";
+        display: inline-block;
+        position: relative;
+        width: 30px;
+        height: 10px;
+        background-color: #818181;
+        border-radius: 15px;
+        margin-right: 10px;
+        -webkit-transition: background .3s ease;
+        transition: background .3s ease;
+        vertical-align: middle;
+        margin: 0 16px;
+        box-shadow: none;
+    }
+
+    .custom-checkbox .custom-control-indicator:after {
+        content: "";
+        position: absolute;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background-color: #84c7c1;
+        border-radius: 21px;
+        box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4);
+        left: -2px;
+        top: -4px;
+        -webkit-transition: left .3s ease, background .3s ease, box-shadow .1s ease;
+        transition: left .3s ease, background .3s ease, box-shadow .1s ease;
+    }
+
+    .custom-checkbox .custom-control-input:checked ~ .custom-control-indicator {
+        background-color: #c70009;
+        background-image: none;
+        box-shadow: none !important;
+    }
+
+    .custom-checkbox .custom-control-input:checked ~ .custom-control-indicator:after {
+        background-color: #c70009;
+        left: 15px;
+    }
+
+    .custom-checkbox .custom-control-input:focus ~ .custom-control-indicator {
+        box-shadow: none !important;
+    }
+</style>
+
+
+<link href="/static/css/bootstrap.css" rel="stylesheet" id="bootstrap-css">
+
+<legend>Common counters:</legend>
+<div class="card">
+    <table class="table table-bordered table-striped table-hover">
+        <tr>
+            <th>Accounts</th>
+            <th>Persons</th>
+            <th>Descriptors</th>
+            <th>Account lists</th>
+        </tr>
+        <tr>
+            <td>{{ (account_count)}}</td>
+            <td>{{ (person_count)}}</td>
+            <td>{{ (descriptor_count)}}</td>
+            <td>{{ (accounts_list_count)}}</td>
+        </tr>
+
+    </table>
+
+    <legend>Accounts:</legend>
+    <div class="card-block p-0">
+        <table class="table table-bordered table-sm m-0">
+            <thead class="">
+            <tr>
+                <th>Suspend</th>
+                <th>Organization name</th>
+                <th>E-mail address</th>
+                <th>Status</th>
+                <th>Account id</th>
+                <th><i class="glyphicon glyphicon-cog"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>
+                            <label class="custom-control custom-checkbox">
+                                <input id="{{ "checkbox_" +  escape(item[3])}}" type="checkbox"
+                                       class="custom-control-input"
+                                       onclick="submitAccountBlock('{{ escape(item[3])}}')"
+                                       {% if item[2]== "suspended" %} checked="checked" {% end %}
+                                       hidden="hidden"
+                                >
+                                <span class="custom-control-indicator"></span>
+                            </label>
+                        </td>
+                        <td id='{{ "org_name_" +  escape(item[3])}}'>{{ escape(item[0]) }}</td>
+                        <td id='{{ "email_" +  escape(item[3])}}'>{{ escape(item[1]) }}</td>
+                        <td id='{{ "status_" +  escape(item[3])}}'>{{ escape(item[2]) }}</td>
+                        <td>{{ escape(item[3]) }}</td>
+                        <td align="center">
+                            <a href="{{'/accounts/' + escape(item[3])}}">
+                                <button type="button" class="btn btn-default btn-sm"
+                                        onclick="getTaskErrors({{ item[3]}})"
+                                        title="view account"
+                                >
+                                    <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                {% end %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer p-0">
+        <nav aria-label="...">
+            <ul class="pagination justify-content-end mt-3 mr-3">
+                <li class="page-item"><a class="page-link" href={{"/accounts?page=" + escape(prev_page) + "&page_size=" + escape(page_size)}}>
+                    Previous
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href={{"/accounts?page=1&page_size=" + escape(page_size)}}>1</a></li>
+                <li class="page-item active">
+                            <span class="page-link"> {{escape(page)}}<span class="sr-only">(current)</span>
+                            </span>
+                </li>
+                <li class="page-item"><a class="page-link" href={{"/accounts?page=" + escape(max_page) + "&page_size=" + escape(page_size)}}>{{escape(max_page)}}</a></li>
+                <li class="page-item">
+                    <a class="page-link" href={{"/accounts?page=" + escape(next_page) + "&page_size=" + escape(page_size)}}>Next</a>
+                </li>
+                <div class="container">
+
+
+                    <div id="imaginary_container">
+                        <div class="input-group stylish-input-group">
+                            <input type="text" class="form-control" id="search_account" onkeypress="runSearchAccountScript(event)"
+                                   placeholder="Search">
+                            <span class="input-group-addon">
+                                <button type="submit" onclick="getAccount()">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+    function runSearchAccountScript(e) {
+        if (e.keyCode == 13) {
+            getAccount();
+        }
+    }
+
+    function getAccount() {
+        var account_email = $('#search_account').val();
+        jQuery.ajax({
+            url: '/search?account_email=' + account_email,
+            type: 'GET',
+            timeout: 60000,
+            success: function (response) {
+                // redirect must be defined and must be true
+                window.location.replace("/accounts/"+ response);
+//                $("#status_" + accountId).text(newStatus);
+            },
+            error: function (response) {
+                var errorJs = jQuery.parseJSON( response.responseText );
+                showErrorModalWindowWithText("Error find account", errorJs,  "");
+            }
+        })
+    }
+
+    function submitAccountBlock(accountId) {
+        console.log(accountId);
+
+        var status = $("#status_" + accountId).text();
+        if (status == "active") {
+            var currentStatus = 1;
+            var newStatus = "suspended";
+        } else {
+            var currentStatus = 0;
+            var newStatus = "active";
+        }
+
+        jQuery.ajax({
+            url: '/2/accounts/' + accountId + "?status=" + (1 - currentStatus),
+            type: 'PATCH',
+            timeout: 60000,
+            success: function (response) {
+                // redirect must be defined and must be true
+                $("#status_" + accountId).text(newStatus);
+            },
+            error: function (response) {
+                $('#checkbox_' + accountId).prop('checked', 1 - currentStatus);
+            }
+        })
+    }
+</script>
+
+
+{% end %}
+

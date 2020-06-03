@@ -1,0 +1,697 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tests.matcher.unittests_matching_search &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>tests.matcher.unittests_matching_search</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for tests.matcher.unittests_matching_search</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">tests.classes</span> <span class="k">import</span> <span class="n">authStr</span>
+<span class="kn">from</span> <span class="nn">tests.config</span> <span class="k">import</span> <span class="n">LUNA_IMAGE_STORE_OFF</span>
+<span class="kn">from</span> <span class="nn">tests.functions</span> <span class="k">import</span> <span class="n">createPayloadImg</span>
+<span class="kn">from</span> <span class="nn">tests.matcher.matcher_caseGenerator</span> <span class="k">import</span> <span class="n">CaseGenerator</span>
+<span class="kn">from</span> <span class="nn">tests.matcher.unittests_abstract_match</span> <span class="k">import</span> <span class="n">TestAbstractMatching</span>
+<span class="kn">from</span> <span class="nn">tests.resources</span> <span class="k">import</span> <span class="n">standardImage</span><span class="p">,</span> <span class="n">severalFaces</span><span class="p">,</span> <span class="n">warpedImage</span><span class="p">,</span> <span class="n">base64Files</span><span class="p">,</span> <span class="n">onePersonList</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">tests</span> <span class="k">import</span> <span class="n">luna_api_functions</span>
+
+
+<div class="viewcode-block" id="TestMatchingSearch"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch">[docs]</a><span class="k">class</span> <span class="nc">TestMatchingSearch</span><span class="p">(</span><span class="n">TestAbstractMatching</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests of matching search</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">resource</span> <span class="o">=</span> <span class="s1">&#39;/matching/search&#39;</span>
+
+<div class="viewcode-block" id="TestMatchingSearch.setUp"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.setUpClass"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.setUpClass">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUpClass</span><span class="p">()</span>
+        <span class="n">TestMatchingSearch</span><span class="o">.</span><span class="n">uploadImage</span> <span class="o">=</span> <span class="n">createPayloadImg</span><span class="p">(</span><span class="n">standardImage</span><span class="p">)</span>
+        <span class="n">TestMatchingSearch</span><span class="o">.</span><span class="n">isBinary</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_person_list"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_person_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_person_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_person_list</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: success searching by person list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">standardImage</span><span class="p">),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_descriptors_list"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_descriptors_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_descriptors_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_descriptors_list</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: success searching by descriptors list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptorsListId</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">standardImage</span><span class="p">),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_dynamic_descriptors_list"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_dynamic_descriptors_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_dynamic_descriptors_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_dynamic_descriptors_list</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: success searching by dynamic descriptors list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listPhotoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamicDescriptorsList</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">standardImage</span><span class="p">),</span>
+                                              <span class="n">descriptorIds</span><span class="o">=</span><span class="n">listPhotoId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_dynamic_persons_list"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_dynamic_persons_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_dynamic_persons_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_dynamic_persons_list</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by dynamic persons list</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listPersonId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamicPersonsList</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">standardImage</span><span class="p">),</span> <span class="n">personIds</span><span class="o">=</span><span class="n">listPersonId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_many_faces"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_many_faces">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_many_faces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_many_faces</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: trying to search , template is image with several faces</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">severalFaces</span><span class="p">),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span> <span class="n">Error</span><span class="o">.</span><span class="n">ManyFaces</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">][</span><span class="s2">&quot;faces&quot;</span><span class="p">]),</span> <span class="mi">9</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_with_exif"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_with_exif">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_with_exif</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_with_exif</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by persons list with set extract_exif to 0 and 1</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">extract</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">extractExif</span><span class="o">=</span><span class="n">extract</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">extract</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;exif&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;exif&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_warped_image"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_warped_image">[docs]</a>    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skipIf</span><span class="p">(</span><span class="n">LUNA_IMAGE_STORE_OFF</span><span class="p">,</span> <span class="s2">&quot;S3 in LUNA API OFF&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_matching_search_warped_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_warped_image</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by persons list with set warped_image to 0 and 1</span>
+<span class="sd">             :LIS: Yes</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">warped</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">warpedImage</span><span class="p">),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">warpedImage</span><span class="o">=</span><span class="n">warped</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="n">descriptorId</span> <span class="o">=</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">warped</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+                    <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getPortrait</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">descriptorId</span><span class="p">)</span>
+                    <span class="n">body</span> <span class="o">=</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">warpedImage</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">imgBytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">imgBytes</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getPortrait</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">descriptorId</span><span class="p">)</span>
+                    <span class="n">body</span> <span class="o">=</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">warpedImage</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">imgBytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">imgBytes</span> <span class="o">!=</span> <span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_extract_descriptor"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_extract_descriptor">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_extract_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_extract_descriptor</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: trying to search by persons list with set extract_descriptor to 0 and 1</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">extract</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]:</span>
+                <span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;image/jpeg&#39;</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">manualRequest</span><span class="p">(</span><span class="s1">&#39;/matching/search&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">warpedImage</span><span class="p">),</span>
+                                                         <span class="n">isBinary</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+                                                         <span class="n">queryParams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;list_id&#39;</span><span class="p">:</span> <span class="n">listId</span><span class="p">,</span> <span class="s1">&#39;extract_descriptor&#39;</span><span class="p">:</span> <span class="n">extract</span><span class="p">})</span>
+                <span class="k">if</span> <span class="n">extract</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">UnsupportedQueryParm</span><span class="p">,</span>
+                                               <span class="n">msgFormat</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;extract_descriptor&quot;</span><span class="p">],</span> <span class="n">auth</span><span class="o">=</span><span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_estimate_attributes"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_estimate_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_estimate_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_estimate_attributes</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by persons list with set estimate_attributes to 0 and 1</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">estimate</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">estimateAttributes</span><span class="o">=</span><span class="n">estimate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">estimate</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_estimate_emotions"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_estimate_emotions">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_estimate_emotions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_estimate_emotions</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by persons list with set estimate_emotions to 0 and 1</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">estimate</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">estimateEmotions</span><span class="o">=</span><span class="n">estimate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">estimate</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;emotions&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">][</span><span class="s2">&quot;attributes&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_estimate_head_pose"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_estimate_head_pose">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_estimate_head_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_estimate_head_pose</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by person&#39;s list with and without estimate head position</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">estimate</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">estimateHeadPose</span><span class="o">=</span><span class="n">estimate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">estimate</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;head_pose&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">][</span><span class="s2">&quot;attributes&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_estimate_ethnicities"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_estimate_ethnicities">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_estimate_ethnicities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_estimate_ethnicities</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by persons list with set estimate_ethnicities to 0 and 1</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">estimate</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">estimateEthnicities</span><span class="o">=</span><span class="n">estimate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">estimate</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;attributes&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;ethnicities&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">][</span><span class="s2">&quot;attributes&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_estimate_quality"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_estimate_quality">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_estimate_quality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_estimate_quality</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success searching by persons list with set estimate_quality to 0 and 1</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">estimate</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">estimateQuality</span><span class="o">=</span><span class="n">estimate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">estimate</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;quality&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;quality&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_quality_threshold"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_quality_threshold">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_quality_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_quality_threshold</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: trying to search by persons list with set quality_threshold to 0 and 0.99</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;0.9999&quot;</span><span class="p">]:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">scoreThreshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">threshold</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;score&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span>
+                                     <span class="n">Error</span><span class="o">.</span><span class="n">LowThreshold</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_angle_threshold"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_angle_threshold">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_angle_threshold</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         .. test:: test_matching_search_angle_threshold</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: trying to search by persons list with set angle threshold to 0 and 180</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">personsListId</span>
+            <span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pitchLt&quot;</span><span class="p">,</span> <span class="s2">&quot;yawLt&quot;</span><span class="p">,</span> <span class="s2">&quot;rollLt&quot;</span><span class="p">):</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="p">):</span>
+                        <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">onePersonList</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                                          <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                          <span class="o">**</span><span class="p">{</span><span class="n">angle</span><span class="p">:</span> <span class="n">threshold</span><span class="p">})</span>
+                        <span class="k">if</span> <span class="n">threshold</span> <span class="o">==</span> <span class="mi">180</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s2">&quot;score&quot;</span> <span class="ow">in</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span>
+                                             <span class="n">Error</span><span class="o">.</span><span class="n">LowThreshold</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">searchTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_base64_in_list"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_base64_in_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_base64_in_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_base64_in_list</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: success search descriptors from data in base64 encoding</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchBase64</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">base64File</span> <span class="ow">in</span> <span class="n">base64Files</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">contentType</span><span class="o">=</span><span class="n">base64File</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">base64File</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptorsListId</span>
+                    <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">base64File</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]),</span>
+                                                          <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span> <span class="n">contentType</span><span class="o">=</span><span class="n">base64File</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessMatching</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">searchBase64</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_base64_with_wrong_type_header"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_base64_with_wrong_type_header">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_base64_with_wrong_type_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_base64_with_wrong_type_header</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: trying search descriptors from data in base64 encoding and content-type  &quot;image/bmp&quot;</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchBase64WithWrongContentTypeHeader</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptorsListId</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">createPayloadImg</span><span class="p">(</span><span class="n">base64Files</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;filename&quot;</span><span class="p">]),</span>
+                                                  <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span> <span class="n">contentType</span><span class="o">=</span><span class="s2">&quot;image/bmp&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">ConvertImageToJPGError</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchBase64WithWrongContentTypeHeader</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_bad_base64"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_bad_base64">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_bad_base64</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_bad_base64</span>
+
+<span class="sd">             :resources: &quot;/matching/search&quot;</span>
+<span class="sd">             :description: trying search descriptors from data in non base64</span>
+<span class="sd">             :LIS: No</span>
+<span class="sd">             :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">searchSendBase64</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptorsListId</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;image/x-jpeg-base64&quot;</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;123&#39;</span><span class="p">,</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span>
+                                                  <span class="n">contentType</span><span class="o">=</span><span class="s2">&quot;image/x-jpeg-base64&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">ConvertBase64Error</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">searchSendBase64</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_limit_params"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_limit_params">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_limit_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_limit_params</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: testing of valid values of &#39;limit&#39; param</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">limitParamsTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">queryParams</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;person_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">personId</span><span class="p">,</span> <span class="s2">&quot;list_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptorsListId</span><span class="p">},</span>
+                <span class="s2">&quot;isPerson&quot;</span><span class="p">:</span> <span class="kc">False</span>
+            <span class="p">}</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;image/jpeg&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">limitParamsTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">queryParams</span><span class="p">)</span>
+
+        <span class="n">limitParamsTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_with_invalid_limit_params"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_with_invalid_limit_params">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_with_invalid_limit_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_with_invalid_limit_params</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: testing of invalid values of &#39;limit&#39; param</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">limitParamsTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">queryParams</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;person_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">personId</span><span class="p">,</span> <span class="s2">&quot;list_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptorsListId</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">invalidLimitParamsTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">queryParams</span><span class="p">)</span>
+
+        <span class="n">limitParamsTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_bad_id_query_param"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_bad_id_query_param">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_bad_id_query_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_bad_id_query_param</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: failed matching search with bad type of query params</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">matchingBadIdQueryParamTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">testCases</span> <span class="o">=</span> <span class="n">CaseGenerator</span><span class="o">.</span><span class="n">badIdQueryParamsTestSuiteSearchGenerator</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">)</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matchingBadIdQueryParams</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">testCases</span><span class="p">)</span>
+
+        <span class="n">matchingBadIdQueryParamTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_non_exist_id"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_non_exist_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_non_exist_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_non_exist_id</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: trying to match with non exist id value (uuid4)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">matchingNonExistIdTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">testCases</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;queries&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">Error</span><span class="o">.</span><span class="n">RequiredQueryParameterNotFound</span><span class="p">,</span>
+                    <span class="s2">&quot;msgFormat&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">]]</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matchingNonExistIdTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">testCases</span><span class="p">)</span>
+
+        <span class="n">matchingNonExistIdTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_excess_query_params"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_excess_query_params">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_excess_query_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_excess_query_params</span>
+
+<span class="sd">            :resources: &quot;/matching/match&quot;</span>
+<span class="sd">            :description: success match with too much query params (1 of query param is excess)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">matchingExcessTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">testCases</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;person_ids&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamicPersonsList</span><span class="p">,</span>
+                 <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dynamicDescriptorsList</span><span class="p">,</span>
+                 <span class="s2">&quot;list_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">descriptorsListId</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matchingExcessTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">testCases</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">matchingExcessTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_not_consistent_query_params"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_not_consistent_query_params">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_not_consistent_query_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_match_not_consistent_query_params</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: trying to match with no full query params (one of necessary param is missing)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">matchingNonConsistentTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">testCases</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;queries&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">Error</span><span class="o">.</span><span class="n">RequiredQueryParameterNotFound</span><span class="p">,</span>
+                    <span class="s2">&quot;msgFormat&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">]]</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matchingNonConsistentTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">testCases</span><span class="p">)</span>
+
+        <span class="n">matchingNonConsistentTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_search_empty_list"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_search_empty_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_search_empty_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_search_empty_list</span>
+
+<span class="sd">            :resources: &quot;/matching/search&quot;</span>
+<span class="sd">            :description: success matching with list which has no id</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">matchEmptyListTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">emptyDescriptorListId</span> <span class="o">=</span>  <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createList</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">listType</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                                  <span class="n">listData</span><span class="o">=</span><span class="s2">&quot;visionlabs search tests, descriptor&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">]</span>
+            <span class="n">emptyPersonListId</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createList</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">listType</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                                  <span class="n">listData</span><span class="o">=</span><span class="s2">&quot;visionlabs search tests, persons list&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">]</span>
+            <span class="n">testCases</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;list_id&quot;</span><span class="p">:</span> <span class="n">emptyPersonListId</span><span class="p">},</span>
+                    <span class="s2">&quot;isPersons&quot;</span><span class="p">:</span> <span class="kc">True</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;list_id&quot;</span><span class="p">:</span> <span class="n">emptyDescriptorListId</span><span class="p">},</span>
+                    <span class="s2">&quot;isPersons&quot;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matchEmptyListTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">testCases</span><span class="p">)</span>
+
+        <span class="n">matchEmptyListTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestMatchingSearch.test_matching_identify_one_of_list_id_non_exist"><a class="viewcode-back" href="../../../testing.html#tests.matcher.unittests_matching_search.TestMatchingSearch.test_matching_identify_one_of_list_id_non_exist">[docs]</a>    <span class="k">def</span> <span class="nf">test_matching_identify_one_of_list_id_non_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_matching_identify_one_of_list_id_non_exist</span>
+
+<span class="sd">            :resources: &quot;/matching/identify&quot;</span>
+<span class="sd">            :description: trying to match with dynamic list where one of id doesn&#39;t exist</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Match</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">matchNonExistItemListTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">badDescriptorIds</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dynamicDescriptorsList</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonExistsId</span><span class="p">)</span>
+            <span class="n">badPersonIds</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dynamicPersonsList</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonExistsId</span><span class="p">)</span>
+            <span class="n">testCases</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;queries&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">:</span> <span class="n">badDescriptorIds</span><span class="p">},</span>
+                    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">Error</span><span class="o">.</span><span class="n">ObjectNotFound</span><span class="p">,</span>
+                    <span class="s2">&quot;msgFormat&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;queries&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">:</span> <span class="n">badPersonIds</span><span class="p">},</span>
+                    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">Error</span><span class="o">.</span><span class="n">ObjectNotFound</span><span class="p">,</span>
+                    <span class="s2">&quot;msgFormat&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">]</span>
+                <span class="p">}</span>
+
+            <span class="p">)</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;image/jpeg&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matchNonExistItemListTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">testCases</span><span class="p">)</span>
+
+        <span class="n">matchNonExistItemListTest</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

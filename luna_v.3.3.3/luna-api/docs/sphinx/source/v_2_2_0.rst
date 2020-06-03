@@ -1,0 +1,19 @@
+v.2.2.0
+=======
+
+Improvements:
+-------------
+
+    1) Added ability to use plugins for account statics.
+
+    #) Added a example of a account statistics plugin.
+
+    #) Added "list_data" and "list_type" to account statics json.
+
+    #) Speed up searching by lists.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_api, tests, uploads_scripts*
+and update dependencies from requirements.txt.

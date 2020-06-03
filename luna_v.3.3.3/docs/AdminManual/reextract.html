@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Update neural network &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Internal task handler" href="internal_task_handler.html" />
+    <link rel="prev" title="Tasks handler" href="tasks_handlers.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>Update neural network</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="tasks_handlers.html">Tasks handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="internal_task_handler.html">Internal task handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="update-neural-network">
+<h1>Update neural network<a class="headerlink" href="#update-neural-network" title="Permalink to this headline">¶</a></h1>
+<p>You should re-extract all descriptors for update neural network. For the process of re-extracting descriptors need:</p>
+<blockquote>
+<div><ul class="simple">
+<li>configurate new instance of LUNA Core with new neural network;</li>
+<li>set correct value for <em>LUNA_REEXTRACT_URL</em>, settings of luna-image-store with warps in configuration file;</li>
+<li>run task of request to resource <em>/reextract</em> with method <em>POST</em>;</li>
+<li>after re-extracting descriptors change value <em>LUNA_URL</em> in configuration file;</li>
+<li>change <em>LUNA_URL</em> in configuration file of LUNA Api.</li>
+</ul>
+</div></blockquote>
+<p>Recommendations. Don’t use LUNA Api when re-extract in progress. It is impossible to pause the process
+of re-extraction. You can only to stop the process and restart it. All descriptors which already are in new instance
+LUNA Core would not re-extract again.</p>
+<span class="target" id="module-luna_admin.app.handlers.reextract_handler"></span><p>Reextract module.</p>
+<dl class="class">
+<dt id="luna_admin.app.handlers.reextract_handler.ReExtractHandler">
+<em class="property">class </em><code class="descclassname">luna_admin.app.handlers.reextract_handler.</code><code class="descname">ReExtractHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/handlers/reextract_handler.html#ReExtractHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.handlers.reextract_handler.ReExtractHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reextract handler.</p>
+<dl class="method">
+<dt id="luna_admin.app.handlers.reextract_handler.ReExtractHandler.on_finish">
+<code class="descname">on_finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/handlers/reextract_handler.html#ReExtractHandler.on_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.handlers.reextract_handler.ReExtractHandler.on_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start execute task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_admin.app.handlers.reextract_handler.ReExtractHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/handlers/reextract_handler.html#ReExtractHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.handlers.reextract_handler.ReExtractHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new reextract task</p>
+<dl class="post">
+<dt id="post--reextract">
+<code class="descname">POST </code><code class="descname">/reextract</code><a class="headerlink" href="#post--reextract" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Example request</strong>:</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">reqheader Authorization:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">basic authorization</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/reextract</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="task">
+<!--[task]--><code class="descname">task</code><a class="headerlink" href="#task" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>descriptors</strong> (<em>_list_(uuid4)</em>) – task</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;8ce1a5d3-1259-40c5-b93e-33874ba93cbc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1494f5fd-6f66-44df-8041-fd6b05e7fbe2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2272a54d-1eb3-4eb9-99ee-557ede915558&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div></blockquote>
+<p><strong>Example response</strong>:</p>
+<blockquote>
+<div><div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,d3abc2f6-70f1-4ae0-9d10-475103e0891d</span>
+<span class="na">Location</span><span class="o">:</span> <span class="l">/tasks/12</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt>
+<code class="descname">task</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>task_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – task</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;7d22f1b4-04e2-4f46-af72-54382b7c004b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;b83cb55c-4c59-4ed6-b0cf-4f8882ff70e5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;649126c0-438a-42ef-87e2-36e3ceb1d22b&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div></blockquote>
+<p>Message error is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – task is created.</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – Bad json</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="tasks_handlers.html">Tasks handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="internal_task_handler.html">Internal task handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

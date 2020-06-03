@@ -1,0 +1,99 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_faces.app.handlers.unlink_history_handler &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_faces.app.handlers.unlink_history_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_faces.app.handlers.unlink_history_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">app.handlers.base_handler</span> <span class="k">import</span> <span class="n">BaseRequestHandler</span>
+<span class="kn">from</span> <span class="nn">app.handlers.query_validators</span> <span class="k">import</span> <span class="n">timeFilterGetter</span>
+
+
+<div class="viewcode-block" id="UnlinkHistoryHandler"><a class="viewcode-back" href="../../../../unlink_history_handler.html#luna_faces.app.handlers.unlink_history_handler.UnlinkHistoryHandler">[docs]</a><span class="k">class</span> <span class="nc">UnlinkHistoryHandler</span><span class="p">(</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler for work with unlinking log</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="UnlinkHistoryHandler.patch"><a class="viewcode-back" href="../../../../unlink_history_handler.html#luna_faces.app.handlers.unlink_history_handler.UnlinkHistoryHandler.patch">[docs]</a>    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">patch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean history of unlink attributes from lists. This history is need for correct updating cash in matchers.</span>
+
+
+<span class="sd">        Resource is reached by address &#39;/linker/unlink_history&#39;</span>
+
+<span class="sd">        .. http:patch:: /linker/unlink_history</span>
+
+<span class="sd">            :query time__lt: upper bound of unlink attributes time</span>
+
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                PATCH /linker/log HTTP/1.1</span>
+
+<span class="sd">            **Example response**:</span>
+
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 204 OK</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+<span class="sd">                    Begin-Request-Time: 1526039272.9173293</span>
+<span class="sd">                    End-Request-Time: 1526039272.9505265</span>
+<span class="sd">                    LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295</span>
+
+
+
+<span class="sd">            :statuscode 204: Ok</span>
+<span class="sd">            :statuscode 400: list not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">createTimeLt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s2">&quot;time__lt&quot;</span><span class="p">,</span> <span class="n">timeFilterGetter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">cleanLog</span><span class="p">(</span><span class="n">createTimeLt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

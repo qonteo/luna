@@ -1,0 +1,15 @@
+requests==2.18.4
+tornado==5.0.1
+logbook==1.1.0
+pillow-simd==4.3.0.post0
+ujson==1.35
+python-interface==1.4.0
+lxml==4.1.1
+boto3==1.4.4
+aerospike==3.1.1
+jsonschema==2.6.0
+python-dateutil==2.7.3
+six==1.11.0
+pytz==2018.4
+chardet==3.0.4
+extras/luna3-v.0.0.50.tar.gz

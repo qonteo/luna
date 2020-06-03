@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Document</title>
+
+  <link rel="stylesheet" href="static/css/app.css">
+    <script type="text/javascript" src="/static/js/socket.io.min.js"></script>
+    <script src="/static/js/websocket.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/app.js"></script>
+  <style>
+    .open_minSimilarity_correct {
+           width: 100px;
+           height: 100px;
+           position: absolute;
+           z-index: 50;
+           top: 0;
+           right: 0;
+      cursor: pointer;
+         }
+    .open_minSimilarity_correct:hover {
+      background-color: rgba(42, 171, 210, 0.11);
+    }
+    .minSimilarity_correct {
+      width: 20%;
+      position: absolute;
+      z-index: 51;
+      top: 0;
+      right: 0;
+      background-color: rgba(232, 232, 232, 0.95);
+      box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.2);
+      padding: 2em;
+      font-size: 1.5em;
+    }
+    .minSimilarity_correct:not(.active) {
+      display: none;
+    }
+    .minSimilarity_correct .text_minSimilarity {
+      margin: 10% 5% 0;
+      text-align: center;
+      display: block;
+
+    }
+    .minSimilarity_correct .minSimilarity_value, .minSimilarity_correct .minPassportSimilarity_value {
+      width: 100%;
+      margin: 5% 0;
+      text-align: right;
+
+    }
+    .minSimilarity_correct .save {
+      line-height: 2em;
+      background-color: #7b9a7d;
+      cursor: pointer;
+      display: block;
+      text-align: center;
+      font-size: 2em;
+    }
+    .minSimilarity_correct .save:hover {
+      background-color: #409152;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="main-header">
+      <div class="open_minSimilarity_correct"></div>
+      <div class="minSimilarity_correct">
+        <input type="checkbox" id="view_connectID_logo"><label for="view_connectID_logo">Показывать connectID</label><br>
+        <input type="checkbox" id="view_similarity"  checked><label for="view_similarity">Показывать Similarity</label><br>
+        <input type="checkbox" id="view_passport_icon"  checked><label for="view_passport_icon">Показывать passport_icon</label><br>
+        <input type="checkbox" id="view_attributes" checked><label for="view_attributes">Показывать пол и возраст</label><br>
+        <span class="text_minSimilarity">minPassportSimilarity</span>
+        <input class="minPassportSimilarity_value">
+        <span class="text_minSimilarity">minSimilarity</span>
+        <input class="minSimilarity_value">
+        <span class="save"> OK </span>
+      </div>
+
+      <div class="main-header__left-col">
+        <a href="/" class="main-header__back-btn">
+          <span class="main-header__back-btn-ico"></span>
+          Video Stream Recognition
+        </a>
+      </div>
+      <div class="main-header__right-col">
+        <img src="static/img/icons/visionlab.png" alt="" class="main-header__right-col-img">
+        <img src="static/img/icons/connect.png" id="connectID_logo" alt="" class="main-header__right-col-img">
+      </div>
+    </header>
+    <div class="main-content main-content--video">
+      <div class="video-stream__wrap">
+      </div>
+    </div>
+  </div>
+
+  <script>initSockets("{{namespace}}","stream_room");</script>
+</body>
+</html>

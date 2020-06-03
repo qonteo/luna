@@ -1,0 +1,1002 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Matching API &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Descriptor API" href="descriptor.html" />
+    <link rel="prev" title="Descriptor extraction API" href="photo.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Matching API</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="photo.html">Descriptor extraction API</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="descriptor.html">Descriptor API</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_api.app.rest_handlers.matcher_handler">
+<span id="matching-api"></span><h1>Matching API<a class="headerlink" href="#module-luna_api.app.rest_handlers.matcher_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatchValidatorClass">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">MatchValidatorClass</code><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatchValidatorClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatchValidatorClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure for parsing query parameters during matching.</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd>For every parameter Param must be class instance</dd>
+<dt>Attributes:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">ivar limit:</th><td class="field-body">maximum number of objects in responce, limited by MAX_CANDIDATE_IN_RESPONSE,         default 3.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">ivar descriptor_id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">id of template descriptor</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">ivar list_id:</th><td class="field-body">account list id</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">ivar descriptor_ids:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">dynamic set of descriptor ids</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">ivar person_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">dynamic set of person ids</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">ivar candidateLength:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">number of candodates (for statistics).</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherDescriptorHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">MatcherDescriptorHandler</code><span class="sig-paren">(</span><em>*func_args</em>, <em>**func_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherDescriptorHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherDescriptorHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for similar descriptor search</p>
+<dl class="post">
+<dt id="post--matching-match?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706        -8baf-433b-82eb-8c7fada847d1">
+<code class="descname">POST </code><code class="descname">/matching/match?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706        -8baf-433b-82eb-8c7fada847d1</code><a class="headerlink" href="#post--matching-match?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&limit=1&person_id=22fd2706        -8baf-433b-82eb-8c7fada847d1" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam descriptor_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">list of candidate person ids for matching</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Optparam list_id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">id of descriptor list for account</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Optparam limit:</th><td class="field-body"><p class="first">maximum number of results in response</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Optparam person_id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">id of reference person</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam descriptor_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">id of reference decriptor</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – Matching successful</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="match_result">
+<!--[match_result]--><code class="descname">match_result</code><a class="headerlink" href="#match_result" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>candidates</strong> (_list_(<a class="reference internal" href="handlers.html#one_match_result_descriptor"><code class="xref json json-object docutils literal notranslate"><span class="pre">one_match_result_descriptor</span></code></a>)) – list with matching result</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;5f4ab573-fe69-49df-a2a8-98ad711595d4&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.7001953125</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;2f28ff87-e2b5-499b-a059-d5cc767704da&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.4389999993145466</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a1f8f5e0-8c32-4700-bd4b-287bb28721cd&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.8155025007510002</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – wrong type of query parameter</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherDescriptorHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherDescriptorHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherDescriptorHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method “POST”, stub.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">MatcherHandler</code><span class="sig-paren">(</span><em>*func_args</em>, <em>**func_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic handler for matching</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.connectResultMatching">
+<code class="descname">connectResultMatching</code><span class="sig-paren">(</span><em>currentResult</em>, <em>newMatchingResult</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.connectResultMatching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.connectResultMatching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join new matching result with previous result. This operation is necessary as far as we do search,
+based on several reference person photos.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>currentResult</strong> – Current results</li>
+<li><strong>newMatchingResult</strong> – New matching result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">In case of success system returns joined result, list with dictionary with keys         person_id, similarity (best matching for all person descriptors), user_data,         descriptor_id of the best match.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.generateEmptyMatchingResult">
+<code class="descname">generateEmptyMatchingResult</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.generateEmptyMatchingResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.generateEmptyMatchingResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send empty matching result</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">success(201, {“candidates”: []})</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.generateErrorForHead">
+<em class="property">static </em><code class="descname">generateErrorForHead</code><span class="sig-paren">(</span><em>exception: luna3.common.exceptions.LunaApiException</em><span class="sig-paren">)</span> &#x2192; crutches_on_wheels.errors.errors.ErrorInfo<a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.generateErrorForHead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.generateErrorForHead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate error for method head (now body with error)</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>exception: luna3 exception</dd>
+<dt>Returns:</dt>
+<dd>if status code 404 - object not found error otherwise Error.UnknownErrorFromLunaFaces</dd>
+<dt>Raises:</dt>
+<dd>VLException(error, e.statusCode, False): if method head and request failed</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getCandidatesForMatching">
+<code class="descname">getCandidatesForMatching</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.getCandidatesForMatching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getCandidatesForMatching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of candidates for matching</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>params: set of query parameters to get candidate list</dd>
+<dt>Returns:</dt>
+<dd>in case of success list of descriptors or list ids from LUNA is returned</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getRequestParam">
+<code class="descname">getRequestParam</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.getRequestParam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getRequestParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get query parameters of request</p>
+<p>note: It’s assumed that at least one parameter exists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> – list of possible parameters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict is returned</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getStatSimilarity">
+<code class="descname">getStatSimilarity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.getStatSimilarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getStatSimilarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get maximum similarity from response.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">0, if list is empty, else number in range from 0 to 1</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTemplateForMatching">
+<code class="descname">getTemplateForMatching</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.getTemplateForMatching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTemplateForMatching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive list of template descriptors.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>List of query parameters</dd>
+<dt>Returns:</dt>
+<dd>in case of success system returns Result with list of template descriptors</dd>
+<dt>Raises:</dt>
+<dd>VLException(error, e.statusCode, False): if method head and request failed</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTypeCandidate">
+<code class="descname">getTypeCandidate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.getTypeCandidate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTypeCandidate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get candidate type (dynamic or static list).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">If type = dynamic return 1, else return 0</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTypeTemplate">
+<code class="descname">getTypeTemplate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.getTypeTemplate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTypeTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get template type
+:return:  If type = person return 1, else return 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.matchAndUnion">
+<code class="descname">matchAndUnion</code><span class="sig-paren">(</span><em>template</em>, <em>candidateLists</em>, <em>prevMatchingResult</em>, <em>searchByLists=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.matchAndUnion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.matchAndUnion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for matching template with candidates list and for joining with previous results</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>template</strong> – reference descriptor id</li>
+<li><strong>candidateLists</strong> – candidate list, list uuids</li>
+<li><strong>prevMatchingResult</strong> – previous matching results</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">in case of success refer to connectResultMatching</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.on_finish">
+<code class="descname">on_finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.on_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.on_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for sending request statistics</p>
+<p>note: Function is called after request was processed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAccountStatistic">
+<code class="descname">setAdditionalDataToAccountStatistic</code><span class="sig-paren">(</span><em>accountStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.setAdditionalDataToAccountStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAccountStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set template and candidate to stats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>accountStats</strong> – common request stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAdminStatistic">
+<code class="descname">setAdditionalDataToAdminStatistic</code><span class="sig-paren">(</span><em>adminStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.setAdditionalDataToAdminStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAdminStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set additional admin stats “limit”, “template”, “candidate”, “value_sim”, “value_time”, “value_size”</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>adminStats</strong> – common stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new admin stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setQueryParameters">
+<code class="descname">setQueryParameters</code><span class="sig-paren">(</span><em>listParams</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.setQueryParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setQueryParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install lists parameters, that satisfy the query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>listParams</strong> – list of possible query parameters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">in case of success system returns Result with 0.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherIdentifyHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">MatcherIdentifyHandler</code><span class="sig-paren">(</span><em>*func_args</em>, <em>**func_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherIdentifyHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherIdentifyHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for identification request. This request is used to compare descriptors or persons</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherIdentifyHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherIdentifyHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherIdentifyHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for similar person search</p>
+<dl class="post">
+<dt id="post--matching-identify?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1">
+<code class="descname">POST </code><code class="descname">/matching/identify?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1</code><a class="headerlink" href="#post--matching-identify?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&limit=1&person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam person_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">list of candidate person ids for matching</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Optparam list_id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">account list id</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Optparam limit:</th><td class="field-body"><p class="first">maximum number of results in response</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Optparam person_id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">id of reference person</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam descriptor_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">id  of reference descriptor</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – Matching successful</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="identify_result">
+<!--[identify_result]--><code class="descname">identify_result</code><a class="headerlink" href="#identify_result" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>candidates</strong> (_list_(<a class="reference internal" href="handlers.html#one_match_result_person"><code class="xref json json-object docutils literal notranslate"><span class="pre">one_match_result_person</span></code></a>)) – matching result</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;596319bc-ee44-4ba7-873c-7c5caa911c30&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.41209100000560284</span><span class="p">,</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;christinaatkinson&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;75740212-1d49-4e65-9a4b-0dc32ef6b780&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2f6847d4-e448-491b-a4b7-5602f85dd767&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;gmccoy&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;56f8c4c1-ddb0-4a62-89c6-ebf2774e2383&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;99216c56-526c-4fe9-aea8-9829842bb3e5&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.5999999999999996</span><span class="p">,</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;rsmith&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;5b7b8485-e12b-430a-9982-b3b3e568b57b&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – wrong type of query parameter</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherSearchHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">MatcherSearchHandler</code><span class="sig-paren">(</span><em>*func_args</em>, <em>**func_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherSearchHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherSearchHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler of photo search request.</p>
+<dl class="post">
+<dt id="post--matching-search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1">
+<code class="descname">POST </code><code class="descname">/matching/search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1</code><a class="headerlink" href="#post--matching-search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&limit=1" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam person_ids:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">dynamic list of candidate ids</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Optparam descriptor_ids:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">dynamic list of candidate ids</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam list_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">account list id</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Optparam limit:</th><td class="field-body"><p class="first">maximum number of results in request</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam estimate_emotions:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">Whether to estimate emotions from the image.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For more information refer to <a class="reference internal" href="photo.html#extract-label"><span class="std std-ref">Descriptor extraction API</span></a>, doesn’t support flag “don’t extract descriptor”</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – “image/png”, “image/x-portable-pixmap”, “image/bmp”, “image/tiff”, “image/gif”,
+“image/x-windows-bmp”</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For data in base64 is sent:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Content-Type</a> – ‘image/x-jpeg-base64’,
+‘image/x-windows-bmp-base64’, ‘image/x-png-base64’, ‘image/x-portable-pixmap-base64’,
+‘image/x-bmp-base64”, ‘image/x-tiff-base64’, ‘image/x-gif-base64’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/matching/search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">&quot;image/png&quot;, &quot;image/x-portable-pixmap&quot;, &quot;image/bmp&quot;, &quot;image/tiff&quot;, &quot;image/gif&quot;,</span>
+         <span class="l">&quot;image/x-windows-bmp&quot;,</span>
+        <span class="l">&#39;image/x-windows-bmp-base64&#39;, &#39;image/x-png-base64&#39;, &#39;image/x-portable-pixmap-base64&#39;,</span>
+        <span class="l">&#39;image/x-bmp-base64&quot;, &#39;image/x-tiff-base64&#39;, &#39;image/x-gif-base64&#39;</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – matching is successful.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<p>Search  by persons list</p>
+<dl class="object">
+<dt id="search_result_persons">
+<!--[search_result_persons]--><code class="descname">search_result_persons</code><a class="headerlink" href="#search_result_persons" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>candidates</strong> (_list_(<a class="reference internal" href="handlers.html#one_match_result_person"><code class="xref json json-object docutils literal notranslate"><span class="pre">one_match_result_person</span></code></a>)) – matching result</li>
+<li><strong>face</strong> (<a class="reference internal" href="handlers.html#extract_one_descriptor"><code class="xref json json-object docutils literal notranslate"><span class="pre">extract_one_descriptor</span></code></a>) – extraction and matching were made for this face</li>
+<li><strong>exif</strong> (<a class="reference internal" href="handlers.html#exif"><code class="xref json json-object docutils literal notranslate"><span class="pre">exif</span></code></a>) – Select image EXIF tags. See CIPA DC-008-2016 for details. Tag to string conversions              are handled by libEXIF.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;99f4582a-3589-465f-a5dd-61666711261a&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.7575960000003761</span><span class="p">,</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;chadyoung&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;154f1402-2e6b-4b8e-b1fd-dd796157b6f9&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0703652c-36e5-41aa-b4c4-0c5b3d775beb&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;isparks&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a438e1c0-c4c3-4771-a95d-9bb99e9736bc&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;e399226a-a92f-4639-a556-e52faaa6fbe5&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;ojohnson&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;bf0770fc-5d3a-4f7f-90e5-03054651f1e8&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;face&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;7dd749c9-3dc2-412e-9683-1356718dabc7&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;rect&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">8245</span><span class="p">,</span>
+            <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">9891</span><span class="p">,</span>
+            <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">5625</span><span class="p">,</span>
+            <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">7304</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;rectISO&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">2123</span><span class="p">,</span>
+            <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">7448</span><span class="p">,</span>
+            <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1729</span><span class="p">,</span>
+            <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">2103</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="nt">&quot;quality&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;light&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="nt">&quot;dark&quot;</span><span class="p">:</span> <span class="mf">0.7620010375976562</span><span class="p">,</span>
+            <span class="nt">&quot;saturation&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+            <span class="nt">&quot;blurriness&quot;</span><span class="p">:</span> <span class="mf">0.31223000001045875</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">7258</span><span class="p">,</span>
+            <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">7957</span><span class="p">,</span>
+            <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">0.40000152587890625</span><span class="p">,</span>
+            <span class="nt">&quot;emotions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;anger&quot;</span><span class="p">:</span> <span class="mf">0.8203125</span><span class="p">,</span>
+                <span class="nt">&quot;disgust&quot;</span><span class="p">:</span> <span class="mf">0.9078000001609325</span><span class="p">,</span>
+                <span class="nt">&quot;fear&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="nt">&quot;happiness&quot;</span><span class="p">:</span> <span class="mf">0.5960006713867188</span><span class="p">,</span>
+                <span class="nt">&quot;neutral&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="nt">&quot;sadness&quot;</span><span class="p">:</span> <span class="mf">0.3999999999996362</span><span class="p">,</span>
+                <span class="nt">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.909644596507</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;ethnicities&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;asian&quot;</span><span class="p">:</span> <span class="mf">0.43482999969273806</span><span class="p">,</span>
+                <span class="nt">&quot;indian&quot;</span><span class="p">:</span> <span class="mf">0.699951171875</span><span class="p">,</span>
+                <span class="nt">&quot;caucasian&quot;</span><span class="p">:</span> <span class="mf">0.30078125</span><span class="p">,</span>
+                <span class="nt">&quot;african&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;head_pose&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;yaw&quot;</span><span class="p">:</span> <span class="mi">7573</span><span class="p">,</span>
+                <span class="nt">&quot;pitch&quot;</span><span class="p">:</span> <span class="mi">7561</span><span class="p">,</span>
+                <span class="nt">&quot;roll&quot;</span><span class="p">:</span> <span class="mi">7591</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;exif&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;artist&quot;</span><span class="p">:</span> <span class="s2">&quot;paul81&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;dateTime&quot;</span><span class="p">:</span> <span class="s2">&quot;1975-10-16T02:50:29&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Search by descriptors list.</p>
+<dl class="object">
+<dt id="search_result_descriptors">
+<!--[search_result_descriptors]--><code class="descname">search_result_descriptors</code><a class="headerlink" href="#search_result_descriptors" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>candidates</strong> (_list_(<a class="reference internal" href="handlers.html#one_match_result_descriptor"><code class="xref json json-object docutils literal notranslate"><span class="pre">one_match_result_descriptor</span></code></a>)) – matching result</li>
+<li><strong>face</strong> (<a class="reference internal" href="handlers.html#extract_one_descriptor"><code class="xref json json-object docutils literal notranslate"><span class="pre">extract_one_descriptor</span></code></a>) – extraction and matching were made for this face</li>
+<li><strong>exif</strong> (<a class="reference internal" href="handlers.html#exif"><code class="xref json json-object docutils literal notranslate"><span class="pre">exif</span></code></a>) – Select image EXIF tags. See CIPA DC-008-2016 for details. Tag to string conversions              are handled by libEXIF.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;c006a08e-1494-4d70-aa7b-617388bf0fc4&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.7600002288818359</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;580f222f-5c66-4322-b68f-e45e8d0f6c6e&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;3c7e8a3a-2ad6-4d8c-8729-9bd76dca27fb&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.5</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;face&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;6db0218f-7504-41ce-9c42-66c93e3c5540&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;rect&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">5999</span><span class="p">,</span>
+            <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">4510</span><span class="p">,</span>
+            <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">282</span><span class="p">,</span>
+            <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">181</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;rectISO&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">9501</span><span class="p">,</span>
+            <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">8413</span><span class="p">,</span>
+            <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">4351</span><span class="p">,</span>
+            <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">7676</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">0.900000000372529</span><span class="p">,</span>
+        <span class="nt">&quot;quality&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;light&quot;</span><span class="p">:</span> <span class="mf">0.8260002136230469</span><span class="p">,</span>
+            <span class="nt">&quot;dark&quot;</span><span class="p">:</span> <span class="mf">0.7841999999945983</span><span class="p">,</span>
+            <span class="nt">&quot;saturation&quot;</span><span class="p">:</span> <span class="mf">0.3200000524520874</span><span class="p">,</span>
+            <span class="nt">&quot;blurriness&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">3152</span><span class="p">,</span>
+            <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">4247</span><span class="p">,</span>
+            <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">0.7252006530761719</span><span class="p">,</span>
+            <span class="nt">&quot;emotions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;anger&quot;</span><span class="p">:</span> <span class="mf">0.2263792500000008</span><span class="p">,</span>
+                <span class="nt">&quot;disgust&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="nt">&quot;fear&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="nt">&quot;happiness&quot;</span><span class="p">:</span> <span class="mf">0.800000011920929</span><span class="p">,</span>
+                <span class="nt">&quot;neutral&quot;</span><span class="p">:</span> <span class="mf">0.5637005300000002</span><span class="p">,</span>
+                <span class="nt">&quot;sadness&quot;</span><span class="p">:</span> <span class="mf">0.949951171875</span><span class="p">,</span>
+                <span class="nt">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;ethnicities&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;asian&quot;</span><span class="p">:</span> <span class="mf">0.3498062000144273</span><span class="p">,</span>
+                <span class="nt">&quot;indian&quot;</span><span class="p">:</span> <span class="mf">0.550048828125</span><span class="p">,</span>
+                <span class="nt">&quot;caucasian&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="nt">&quot;african&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;head_pose&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;yaw&quot;</span><span class="p">:</span> <span class="mi">8937</span><span class="p">,</span>
+                <span class="nt">&quot;pitch&quot;</span><span class="p">:</span> <span class="mi">7173</span><span class="p">,</span>
+                <span class="nt">&quot;roll&quot;</span><span class="p">:</span> <span class="mi">5748</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;exif&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;artist&quot;</span><span class="p">:</span> <span class="s2">&quot;sotokelly&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;dateTime&quot;</span><span class="p">:</span> <span class="s2">&quot;1976-08-26T04:40:55&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – wrong type of query parameter</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – too many faces in the picture</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherSearchHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherSearchHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherSearchHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method “POST”, stub.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherVerifyHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">MatcherVerifyHandler</code><span class="sig-paren">(</span><em>*func_args</em>, <em>**func_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherVerifyHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherVerifyHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for verification request. This request is necessary to match descriptor with person.</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherVerifyHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherVerifyHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherVerifyHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for request to search for similar person</p>
+<dl class="post">
+<dt id="post--matching-verify?descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1">
+<code class="descname">POST </code><code class="descname">/matching/verify?descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1</code><a class="headerlink" href="#post--matching-verify?descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847d1&person_id=22fd2706            -8baf-433b-82eb-8c7fada847d1" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Optparam person_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">Reference person id for matching</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Optparam descriptor_id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">descriptor id of candidate</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – Matching successful</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="verify_result">
+<!--[verify_result]--><code class="descname">verify_result</code><a class="headerlink" href="#verify_result" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>candidates</strong> (<a class="reference internal" href="handlers.html#one_match_result_person"><code class="xref json json-object docutils literal notranslate"><span class="pre">one_match_result_person</span></code></a>) – matching result (array with one element)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0c036220-d266-4d5d-b015-9a3060a74a88&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.75799560546875</span><span class="p">,</span>
+        <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;jdavis&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;7963bbe4-1682-40a1-a3f4-a79c48e1f0e8&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – wrong type of query parameter</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.rest_handlers.matcher_handler.getSimilarity">
+<code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">getSimilarity</code><span class="sig-paren">(</span><em>matchingRes</em>, <em>descriptorId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#getSimilarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.getSimilarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get similarity for id descriptor from LUNA.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>matchingRes</strong> – matching result in LUNA</li>
+<li><strong>descriptorId</strong> – descriptor id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0, id descriptor with descriptorId was not found</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.rest_handlers.matcher_handler.sortBySimilarity">
+<code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">sortBySimilarity</code><span class="sig-paren">(</span><em>el</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#sortBySimilarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.sortBySimilarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns similarity from matching result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>el</strong> – one matching result</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">-el[‘similarity’]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.rest_handlers.matcher_handler.sortMatchingResult">
+<code class="descclassname">luna_api.app.rest_handlers.matcher_handler.</code><code class="descname">sortMatchingResult</code><span class="sig-paren">(</span><em>arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#sortMatchingResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.sortMatchingResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort array by similarity to respond to matching.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arr</strong> – respond array to matching</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">sorted array.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="photo.html">Descriptor extraction API</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="descriptor.html">Descriptor API</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

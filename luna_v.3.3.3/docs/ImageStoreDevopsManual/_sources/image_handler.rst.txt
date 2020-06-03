@@ -1,0 +1,5 @@
+Image handler
+=============
+
+.. automodule:: luna_image_store.app.handlers.image_handler
+	:members:

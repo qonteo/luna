@@ -1,0 +1,7 @@
+#!/bin/bash
+IP=$(hostname -I | awk '{ print $1 }')
+echo 'http://'$IP
+export LUNA_ADDRESS='http://'$IP
+cd /var/lib/luna/video-bi
+docker-compose down
+docker-compose up -d 

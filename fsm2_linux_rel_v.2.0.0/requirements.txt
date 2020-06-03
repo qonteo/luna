@@ -1,0 +1,8 @@
+requests==2.13.0
+logbook==1.0.0
+ujson==1.35
+jsonschema==2.6.0
+wand==0.4.4
+tornado==4.5.3
+external/LunaVL-v.1.0.0.tar.gz
+external/luna3-v.0.0.1.tar.gz

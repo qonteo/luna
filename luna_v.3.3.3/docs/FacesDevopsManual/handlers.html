@@ -1,0 +1,268 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Documentation of tornado-handlers &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Base handler" href="base_handler.html" />
+    <link rel="prev" title="Application" href="application.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>Documentation of tornado-handlers</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="application.html">Application</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="base_handler.html">Base handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="documentation-of-tornado-handlers">
+<h1>Documentation of tornado-handlers<a class="headerlink" href="#documentation-of-tornado-handlers" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="base_handler.html">Base handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faces_handler.html">Faces handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faces_attributes_handler.html">Faces attributes handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="face_handler.html">Face handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="persons_attributes_handler.html">Persons attributes handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linker_handler.html">List handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_attributes_handler.html">List attributes handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list_handler.html">List handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lists_handler.html">Lists handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unlink_history_handler.html">Unlink history handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_handler.html">Version handler</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="common-jsons">
+<h1>Common jsons<a class="headerlink" href="#common-jsons" title="Permalink to this headline">¶</a></h1>
+<dl class="object">
+<dt id="luna_face">
+<!--[luna_face]--><code class="descname">luna_face</code><a class="headerlink" href="#luna_face" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>face_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – face id</li>
+<li><strong>event_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – event id</li>
+<li><strong>attributes_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – attribute id</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – time of face creating</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – user data about face</li>
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – account id</li>
+<li><strong>external_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>string</em></a>) – external id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;face_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2d15fab6-d943-4084-a02d-f3753f4832ec&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;event_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2b4b6f4c-6936-4d54-8d0b-98c08a17c052&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;attributes_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0e65bf9e-cc50-4361-8f70-bc0418f7a1ab&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1972-11-28T17:48:52&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;kelly88&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;128765e9-41a3-4c10-9c95-99630916d43f&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;external_id&quot;</span><span class="p">:</span> <span class="s2">&quot;oaNfypJjxQcefGtLHuhS&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="luna_person">
+<!--[luna_person]--><code class="descname">luna_person</code><a class="headerlink" href="#luna_person" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – person id</li>
+<li><strong>faces</strong> (<em>_list_(uuid4)</em>) – linked faces</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – time of face creating</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – user data about face</li>
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – account id</li>
+<li><strong>external_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>string</em></a>) – external id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;e3fa6e53-b609-47fd-b27f-7b9f9d922dc3&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;faces&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;01028968-a8a7-452d-b72f-0fc50eb0d0eb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a64c7909-ff8c-4795-8902-394abd09c837&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;49ff6b85-313b-437d-9801-a0282bba163d&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2001-04-17T12:27:28&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;james59&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2216d069-7f13-4e83-ae03-4ad10ce111b1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;external_id&quot;</span><span class="p">:</span> <span class="s2">&quot;FTJxkbbpTpWQUuicyeqN&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="luna_list">
+<!--[luna_list]--><code class="descname">luna_list</code><a class="headerlink" href="#luna_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – list id</li>
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – account id</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – user data about list</li>
+<li><strong>face_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – face count in list</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – <ul>
+<li>list create time</li>
+</ul>
+</li>
+<li><strong>last_update_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – time of last action with list (attach or detach face from list)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="object">
+<dt id="luna_list_with_keys">
+<!--[luna_list_with_keys]--><code class="descname">luna_list_with_keys</code><a class="headerlink" href="#luna_list_with_keys" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – list id</li>
+<li><strong>link_key</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – link key</li>
+<li><strong>unlink_key</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – unlink key</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="object">
+<dt id="luna_face_attributes">
+<!--[luna_face_attributes]--><code class="descname">luna_face_attributes</code><a class="headerlink" href="#luna_face_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>face_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – face id</li>
+<li><strong>attributes_id</strong> (<em>_enum_(uuid4)_(null)</em>) – face attributes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;face_id&quot;</span><span class="p">:</span> <span class="s2">&quot;6c9c355f-f6af-4c48-a8e0-99c38b9bac58&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;attributes_id&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="luna_person_attributes">
+<!--[luna_person_attributes]--><code class="descname">luna_person_attributes</code><a class="headerlink" href="#luna_person_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – person id</li>
+<li><strong>attributes_id</strong> (<em>_list_(uuid4)</em>) – face attributes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;650a2cfe-33b0-4734-bcaa-96ca3b45f370&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;attributes_id&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;29c80574-2373-4c3d-9e31-d3d2218200aa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;29b3a59f-33c4-47b3-91e2-7a8fe5475bbf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a0e652e0-f078-4d74-bfda-63c24495a2d1&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="log_note">
+<!--[log_note]--><code class="descname">log_note</code><a class="headerlink" href="#log_note" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – list id</li>
+<li><strong>attributes_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – attributes id</li>
+<li><strong>face_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – face count in list</li>
+<li><strong>action</strong> (<em>_enum_(0,1)</em>) – type of action</li>
+<li><strong>update_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – time of  action (attach or detach attributes from list)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="application.html">Application</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="base_handler.html">Base handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Person API &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Descriptor linkage to person API" href="person_link_descriptor.html" />
+    <link rel="prev" title="Descriptor linkage to list API" href="link_descriptor_to_list.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Person API</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="link_descriptor_to_list.html">Descriptor linkage to list API</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="person_link_descriptor.html">Descriptor linkage to person API</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_api.app.rest_handlers.person_handler">
+<span id="person-api"></span><h1>Person API<a class="headerlink" href="#module-luna_api.app.rest_handlers.person_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.person_handler.PersonHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.person_handler.</code><code class="descname">PersonHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/person_handler.html#PersonHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.person_handler.PersonHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler to operate with existing person. First you have to authorize and account must be active.</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.person_handler.PersonHandler.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>person_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/person_handler.html#PersonHandler.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.person_handler.PersonHandler.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource for person deletion.</p>
+<p>Person and all its lists will be blocked for deletion/objects addition during person deletion.
+After deletion, all objects must be unblocked (regardless, deletion was successful or not).</p>
+<dl class="patch">
+<dt id="patch--storage-persons-person_id">
+<code class="descname">PATCH </code><code class="descname">/storage/persons/{person_id}</code><a class="headerlink" href="#patch--storage-persons-person_id" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>person_id</strong> – person id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>or</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5">204 No Content</a> – person is deleted successfully</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – person not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a> – person is currently blocked</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.person_handler.PersonHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>person_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/person_handler.html#PersonHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.person_handler.PersonHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource to get person data
+.. <a class="reference external" href="http:get">http:get</a>:: /storage/persons/{person_id}</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param person_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">person id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">reqheader Authorization:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">basic authorization</td>
+</tr>
+</tbody>
+</table>
+<p><strong>or</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">reqheader X-Auth-Token:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">‘16fd2706-8baf-433b-82eb-8c7fada847da’</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">reqheader LUNA-Request-Id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">request id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<p>Data is returned in format <a class="reference internal" href="handlers.html#user_data"><code class="xref json json-object docutils literal notranslate"><span class="pre">user_data</span></code></a>.</p>
+<p>Message error is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">statuscode 404:</th><td class="field-body">person is not found</td>
+</tr>
+<tr class="field-even field"><th class="field-name">statuscode 500:</th><td class="field-body">internal server error</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.person_handler.PersonHandler.patch">
+<code class="descname">patch</code><span class="sig-paren">(</span><em>person_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/person_handler.html#PersonHandler.patch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.person_handler.PersonHandler.patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource to change user data of person.
+.. <a class="reference external" href="http:patch">http:patch</a>:: /storage/persons/{person_id}</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param person_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">person id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">reqheader Authorization:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">basic authorization</td>
+</tr>
+</tbody>
+</table>
+<p><strong>or</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">reqheader X-Auth-Token:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">‘16fd2706-8baf-433b-82eb-8c7fada847da’</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">reqheader LUNA-Request-Id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">request id</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/storage/persons/{id}</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json            </span>
+</pre></div>
+</div>
+<p>New user data has to be attached in format <a class="reference internal" href="handlers.html#user_data"><code class="xref json json-object docutils literal notranslate"><span class="pre">user_data</span></code></a>.</p>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 204
+LUNA-Request-Id: 1516179740,c06887a2
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">statuscode 204:</th><td class="field-body">data successfully update</td>
+</tr>
+</tbody>
+</table>
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">statuscode 400:</th><td class="field-body">field <em>user_data</em> is too large</td>
+</tr>
+<tr class="field-even field"><th class="field-name">statuscode 400:</th><td class="field-body">field <em>user_data</em> has wrong type, <em>string</em> type is required</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">statuscode 400:</th><td class="field-body">field <em>external_id</em> is too large</td>
+</tr>
+<tr class="field-even field"><th class="field-name">statuscode 400:</th><td class="field-body">field <em>external_id</em> has wrong type, <em>string</em> type is required</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">statuscode 404:</th><td class="field-body">person not found</td>
+</tr>
+<tr class="field-even field"><th class="field-name">statuscode 500:</th><td class="field-body">internal server error</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="link_descriptor_to_list.html">Descriptor linkage to list API</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="person_link_descriptor.html">Descriptor linkage to person API</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,350 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.app.rest_handlers.photo_handler &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.app.rest_handlers.photo_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.app.rest_handlers.photo_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span><span class="p">,</span> <span class="n">web</span>
+
+<span class="kn">from</span> <span class="nn">app.common</span> <span class="k">import</span> <span class="n">GETTER_PORTRAITS_PLUGINS</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.storage_handlers</span> <span class="k">import</span> <span class="n">StorageHandler</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.utils.timer</span> <span class="k">import</span> <span class="n">timer</span>
+<span class="kn">from</span> <span class="nn">configs.config</span> <span class="k">import</span> <span class="n">SEND_TO_LUNA_IMAGE_STORE</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">app.functions</span> <span class="k">import</span> <span class="n">convertDateTime</span>
+
+
+<div class="viewcode-block" id="PhotoHandler"><a class="viewcode-back" href="../../../../photo.html#luna_api.app.rest_handlers.photo_handler.PhotoHandler">[docs]</a><span class="k">class</span> <span class="nc">PhotoHandler</span><span class="p">(</span><span class="n">StorageHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler to receive images for extract. To work with handler you must authorize and account must be active</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PhotoHandler.post"><a class="viewcode-back" href="../../../../photo.html#luna_api.app.rest_handlers.photo_handler.PhotoHandler.post">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request for descriptor extraction from photo.  Request is forwarded to LUNA, so input parameters are the same.</span>
+<span class="sd">        After extraction all descriptors are added to database, answer from LUNA is received</span>
+<span class="sd">        (if other is not set in parameters).</span>
+
+<span class="sd">        .. http:post:: /storage/descriptors?estimate_attributes=1&amp;estimate_quality=1&amp;quality_threshold=1&amp;warped_image=1&amp;extract_descriptor=1&amp;extract_exif=1 </span>
+
+<span class="sd">            :optparam estimate_attributes: Whether to estimate face attributes from the image.</span>
+<span class="sd">             </span>
+<span class="sd">             The attributes are stored in attributes object per face. Type: boolean, default: false.</span>
+
+<span class="sd">            :optparam estimate_emotions: Whether to estimate emotions from the image.</span>
+<span class="sd">             </span>
+<span class="sd">            :optparam quality_threshold: Whether to estimate face image quality from the image. The estimated quality</span>
+<span class="sd">                                         value is a floating point probability in [0..1] range.</span>
+<span class="sd">            </span>
+<span class="sd">            The quality is stored in quality parameter per face. See also quality_threshold. Type: boolean, default:</span>
+<span class="sd">            false.</span>
+<span class="sd">             </span>
+<span class="sd">            :optparam estimate_quality: If estimate_quality parameter is set to 1, it is possible to apply a threshold</span>
+<span class="sd">                                        check to each estimation. All face detections with quality below the threshold</span>
+<span class="sd">                                        will be ignored and no descriptors will be extracted out of them. The function</span>
+<span class="sd">                                        will proceed as usual with all the remaining detections (if left).</span>
+<span class="sd">             </span>
+<span class="sd">            :optparam warped_image: Whether input image is a warped or arbitrary one. Exact image warping algorithm</span>
+<span class="sd">                                    is proprietary and this flag is intended for VisionLabs front-end tools.</span>
+
+
+<span class="sd">             The warped image has the following properties:</span>
+<span class="sd">              </span>
+<span class="sd">              * it&#39;s size is always 250x250 pixels</span>
+
+<span class="sd">              + it&#39;s always in RGB color format</span>
+
+<span class="sd">              + it always contains just a single face</span>
+
+<span class="sd">              + the face is always centered and rotated so that imaginary line between the eyes is horizontal.</span>
+<span class="sd">             </span>
+<span class="sd">             Type: boolean, default: false.</span>
+<span class="sd">             </span>
+<span class="sd">            :optparam extract_descriptor: Whether to extract face descriptor(s). Useful when face descriptor is not</span>
+<span class="sd">                                          actually required and only face detection bounding rectangle (with optional</span>
+<span class="sd">                                          attributes and quality estimation) is enough. Note, that in this case face</span>
+<span class="sd">                                          structure will lack the member id.</span>
+<span class="sd">             </span>
+<span class="sd">             Type: boolean, default: true.</span>
+
+<span class="sd">            :optparam estimate_head_pose:  Whether to estimate head pose from the image.</span>
+<span class="sd">                *Not supported with warped images (see `warped_image` parameter).*</span>
+<span class="sd">             Type: boolean, default: false.</span>
+
+<span class="sd">            :optparam pitch__lt: Pitch threshold. For all the faces with estimated pitch that&#39;s more than threshold do not extract descriptor.</span>
+<span class="sd">               Threshold must be in degrees, in the interval [0,180]. Otherwise, threshold is not taken into account.</span>
+
+
+<span class="sd">             Type: float, maximum: 180, minimum: 0</span>
+
+<span class="sd">            :optparam yaw__lt: Yaw threshold. For all the faces with estimated yaw that&#39;s more than threshold do not extract descriptor.</span>
+<span class="sd">               Threshold must be in degrees, in the interval [0,180]. Otherwise, threshold is not taken into account.</span>
+
+<span class="sd">             Type: float, maximum: 180, minimum: 0</span>
+
+<span class="sd">            :optparam roll__lt: Roll threshold. For all the faces with estimated roll that&#39;s more than threshold do not extract descriptor.</span>
+<span class="sd">              Threshold must be in degrees, in the interval [0,180]. Otherwise, threshold is not taken into account.</span>
+
+<span class="sd">             Type: float, maximum: 180, minimum: 0</span>
+<span class="sd">             </span>
+<span class="sd">            :optparam extract_exif: Whether to extract EXIF meta information from the input image.</span>
+<span class="sd">            </span>
+<span class="sd">             Exact output will vary since there are no mandatory requirements to both authoring software and digital \</span>
+<span class="sd">             cameras how to write the data.</span>
+
+<span class="sd">             This function will only parse the tags and output their names and values as is. Please refer to \</span>
+<span class="sd">             JEITA CP-3451 EXIF specification for details.</span>
+<span class="sd">            </span>
+
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+<span class="sd">            </span>
+<span class="sd">            You must specify Content-Type.</span>
+<span class="sd">            </span>
+<span class="sd">            If image is sent:</span>
+<span class="sd">            </span>
+<span class="sd">            :reqheader Content-Type: &#39;image/jpeg&#39;, &#39;image/png&#39;, &#39;image/bmp&#39;, &#39;image/tiff&#39;, &#39;image/gif&#39;, </span>
+<span class="sd">             &#39;image/x-portable-pixmap&#39;</span>
+<span class="sd">             </span>
+<span class="sd">            If descriptor is sent:</span>
+<span class="sd">            </span>
+<span class="sd">            :reqheader Content-Type: &#39;application/x-vl-face-descriptor&#39;, &#39;application/x-vl-xpk&#39;</span>
+
+<span class="sd">            For data in base64 is sent:</span>
+
+<span class="sd">            :reqheader Content-Type:  &#39;image/x-jpeg-base64&#39;, &#39;application/x-vl-face-descriptor-base64&#39;,</span>
+<span class="sd">             &#39;application/x-vl-xpk-base64&#39;,</span>
+<span class="sd">             &#39;image/x-windows-bmp-base64&#39;, &#39;image/x-png-base64&#39;, &#39;image/x-portable-pixmap-base64&#39;,</span>
+<span class="sd">             &#39;image/x-bmp-base64&quot;, &#39;image/x-tiff-base64&#39;, &#39;image/x-gif-base64&#39;</span>
+<span class="sd">             </span>
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 201 Created</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+<span class="sd">                </span>
+<span class="sd">            .. json:object:: extract_result</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property faces: faces, which were extracted</span>
+<span class="sd">                :proptype faces: _list_(:json:object:`extract_one_descriptor`)</span>
+<span class="sd">                :property  exif: Select image EXIF tags. See CIPA DC-008-2016 for details. Tag to string conversions \</span>
+<span class="sd">                 are handled by libEXIF.</span>
+<span class="sd">                :proptype exif: :json:object:`exif`</span>
+<span class="sd">                </span>
+<span class="sd">            Error messages are returned in following format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qParams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fillQueryParams</span><span class="p">()</span>
+
+        <span class="n">lunaResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunaCoreContext</span><span class="o">.</span><span class="n">aggregateRequestParamAndSendPhotoToLuna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                                                                                          <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="n">qParams</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">lunaResponse</span><span class="p">[</span><span class="s1">&#39;faces&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">face</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;attributes&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">face</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eyeglasses&#39;</span><span class="p">):</span>
+                <span class="n">face</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;eyeglasses&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">face</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">][</span><span class="s1">&#39;eyeglasses&#39;</span><span class="p">]))</span>
+
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">lunaResponse</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">qParams</span><span class="p">[</span><span class="s2">&quot;extract_descriptor&quot;</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>
+                <span class="n">photoId</span> <span class="o">=</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">putFace</span><span class="p">(</span><span class="n">photoId</span><span class="p">,</span> <span class="n">attributesId</span><span class="o">=</span><span class="n">photoId</span><span class="p">,</span> <span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span>
+                                                         <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">lunaResponse</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PhotoHandler.get"><a class="viewcode-back" href="../../../../photo.html#luna_api.app.rest_handlers.photo_handler.PhotoHandler.get">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resource to get all descriptors.</span>
+<span class="sd">        </span>
+<span class="sd">        .. http:post:: /storage/descriptors?page=1&amp;page_size=10</span>
+<span class="sd">        </span>
+<span class="sd">            :optparam page: A number of page. Minimum 1, default 1. </span>
+<span class="sd">            :optparam page_size: Descriptors count on page.  Minimum 1, maximum 100, default 10.</span>
+<span class="sd">            </span>
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+<span class="sd">            </span>
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 200 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+<span class="sd">                </span>
+<span class="sd">            :statuscode 200: list of descriptors and number of descriptors are\</span>
+<span class="sd">             received successfully.</span>
+<span class="sd">            </span>
+<span class="sd">            .. json:object:: descriptors_json</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property descriptors: descriptor list</span>
+<span class="sd">                :proptype descriptors: _list_(:json:object:`descriptor`)</span>
+<span class="sd">                :property count: number of descriptors</span>
+<span class="sd">                :proptype count: int</span>
+
+<span class="sd">            Error messages are returned in following format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd"> </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPagination</span><span class="p">()</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getFaces</span><span class="p">(</span><span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">pageSize</span><span class="o">=</span><span class="n">pageSize</span><span class="p">,</span>
+                                                             <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
+                                                             <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;descriptors&quot;</span><span class="p">:</span>
+                                          <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;attributes_id&quot;</span><span class="p">],</span>
+                                            <span class="s2">&quot;last_update&quot;</span><span class="p">:</span> <span class="n">convertDateTime</span><span class="p">(</span><span class="n">face</span><span class="p">[</span><span class="s2">&quot;create_time&quot;</span><span class="p">]),</span>
+                                            <span class="s2">&quot;person_id&quot;</span><span class="p">:</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">],</span>
+                                            <span class="s2">&quot;lists&quot;</span><span class="p">:</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">]],</span>
+                                      <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]})</span></div>
+
+<div class="viewcode-block" id="PhotoHandler.setAdditionalDataToAdminStatistic"><a class="viewcode-back" href="../../../../statistics.html#luna_api.app.rest_handlers.photo_handler.PhotoHandler.setAdditionalDataToAdminStatistic">[docs]</a>    <span class="k">def</span> <span class="nf">setAdditionalDataToAdminStatistic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adminStats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set additional stats &quot;count_faces&quot;</span>
+
+<span class="sd">        :param adminStats: common stats</span>
+<span class="sd">        :return: new admin stats</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">adminStats</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;count_faces&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistiData</span><span class="o">.</span><span class="n">responseJson</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">]))})</span>
+        <span class="k">return</span> <span class="n">adminStats</span></div>
+
+<div class="viewcode-block" id="PhotoHandler.on_finish"><a class="viewcode-back" href="../../../../statistics.html#luna_api.app.rest_handlers.photo_handler.PhotoHandler.on_finish">[docs]</a>    <span class="nd">@web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to send statistics. Called, when account has already received answer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">sendStats</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="GetterPhotoHandler"><a class="viewcode-back" href="../../../../photo.html#luna_api.app.rest_handlers.photo_handler.GetterPhotoHandler">[docs]</a><span class="k">class</span> <span class="nc">GetterPhotoHandler</span><span class="p">(</span><span class="n">StorageHandler</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GetterPhotoHandler.get"><a class="viewcode-back" href="../../../../photo.html#luna_api.app.rest_handlers.photo_handler.GetterPhotoHandler.get">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">photo_id</span><span class="p">,</span> <span class="n">thumbnail</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Receive descriptor portrait.</span>
+<span class="sd">        If plug-in is activated, portrait is received by plug-in</span>
+
+<span class="sd">        .. http:post:: /storage/portraits/{id}</span>
+
+<span class="sd">            :param thumbnail: type of thumbnail</span>
+<span class="sd">            :param photo_id: descriptor id</span>
+
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :reqheader Content-Type: &#39;image/jpeg&#39;</span>
+
+
+<span class="sd">            Error messages are returned in following format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 403: Forbidden, luna-image-store and plug-ins are disabled.</span>
+<span class="sd">            :statuscode 404: Portrait not found.</span>
+<span class="sd">            :statuscode 500: Internal server error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">photo_id</span> <span class="o">=</span> <span class="n">photo_id</span> <span class="k">if</span> <span class="n">thumbnail</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">photo_id</span> <span class="o">+</span> <span class="n">thumbnail</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">plugin</span> <span class="ow">in</span> <span class="n">GETTER_PORTRAITS_PLUGINS</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">plugin</span><span class="p">(</span><span class="n">photo_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">,</span> <span class="s2">&quot;image/jpeg&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">PortraitNotFound</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">ErrorGetPortraitPlugin</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">SEND_TO_LUNA_IMAGE_STORE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Forbidden&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/html&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="mi">403</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+        <span class="n">portraitRes</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunaCoreContext</span><span class="o">.</span><span class="n">getPortraitsFromLunaImageStore</span><span class="p">(</span><span class="n">photo_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestId</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">portraitRes</span><span class="p">,</span> <span class="n">contentType</span><span class="o">=</span><span class="s2">&quot;image/jpeg&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

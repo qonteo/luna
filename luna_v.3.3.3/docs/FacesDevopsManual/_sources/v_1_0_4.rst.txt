@@ -1,0 +1,27 @@
+v.1.0.4
+=======
+
+Improvements:
+-------------
+
+
+    1) Use alembic migration instead of SQLAlchemy-migrate. DB config for alembic locates in *luna_faces/configs/alembic_config.py*.
+
+    #) Change indexes in database
+
+    #) Min page size for getting list is equal to 0.
+
+Bugs fixed:
+-----------
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests* and update dependencies from
+requirements.txt. Then run the commands:
+
+.. code-block:: bash
+
+	alembic upgrade head
+

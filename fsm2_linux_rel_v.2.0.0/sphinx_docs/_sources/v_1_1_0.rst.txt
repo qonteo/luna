@@ -1,0 +1,28 @@
+=======
+v.1.1.0
+=======
+
+-------------
+Improvements:
+-------------
+
+    #) Added new value (3) for parameter *grouping_policy.search*.If *grouping_policy.search*parameter is equal to 3,
+       than will be create aggregate descriptor from all group events and this descriptor will match by all lists from
+       search policies when group is closes. Result of match will be set to group to field *search*. Parameter *search*
+       is calculate as top match results of events while the group is not closed.
+
+    #) Added credentials for luna core and luna-image-store to config.
+
+    #) Added new dependencies luna3. You can find package with this module in extra.
+
+-----------
+Bugs fixed:
+-----------
+
+    #) Fix test test_handlers_group_search_aggregator.
+
+------------------------------------
+How to update from previous version:
+------------------------------------
+
+Copy project to directory with current project. Update dependencies from requirements.txt.

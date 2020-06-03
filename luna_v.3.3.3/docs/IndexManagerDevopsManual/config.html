@@ -1,0 +1,241 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuration &#8212; luna-index-manager v.0.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Service launch" href="run.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-index-manager v.0.0.3 documentation</span></a></h1>
+        <h2 class="heading"><span>Configuration</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="run.html">Service launch</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="configuration-file-for-administrator">
+<h2>Configuration file for administrator<a class="headerlink" href="#configuration-file-for-administrator" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#: db settings</span>
+
+<span class="n">DB</span> <span class="o">=</span> <span class="s2">&quot;postgres&quot;</span>                                       <span class="c1">#: type of database: postgres, oracle, default postgres</span>
+<span class="n">DB_USER_NAME</span> <span class="o">=</span> <span class="s2">&quot;luna&quot;</span>                                 <span class="c1">#: login to database</span>
+<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;luna&quot;</span>                                  <span class="c1">#: password to database</span>
+<span class="n">DB_HOST</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>                                 <span class="c1">#: ip-address of database</span>
+<span class="n">DB_PORT</span> <span class="o">=</span> <span class="mi">5432</span>                                        <span class="c1">#: database listener port, 5432 - default port of postgres, 1521 - default port of oracle</span>
+<span class="n">DB_NAME</span> <span class="o">=</span> <span class="s2">&quot;luna_index_manager&quot;</span>                        <span class="c1">#: name of database for postgres, sid name for oracle</span>
+
+<span class="c1">#: luna-faces</span>
+
+<span class="n">LUNA_FACES_ORIGIN</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:5030&quot;</span>           <span class="c1">#: LUNA Faces origin</span>
+<span class="n">LUNA_FACES_API_VERSION</span> <span class="o">=</span> <span class="mi">1</span>                            <span class="c1">#: LUNA Faces api version</span>
+
+<span class="c1">#: luna-core</span>
+
+<span class="n">LUNA_CORE_ORIGIN</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8083&quot;</span>            <span class="c1">#: LUNA Core origin</span>
+<span class="n">LUNA_CORE_API_VERSION</span> <span class="o">=</span> <span class="mi">14</span>                            <span class="c1">#: LUNA Core api version</span>
+
+<span class="c1">#: luna-matcher_daemons</span>
+
+<span class="n">LUNA_MATCHER_DAEMONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;http://127.0.0.1:6000/1&quot;</span><span class="p">]</span>    <span class="c1">#: list of luna-matcher-daemon endpoint</span>
+
+<span class="c1">#: common settings</span>
+
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>                                    <span class="c1">#: Level of debug print, by priority: ERROR, WARNING, INFO, DEBUG</span>
+<span class="n">FOLDER_WITH_LOGS</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span>                               <span class="c1">#: Folder, where logs are saved. Relative path begin in directory with application.</span>
+<span class="n">LOG_TIME</span> <span class="o">=</span> <span class="s2">&quot;UTC&quot;</span>                                      <span class="c1">#: logger time: &quot;LOCAL&quot; or &quot;UTC&quot;</span>
+
+<span class="c1">#: index settings</span>
+
+<span class="n">INDEXED_FACES_LISTS</span> <span class="o">=</span> <span class="p">[]</span>                              <span class="c1">#: lists for indexation, for value [&quot;all&quot;] will be indexed all lists with attributes count &gt; MIN_FACES_IN_LIST_FOR_INDEXING</span>
+<span class="n">MIN_FACES_IN_LIST_FOR_INDEXING</span> <span class="o">=</span> <span class="mi">50000</span>                <span class="c1">#: min face count in luna-faces list for indexing</span>
+
+<span class="n">REQUEST_TIMEOUT</span> <span class="o">=</span> <span class="mi">60</span>                                  <span class="c1">#: timeout for http-request to external services (LUNA-Faces, LUNA-Core, daemon-matchers)</span>
+<span class="n">CONNECT_TIMEOUT</span> <span class="o">=</span> <span class="mi">30</span>                                  <span class="c1">#: timeout for connect to external services (LUNA-Faces, LUNA-Core, daemon-matchers)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-configs.config">
+<span id="extended-administrator-configuration"></span><h2>Extended administrator configuration<a class="headerlink" href="#module-configs.config" title="Permalink to this headline">¶</a></h2>
+<p>Module for parsing config file</p>
+<p>Module parse config file and set values in global variables.</p>
+<dl class="attribute">
+<dt id="configs.config.LOG_LEVEL">
+<code class="descclassname">configs.config.</code><code class="descname">LOG_LEVEL</code><a class="headerlink" href="#configs.config.LOG_LEVEL" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – level of debug printing, by priority: ERROR, WARNING, INFO, DEBUG.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="configs.config.FOLDER_WITH_LOGS">
+<code class="descclassname">configs.config.</code><code class="descname">FOLDER_WITH_LOGS</code><a class="headerlink" href="#configs.config.FOLDER_WITH_LOGS" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – folder, where logs are saved. Relative path begin in directory with application.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.APP_NAME">
+<code class="descclassname">configs.config.</code><code class="descname">APP_NAME</code><em class="property"> = 'luna-index-mngr'</em><a class="headerlink" href="#configs.config.APP_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>application name</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.CONNECT_TIMEOUT">
+<code class="descclassname">configs.config.</code><code class="descname">CONNECT_TIMEOUT</code><em class="property"> = 30</em><a class="headerlink" href="#configs.config.CONNECT_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>timeout for connect to external services (LUNA-Faces, LUNA-Core, daemon-matchers)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.CRAWLER_PERIOD">
+<code class="descclassname">configs.config.</code><code class="descname">CRAWLER_PERIOD</code><em class="property"> = 1</em><a class="headerlink" href="#configs.config.CRAWLER_PERIOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>crawler period, minutes</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.DB">
+<code class="descclassname">configs.config.</code><code class="descname">DB</code><em class="property"> = 'postgres'</em><a class="headerlink" href="#configs.config.DB" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>type of database</em> – postgres, oracle, default postgres</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.DB_HOST">
+<code class="descclassname">configs.config.</code><code class="descname">DB_HOST</code><em class="property"> = '127.0.0.1'</em><a class="headerlink" href="#configs.config.DB_HOST" title="Permalink to this definition">¶</a></dt>
+<dd><p>ip-address of database</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.DB_NAME">
+<code class="descclassname">configs.config.</code><code class="descname">DB_NAME</code><em class="property"> = 'luna_index_manager'</em><a class="headerlink" href="#configs.config.DB_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>name of database for postgres, sid name for oracle</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.DB_PASSWORD">
+<code class="descclassname">configs.config.</code><code class="descname">DB_PASSWORD</code><em class="property"> = 'luna'</em><a class="headerlink" href="#configs.config.DB_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>password to database</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.DB_PORT">
+<code class="descclassname">configs.config.</code><code class="descname">DB_PORT</code><em class="property"> = 5432</em><a class="headerlink" href="#configs.config.DB_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>database listener port, 5432 - default port of postgres,</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.DB_USER_NAME">
+<code class="descclassname">configs.config.</code><code class="descname">DB_USER_NAME</code><em class="property"> = 'luna'</em><a class="headerlink" href="#configs.config.DB_USER_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>login to database</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.INDEXED_FACES_LISTS">
+<code class="descclassname">configs.config.</code><code class="descname">INDEXED_FACES_LISTS</code><em class="property"> = []</em><a class="headerlink" href="#configs.config.INDEXED_FACES_LISTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>lists for indexation</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LUNA_CORE_API_VERSION">
+<code class="descclassname">configs.config.</code><code class="descname">LUNA_CORE_API_VERSION</code><em class="property"> = 14</em><a class="headerlink" href="#configs.config.LUNA_CORE_API_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>api of LUNA Faces Core</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LUNA_CORE_ORIGIN">
+<code class="descclassname">configs.config.</code><code class="descname">LUNA_CORE_ORIGIN</code><em class="property"> = 'http://127.0.0.1:8083'</em><a class="headerlink" href="#configs.config.LUNA_CORE_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>protocol to LUNA Core</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LUNA_FACES_API_VERSION">
+<code class="descclassname">configs.config.</code><code class="descname">LUNA_FACES_API_VERSION</code><em class="property"> = 1</em><a class="headerlink" href="#configs.config.LUNA_FACES_API_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Faces Store api version</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LUNA_FACES_ORIGIN">
+<code class="descclassname">configs.config.</code><code class="descname">LUNA_FACES_ORIGIN</code><em class="property"> = 'http://127.0.0.1:5030'</em><a class="headerlink" href="#configs.config.LUNA_FACES_ORIGIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>LUNA Faces origin</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LUNA_MATCHER_DAEMONS">
+<code class="descclassname">configs.config.</code><code class="descname">LUNA_MATCHER_DAEMONS</code><em class="property"> = ['http://127.0.0.1:6000/1']</em><a class="headerlink" href="#configs.config.LUNA_MATCHER_DAEMONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of luna-matcher-daemon endpoint</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.MIN_FACES_IN_LIST_FOR_INDEXING">
+<code class="descclassname">configs.config.</code><code class="descname">MIN_FACES_IN_LIST_FOR_INDEXING</code><em class="property"> = 50000</em><a class="headerlink" href="#configs.config.MIN_FACES_IN_LIST_FOR_INDEXING" title="Permalink to this definition">¶</a></dt>
+<dd><p>min face count in list for indexing</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.REQUEST_TIMEOUT">
+<code class="descclassname">configs.config.</code><code class="descname">REQUEST_TIMEOUT</code><em class="property"> = 60</em><a class="headerlink" href="#configs.config.REQUEST_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>timeout for http-request to external services (LUNA-Faces, LUNA-Core, daemon-matchers)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.SQLALCHEMY_DATABASE_URI">
+<code class="descclassname">configs.config.</code><code class="descname">SQLALCHEMY_DATABASE_URI</code><em class="property"> = 'postgresql://luna:luna&#64;127.0.0.1:5432/luna_index_manager'</em><a class="headerlink" href="#configs.config.SQLALCHEMY_DATABASE_URI" title="Permalink to this definition">¶</a></dt>
+<dd><p>oracle address</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="configs.config.replacePythonPathIfNeed">
+<code class="descclassname">configs.config.</code><code class="descname">replacePythonPathIfNeed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/configs/config.html#replacePythonPathIfNeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#configs.config.replacePythonPathIfNeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determinate need set python path to root or not</p>
+<p>If run sphinx, db_create, db_migrate set python path to root app.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="configs.config.setPythonPathToAPP">
+<code class="descclassname">configs.config.</code><code class="descname">setPythonPathToAPP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/configs/config.html#setPythonPathToAPP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#configs.config.setPythonPathToAPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set python path to root of app.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="run.html">Service launch</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

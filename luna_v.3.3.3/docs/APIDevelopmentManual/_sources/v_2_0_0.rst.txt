@@ -1,0 +1,75 @@
+v.2.0.0
+=======
+
+Improvements:
+-------------
+
+    1) Changed the error handling mechanism, now we are use *VLException* instead *Result* (exceptions instead
+       options).
+
+    #) Used luna-image store for portraits storing.
+
+    #) Now you can get thumbnails of portraits. See resource */storage/portraits/{descriptor_id}{thumbnail}* in
+       raml documentation.
+
+    #) Used luna-faces for storing faces, persons and lists. Now two tables exist in luna-api database (account and
+       account tokens).
+
+    #) Structure of project was refactored. Logic was moved to directory *luna_api*. File *run.py* you can find in
+       this directory.
+
+    #) Mechanism of blocking persons and faces was removed.
+
+    #) Change several error codes affected not found objects, bad params and duplicate ids.
+
+    #) Changed version of tornado, now we use version 5.0.1. For reinstall tornado you can execute following command:
+
+        .. code-block:: bash
+
+            pip install --upgrade --force-reinstall tornado==5.0.1
+
+    #) Added LunaVL library build.
+
+    #) Test work through LunaVL library.
+
+    #) Luna3 python library is used to work with luna-faces.
+
+    #) Added pagination for resources */account/tokens* and */storage/lists*
+
+    #) Descriptors *last_update* and persons *create_time* includes time zone
+
+    #) Parameter *STORAGE_TIME* removed from Luna API config, now it exists in luna-faces config
+
+    #) Added oracle database support
+
+    #) Now ORIGIN is used in configs. Origin consists of "<schema>://<ip-address>:<port>"
+
+    #) Added ethnicities estimate, add query param "*estimate_ethnicities*" to request on resources
+       "/matching/search" or "/storage/descriptors"  for getting ethnicity.
+
+Bugs fixed:
+-----------
+
+    1) Fix objects miss when getting faces and persons from lists with pagination.
+
+    #) Fixed rest-sphinx documentation
+
+    #) Fixes boolean type in raml documentation for extract params (now 0 or 1)
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.
+
+To migrate data from DB, which used by Luna API v.2, to DB, which using by Luna-Faces, use script from
+*base_scripts/db_api_to_faces_migration*. There is config file named *config.conf* in *db_api_to_faces_migration*
+with parameters, that need to databases. Before run migration, create backup of DB and stop any activities with DB,
+including Luna API v.2. Also, it needs database, that using by Luna-Faces, to be already created. To run migration use:
+
+    .. code-block:: bash
+
+        python run.py
+
+To drop tables after migration from Luna API v.2 DB at once, use flag *--clean*. To drop tables from Luna API v.2 DB without
+migration, use flags *--skip-migration* with flag *--clean* together.

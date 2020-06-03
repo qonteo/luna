@@ -1,0 +1,89 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>v.0.1.8 &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="v.0.1.9" href="v_0_1_9.html" />
+    <link rel="prev" title="v.0.1.7" href="v_0_1_7.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>v.0.1.8</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="v_0_1_7.html">v.0.1.7</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="v_0_1_9.html">v.0.1.9</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="v-0-1-8">
+<h1>v.0.1.8<a class="headerlink" href="#v-0-1-8" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="improvements">
+<h2>Improvements:<a class="headerlink" href="#improvements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Complex test for descriptors and persons deletion testing is added. Test can be found in tests folder
+in bigtest.py file.</li>
+<li>Automatic versioning is added in main.raml.</li>
+<li>sphinx-docs generation for CI is added.</li>
+</ol>
+<p>#) sphinx-docs is now ignored and now manually generated when needed (including CI).
+launch line <em>sphinx-build -b html -a ./sphinx_input ./sphinx_docs</em>.</p>
+</div></blockquote>
+</div>
+<div class="section" id="bugs-fixed">
+<h2>Bugs fixed:<a class="headerlink" href="#bugs-fixed" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ol class="arabic simple">
+<li>If photo with enabled SEND_TO_S3 flag was not put in S3, function sendPhotoToLuna is terminated with error
+and whole request is terminated with error (before fix, error was ignored and descriptor could be saved without photo).</li>
+<li>Version field in JSON is fixed.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="how-to-update-from-previous-version">
+<h2>How to update from previous version:<a class="headerlink" href="#how-to-update-from-previous-version" title="Permalink to this headline">¶</a></h2>
+<p>To update from previous version simply replace folders <em>app, error, base_scripts, tests, sphinx_docs, raml</em> and file <em>version.py</em>. It is strongly recommended to backup DB postgres and server.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="v_0_1_7.html">v.0.1.7</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="v_0_1_9.html">v.0.1.9</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

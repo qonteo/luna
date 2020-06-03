@@ -1,0 +1,21 @@
+Service launch
+==============
+
+Example of service launch from root directory:
+
+.. code-block:: bash
+
+	python run.py --workers=4 --port=5001 --config=./configs/myconfig.conf
+
+Parameters *workers=1* and *port=4999* are default ones. Note, that python version should be 3.5. or higher.
+
+During server launch connections are checked. 
+
+Running service in a port with several workers and configuration file. Worker count, port and path to configuration
+file has been set in command line arguments.
+
+You can view help
+
+.. code-block:: bash
+
+	python ./run.py --help

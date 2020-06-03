@@ -1,0 +1,16 @@
+v.1.0.3
+=======
+
+Improvements:
+-------------
+
+Bugs fixed:
+-----------
+
+    1) Fixed misprints in sphinx-docs.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *luna_admin, tests, docs* and update dependencies from
+requirements.txt.

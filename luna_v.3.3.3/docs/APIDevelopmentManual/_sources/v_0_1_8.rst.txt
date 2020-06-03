@@ -1,0 +1,31 @@
+v.0.1.8
+=======
+
+Improvements:
+-------------
+
+	1) Complex test for descriptors and persons deletion testing is added. Test can be found in tests folder
+	   in bigtest.py file.
+
+	#) Automatic versioning is added in main.raml.
+
+	#) sphinx-docs generation for CI is added.
+
+	#) sphinx-docs is now ignored and now manually generated when needed (including CI).
+	launch line *sphinx-build -b html -a ./sphinx_input ./sphinx_docs*.
+
+Bugs fixed:
+-----------
+
+	1) If photo with enabled SEND_TO_S3 flag was not put in S3, function sendPhotoToLuna is terminated with error
+	   and whole request is terminated with error (before fix, error was ignored and descriptor could be saved without photo).
+
+	#) Version field in JSON is fixed.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, sphinx_docs, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.
+
+.. _CORS: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS

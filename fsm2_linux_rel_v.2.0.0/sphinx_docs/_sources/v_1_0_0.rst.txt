@@ -1,0 +1,43 @@
+=======
+v.1.0.0
+=======
+
+-------------
+Improvements:
+-------------
+
+    #) Now tests clear up database if proceed without errors.
+
+    #) Added reports for clusterization and cross-matching tasks
+
+    #) Now latex can be disabled in config (used for generating pdf-reports)
+
+    #) Environment is checked on application startup
+
+    #) LunaVL for pip installation in the ./external folder
+
+    #) Now saving input images can be disabled in config
+
+    #) REST documentation was translated into english
+
+    #) Now we work with time in GMT timestamp millis format and store this time in Elasticsearch database, however all the user interfaces are processed in local rfc3339 time format
+
+    #) Default tornado logger and custom application logger now both work in local time
+
+-----------
+Bugs fixed:
+-----------
+
+    #) Linker tasks are not updated two times in a row at start (caused an error before)
+
+------------------------------------
+How to update from previous version:
+------------------------------------
+
+You can only overwrite all the existing data by
+
+.. code-block:: bash
+
+    python make_index.py
+
+**ATTENTION! ALL THE EXISTING DATA WILL BE LOST!**

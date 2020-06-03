@@ -1,0 +1,107 @@
+Documentation of tornado-handlers
+=================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   base_handler
+   faces_handler
+   faces_attributes_handler
+   face_handler
+   persons_attributes_handler
+   linker_handler
+   list_attributes_handler
+   list_handler
+   lists_handler
+   unlink_history_handler
+   version_handler
+
+Common jsons
+============
+
+.. json:object:: luna_face
+    :showexample:
+
+    :property face_id: face id
+    :proptype face_id: uuid4
+    :property event_id: event id
+    :proptype event_id: uuid4
+    :property attributes_id: attribute id
+    :proptype attributes_id: uuid4
+    :property create_time: time of face creating
+    :proptype create_time: iso8601
+    :property user_data: user data about face
+    :proptype user_data: user_name
+    :property account_id: account id
+    :proptype account_id: uuid4
+    :property external_id: external id
+    :proptype external_id: string
+
+
+.. json:object:: luna_person
+    :showexample:
+
+    :property person_id: person id
+    :proptype person_id: uuid4
+    :property faces: linked faces
+    :proptype faces: _list_(uuid4)
+    :property create_time: time of face creating
+    :proptype create_time: iso8601
+    :property user_data: user data about face
+    :proptype user_data: user_name
+    :property account_id: account id
+    :proptype account_id: uuid4
+    :property external_id: external id
+    :proptype external_id: string
+
+.. json:object:: luna_list
+
+    :property list_id: list id
+    :proptype list_id: uuid4
+    :property account_id: account id
+    :proptype account_id: uuid4
+    :property user_data: user data about list
+    :proptype user_data: user_name
+    :property face_count: face count in list
+    :proptype face_count: integer
+    :property create_time: - list create time
+    :proptype create_time: iso8601
+    :property last_update_time: time of last action with list (attach or detach face from list)
+    :proptype last_update_time: iso8601
+
+.. json:object:: luna_list_with_keys
+
+    :property list_id: list id
+    :proptype list_id: uuid4
+    :property link_key: link key
+    :proptype link_key: integer
+    :property unlink_key: unlink key
+    :proptype unlink_key: integer
+
+.. json:object:: luna_face_attributes
+    :showexample:
+
+    :property uuid4 face_id: face id
+    :property _enum_(uuid4)_(null) attributes_id: face attributes
+
+
+.. json:object:: luna_person_attributes
+    :showexample:
+
+    :property uuid4 person_id: person id
+    :property _list_(uuid4) attributes_id: face attributes
+
+
+.. json:object:: log_note
+
+    :property list_id: list id
+    :proptype list_id: uuid4
+    :property attributes_id: attributes id
+    :proptype attributes_id: uuid4
+    :property face_count: face count in list
+    :proptype face_count: integer
+    :property action: type of action
+    :proptype action: _enum_(0,1)
+    :property update_time: time of  action (attach or detach attributes from list)
+    :proptype update_time: iso8601

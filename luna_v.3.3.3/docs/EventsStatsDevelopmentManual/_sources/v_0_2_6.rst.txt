@@ -1,0 +1,31 @@
+=======
+v.0.2.6
+=======
+
+-------------
+Improvements:
+-------------
+
+1) ss and ss_test configs syntax was updated, tags are now ignored;
+
+2) method round_tags was added in event_handler to control Influx tags by the settings;
+
+3) prints were removed from tests;
+
+4) method cut_ignored was added to tests to ignore nonexistent tags during check;
+
+5) spamers in tests became @classmethods;
+
+6) syntax was updated;
+
+7) many comments added to the code.
+
+-----------
+Bugs fixed:
+-----------
+
+1) warm_influx_up class method was added for testing stability;
+
+2) ws tests are now autonomous;
+
+3) bug ws not-delivering while multisubscribe fixed.

@@ -1,0 +1,5 @@
+Object handler
+==============
+
+.. automodule:: luna_image_store.app.handlers.object_handler
+	:members:

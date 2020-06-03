@@ -1,0 +1,12 @@
+[Unit]
+Description=Luna UI service
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/lib/luna/current/luna-ui2
+ExecStart=/var/lib/luna/current/luna-ui2/venv/bin/python3.6 /var/lib/luna/current/luna-ui2/app/app.py
+
+[Install]
+WantedBy=multi-user.target

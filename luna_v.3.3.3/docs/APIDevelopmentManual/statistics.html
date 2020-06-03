@@ -1,0 +1,830 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Admin and accounts statistic &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Plug-ins" href="plugins.html" />
+    <link rel="prev" title="Testing" href="testing.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Admin and accounts statistic</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="testing.html">Testing</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="plugins.html">Plug-ins</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="admin-and-accounts-statistic">
+<h1>Admin and accounts statistic<a class="headerlink" href="#admin-and-accounts-statistic" title="Permalink to this headline">¶</a></h1>
+<p>After some request server send statistic with result of this request. There are two type of statistics: for a admin and for accounts. Dispatch of both statistics is regulated in parameters  of config-file  <em>SEND_ADMIN_STATS</em>  and <em>SEND_ACCOUNT_STATS</em>. Dispatch of statistics is made right away after request.</p>
+<div class="section" id="statistic-of-administrator">
+<h2>Statistic of administrator<a class="headerlink" href="#statistic-of-administrator" title="Permalink to this headline">¶</a></h2>
+<p>This statistic is send to influxdb where it storage as a time series. Series can be created with scripts “base_scripts” corresponding config-file.</p>
+<div class="section" id="data-in-statistics">
+<h3>Data in statistics<a class="headerlink" href="#data-in-statistics" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="for-success-request">
+<h4>For success request<a class="headerlink" href="#for-success-request" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="8%" />
+<col width="17%" />
+<col width="13%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Resource</th>
+<th class="head">Method</th>
+<th class="head">Series</th>
+<th class="head">Tags/Values</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="6">Common</td>
+<td rowspan="6">&#160;</td>
+<td rowspan="6">&#160;</td>
+<td colspan="2">Tags</td>
+</tr>
+<tr class="row-odd"><td>resource</td>
+<td>One of: identify, search, verify,
+match or descriptors</td>
+</tr>
+<tr class="row-even"><td>server</td>
+<td>Ip of address of worker</td>
+</tr>
+<tr class="row-odd"><td>account_id</td>
+<td>id of account</td>
+</tr>
+<tr class="row-even"><td colspan="2">Value</td>
+</tr>
+<tr class="row-odd"><td>value_time</td>
+<td>time of request</td>
+</tr>
+<tr class="row-even"><td rowspan="8"><p class="first">‘/matching/identify’</p>
+<p>‘/matching/verify’</p>
+<p>‘/matching/search’</p>
+<p class="last">‘/matching/match’</p>
+</td>
+<td rowspan="8">POST</td>
+<td rowspan="8">matching_success</td>
+<td colspan="2">Tags</td>
+</tr>
+<tr class="row-odd"><td>limit</td>
+<td>result count in answer</td>
+</tr>
+<tr class="row-even"><td>template</td>
+<td>0 or 1 (template is person or not)</td>
+</tr>
+<tr class="row-odd"><td>candidate</td>
+<td>0 or 1, matching by dynamic list or
+account list</td>
+</tr>
+<tr class="row-even"><td colspan="2">Values</td>
+</tr>
+<tr class="row-odd"><td>value_sim</td>
+<td>value of most similarity descriptor</td>
+</tr>
+<tr class="row-even"><td>value_time</td>
+<td>time of request</td>
+</tr>
+<tr class="row-odd"><td>value_size</td>
+<td>luna list or persons or descriptors
+count</td>
+</tr>
+<tr class="row-even"><td rowspan="2">‘/storage/descriptors’</td>
+<td rowspan="2">POST</td>
+<td rowspan="2">extract_success</td>
+<td colspan="2">Tags</td>
+</tr>
+<tr class="row-odd"><td>count_faces</td>
+<td>count of faces on image</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="for-failed-request">
+<h4>For failed request<a class="headerlink" href="#for-failed-request" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="8%" />
+<col width="17%" />
+<col width="13%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Resource</th>
+<th class="head">Method</th>
+<th class="head">Series</th>
+<th class="head">Tags/Values</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="6">Common</td>
+<td rowspan="6">&#160;</td>
+<td rowspan="6">errors</td>
+<td colspan="2">Tags</td>
+</tr>
+<tr class="row-odd"><td>resource</td>
+<td>One of: identify, search, verify,
+match or descriptors</td>
+</tr>
+<tr class="row-even"><td>server</td>
+<td>Ip of address of worker</td>
+</tr>
+<tr class="row-odd"><td>account_id</td>
+<td>id of account (if exist</td>
+</tr>
+<tr class="row-even"><td>Values</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>error_code</td>
+<td>Error code</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="section" id="statistic-of-accounts">
+<h2>Statistic of accounts<a class="headerlink" href="#statistic-of-accounts" title="Permalink to this headline">¶</a></h2>
+<p>This statistic is send to external service corresponding config-file. It is http request with json.</p>
+<div class="section" id="id1">
+<h3>Data in statistics<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="object">
+<dt id="template">
+<!--[template]--><code class="descname">template</code><a class="headerlink" href="#template" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Propery person_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">person id</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Propery descriptor_id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">person id</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2d6fe0ab-8110-46e4-8e69-c20538244c9a&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;5ebc6e96-6135-47dc-b42c-210a32bdcd8d&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="candidate">
+<!--[candidate]--><code class="descname">candidate</code><a class="headerlink" href="#candidate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – list id</li>
+<li><strong>list_data</strong> (<em>street</em>) – list id</li>
+<li><strong>list_type</strong> (<em>_enum_(0,1)</em>) – list id</li>
+<li><strong>person_ids</strong> (<em>_list_(uuid4)</em>) – list id of persons</li>
+<li><strong>descriptor_ids</strong> (<em>_list_(uuid4)</em>) – list id of persons</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;017840ae-cbe2-4ad6-b626-bb3eb3439ad5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;{street object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;list_type&quot;</span><span class="p">:</span> <span class="s2">&quot;0,1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;person_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ed174d2b-749c-46b7-aee1-b5fa38a3b217&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2b598863-13ea-402c-b549-708bf2b4fca2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;54899a60-5356-4ca9-bbe2-728ef626f832&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;descriptor_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;9fdcf22b-d6a6-40d1-b77b-a27ffb0854ec&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;47bc8651-1958-411b-b7bc-fcb0136c6734&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fdfaf32d-ba8e-4e82-8893-e2e4f48a33b3&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="statistic-of-account-after-success-matching">
+<!--[statistic-of-account-after-success-matching]--><code class="descname">statistic of account after success matching</code><a class="headerlink" href="#statistic-of-account-after-success-matching" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – id of account</li>
+<li><strong>timestamp</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – statistics creation time.</li>
+<li><strong>result</strong> (<a class="reference internal" href="matching.html#identify_result"><code class="xref json json-object docutils literal notranslate"><span class="pre">identify_result</span></code></a>) – request reply, for example <cite>identify_result</cite>.</li>
+<li><strong>source</strong> (<em>'match'</em>) – one of: “match, search, identify, verify”</li>
+<li><strong>template</strong> (<a class="reference internal" href="#template"><code class="xref json json-object docutils literal notranslate"><span class="pre">template</span></code></a>) – one of field “person_id” or “descriptor_id” from <a class="reference internal" href="#template"><code class="xref json json-object docutils literal notranslate"><span class="pre">template</span></code></a></li>
+<li><strong>candidate</strong> (<a class="reference internal" href="#candidate"><code class="xref json json-object docutils literal notranslate"><span class="pre">candidate</span></code></a>) – one of field “list_id”, “person_ids” or “descriptor_ids” from <a class="reference internal" href="#candidate"><code class="xref json json-object docutils literal notranslate"><span class="pre">candidate</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Propery authorization:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last">authorization, “basic” or <a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a11f0d88-9042-47b3-bb7c-7bcef80bf70f&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="mi">4816</span><span class="p">,</span>
+    <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1672b894-763e-41f6-9f2d-220834362a53&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.48899999260902405</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;michelle81&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;40702146-8b03-4fd6-93fd-0de22c82beff&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;7d23d2f3-400c-47dd-9295-c324a6f89c10&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.29999999701976776</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;salazarthomas&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0f47e644-4d86-4dd3-b51f-82fe6df4788c&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b2a125f1-7b17-4b28-970b-4fc6d2081b26&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.9567924740258604</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;obenton&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;8f1a4cd8-4641-4a82-956f-3f33856876d5&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;{&#39;match&#39; object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;authorization&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;fe5d0932-4bac-4428-9bfe-4f120bcb6afa&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;27389 Hall Knolls&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;template&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a4bde469-9eed-4a77-b174-0358a5127a46&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;44f90bd7-7b9a-46f6-837d-b4550cf16b0d&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;candidate&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;de6a1576-c265-4462-84b4-fe722d3b8dcb&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;{street object}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;list_type&quot;</span><span class="p">:</span> <span class="s2">&quot;0,1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;person_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;cb5baee6-2637-4369-b1f3-2df0a3e4f843&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;315a0d99-8f59-4cd8-93aa-13e80430c7e9&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;d7e1dfc1-875c-4525-9256-90c8af6a1b6d&quot;</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;descriptor_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;d10cf7e9-e7bc-4211-8b94-75710a8a48e1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;51749758-46ac-46cc-a77f-217ec3cebff5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8d33d997-a285-45ea-a683-d3dc333eb4d1&quot;</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="statistic-of-account-after-failed-matching">
+<!--[statistic-of-account-after-failed-matching]--><code class="descname">statistic of account after failed matching</code><a class="headerlink" href="#statistic-of-account-after-failed-matching" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – id of account</li>
+<li><strong>timestamp</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – statistics creation time</li>
+<li><strong>result</strong> (<a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>) – request reply, for example <cite>identify_result</cite>.</li>
+<li><strong>source</strong> (<em>'match'</em>) – one of: “match, search, identify, verify”</li>
+<li><strong>template</strong> (<a class="reference internal" href="#template"><code class="xref json json-object docutils literal notranslate"><span class="pre">template</span></code></a>) – one of field “person_id” or “descriptor_id” from <a class="reference internal" href="#template"><code class="xref json json-object docutils literal notranslate"><span class="pre">template</span></code></a></li>
+<li><strong>candidate</strong> (<a class="reference internal" href="#candidate"><code class="xref json json-object docutils literal notranslate"><span class="pre">candidate</span></code></a>) – one of field “list_id”, “person_ids” or “descriptor_ids” from <a class="reference internal" href="#candidate"><code class="xref json json-object docutils literal notranslate"><span class="pre">candidate</span></code></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Propery authorization:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last">authorization, “basic” or <a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;ddbcc3ff-b2df-4ee1-b369-2751136810ab&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="mi">7667</span><span class="p">,</span>
+    <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;error_code&quot;</span><span class="p">:</span> <span class="mi">7088</span><span class="p">,</span>
+        <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;gwLWKaYPtJhCuAykeKYw&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;{&#39;match&#39; object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;{\&quot;basic\&quot; object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;template&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1b1b83c2-e42c-4da9-ae9a-4baa579c9f44&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;bc3bb50b-e400-43c8-9c98-cd5576d0a595&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;candidate&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b7e1030f-5a36-4f49-96c3-78cd38236df4&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;{street object}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;list_type&quot;</span><span class="p">:</span> <span class="s2">&quot;0,1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;person_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;20578552-cb43-4241-b4fc-1c69c36cc50e&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;8b1107f0-8a8f-4264-b35c-fec3bf4bfc3c&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;460bb6f9-2f04-41c7-b0bd-bb224902f823&quot;</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;descriptor_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;f9233d36-d7de-487c-b9cb-f44c703ee04e&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;86c9cf04-7890-48ed-9071-1b291bf5b2c3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;00518d49-50ca-4a68-9409-ea89a1f75a1c&quot;</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="statistic-of-account-after-success-extract">
+<!--[statistic-of-account-after-success-extract]--><code class="descname">statistic of account after success extract</code><a class="headerlink" href="#statistic-of-account-after-success-extract" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – id of account</li>
+<li><strong>timestamp</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – statistics creation time</li>
+<li><strong>result</strong> (<a class="reference internal" href="photo.html#extract_result"><code class="xref json json-object docutils literal notranslate"><span class="pre">extract_result</span></code></a>) – request reply</li>
+<li><strong>source</strong> (<em>'descriptors'</em>) – “descriptors”</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Propery authorization:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last">authorization, “basic” or <a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;72b9b70f-072f-431f-81f4-46355cf65d14&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;timestamp&quot;</span><span class="p">:</span> <span class="mi">7008</span><span class="p">,</span>
+    <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;faces&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;edffc7f8-3cd4-44f3-b7ac-2a21de07a05b&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;rect&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">3607</span><span class="p">,</span>
+                    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">2835</span><span class="p">,</span>
+                    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">9583</span><span class="p">,</span>
+                    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">3953</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;rectISO&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">5610</span><span class="p">,</span>
+                    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">9155</span><span class="p">,</span>
+                    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">5127</span><span class="p">,</span>
+                    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">8520</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="nt">&quot;quality&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;light&quot;</span><span class="p">:</span> <span class="mf">0.4800000000000182</span><span class="p">,</span>
+                    <span class="nt">&quot;dark&quot;</span><span class="p">:</span> <span class="mf">0.5199999999999996</span><span class="p">,</span>
+                    <span class="nt">&quot;saturation&quot;</span><span class="p">:</span> <span class="mf">0.9768890579999834</span><span class="p">,</span>
+                    <span class="nt">&quot;blurriness&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">1713</span><span class="p">,</span>
+                    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">2172</span><span class="p">,</span>
+                    <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">0.6209716796875</span><span class="p">,</span>
+                    <span class="nt">&quot;emotions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;anger&quot;</span><span class="p">:</span> <span class="mf">0.724931300006574</span><span class="p">,</span>
+                        <span class="nt">&quot;disgust&quot;</span><span class="p">:</span> <span class="mf">0.913599999999974</span><span class="p">,</span>
+                        <span class="nt">&quot;fear&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="nt">&quot;happiness&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="nt">&quot;neutral&quot;</span><span class="p">:</span> <span class="mf">0.7999999523162842</span><span class="p">,</span>
+                        <span class="nt">&quot;sadness&quot;</span><span class="p">:</span> <span class="mf">0.5043970001861453</span><span class="p">,</span>
+                        <span class="nt">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.7630000114440918</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;ethnicities&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;asian&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="nt">&quot;indian&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="nt">&quot;caucasian&quot;</span><span class="p">:</span> <span class="mf">0.626560093020089</span><span class="p">,</span>
+                        <span class="nt">&quot;african&quot;</span><span class="p">:</span> <span class="mf">0.680000000000291</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;head_pose&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;yaw&quot;</span><span class="p">:</span> <span class="mi">2964</span><span class="p">,</span>
+                        <span class="nt">&quot;pitch&quot;</span><span class="p">:</span> <span class="mi">4955</span><span class="p">,</span>
+                        <span class="nt">&quot;roll&quot;</span><span class="p">:</span> <span class="mi">2565</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;fb2818a0-6533-4eaa-af8e-70064ab03f29&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;rect&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">7851</span><span class="p">,</span>
+                    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">4636</span><span class="p">,</span>
+                    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">366</span><span class="p">,</span>
+                    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">3097</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;rectISO&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">5086</span><span class="p">,</span>
+                    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">5115</span><span class="p">,</span>
+                    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">5382</span><span class="p">,</span>
+                    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">611</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">0.2861824479987263</span><span class="p">,</span>
+                <span class="nt">&quot;quality&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;light&quot;</span><span class="p">:</span> <span class="mf">0.3300018310546875</span><span class="p">,</span>
+                    <span class="nt">&quot;dark&quot;</span><span class="p">:</span> <span class="mf">0.710687710000002</span><span class="p">,</span>
+                    <span class="nt">&quot;saturation&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="nt">&quot;blurriness&quot;</span><span class="p">:</span> <span class="mf">0.6570524649039982</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">7096</span><span class="p">,</span>
+                    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">4459</span><span class="p">,</span>
+                    <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">0.8149995803833008</span><span class="p">,</span>
+                    <span class="nt">&quot;emotions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;anger&quot;</span><span class="p">:</span> <span class="mf">0.9771836340996742</span><span class="p">,</span>
+                        <span class="nt">&quot;disgust&quot;</span><span class="p">:</span> <span class="mf">0.9291000000002896</span><span class="p">,</span>
+                        <span class="nt">&quot;fear&quot;</span><span class="p">:</span> <span class="mf">0.86213060002774</span><span class="p">,</span>
+                        <span class="nt">&quot;happiness&quot;</span><span class="p">:</span> <span class="mf">0.42260339999999985</span><span class="p">,</span>
+                        <span class="nt">&quot;neutral&quot;</span><span class="p">:</span> <span class="mf">0.18900000000000006</span><span class="p">,</span>
+                        <span class="nt">&quot;sadness&quot;</span><span class="p">:</span> <span class="mf">0.11400002241134644</span><span class="p">,</span>
+                        <span class="nt">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;ethnicities&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;asian&quot;</span><span class="p">:</span> <span class="mf">0.6908808651320015</span><span class="p">,</span>
+                        <span class="nt">&quot;indian&quot;</span><span class="p">:</span> <span class="mf">0.7902000024914742</span><span class="p">,</span>
+                        <span class="nt">&quot;caucasian&quot;</span><span class="p">:</span> <span class="mf">0.2755739986896515</span><span class="p">,</span>
+                        <span class="nt">&quot;african&quot;</span><span class="p">:</span> <span class="mf">0.1828514000000041</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;head_pose&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;yaw&quot;</span><span class="p">:</span> <span class="mi">8698</span><span class="p">,</span>
+                        <span class="nt">&quot;pitch&quot;</span><span class="p">:</span> <span class="mi">5098</span><span class="p">,</span>
+                        <span class="nt">&quot;roll&quot;</span><span class="p">:</span> <span class="mi">6405</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;3616d3e1-1901-42c5-98c4-36f772903c73&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;rect&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">9789</span><span class="p">,</span>
+                    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">6282</span><span class="p">,</span>
+                    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1272</span><span class="p">,</span>
+                    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">5916</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;rectISO&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">2556</span><span class="p">,</span>
+                    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">5405</span><span class="p">,</span>
+                    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">9462</span><span class="p">,</span>
+                    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">8485</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">0.4086539999116212</span><span class="p">,</span>
+                <span class="nt">&quot;quality&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;light&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="nt">&quot;dark&quot;</span><span class="p">:</span> <span class="mf">0.588034762200401</span><span class="p">,</span>
+                    <span class="nt">&quot;saturation&quot;</span><span class="p">:</span> <span class="mf">0.9000000059604645</span><span class="p">,</span>
+                    <span class="nt">&quot;blurriness&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">770</span><span class="p">,</span>
+                    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">2351</span><span class="p">,</span>
+                    <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">0.7200000286102295</span><span class="p">,</span>
+                    <span class="nt">&quot;emotions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;anger&quot;</span><span class="p">:</span> <span class="mf">0.5648295612099901</span><span class="p">,</span>
+                        <span class="nt">&quot;disgust&quot;</span><span class="p">:</span> <span class="mf">0.8615090000000123</span><span class="p">,</span>
+                        <span class="nt">&quot;fear&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="nt">&quot;happiness&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+                        <span class="nt">&quot;neutral&quot;</span><span class="p">:</span> <span class="mf">0.39607480000000095</span><span class="p">,</span>
+                        <span class="nt">&quot;sadness&quot;</span><span class="p">:</span> <span class="mf">0.35207998752593994</span><span class="p">,</span>
+                        <span class="nt">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.1713995393999994</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;ethnicities&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;asian&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="nt">&quot;indian&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="nt">&quot;caucasian&quot;</span><span class="p">:</span> <span class="mf">0.2992282999999816</span><span class="p">,</span>
+                        <span class="nt">&quot;african&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+                    <span class="p">},</span>
+                    <span class="nt">&quot;head_pose&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;yaw&quot;</span><span class="p">:</span> <span class="mi">7573</span><span class="p">,</span>
+                        <span class="nt">&quot;pitch&quot;</span><span class="p">:</span> <span class="mi">8308</span><span class="p">,</span>
+                        <span class="nt">&quot;roll&quot;</span><span class="p">:</span> <span class="mi">7845</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;exif&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;artist&quot;</span><span class="p">:</span> <span class="s2">&quot;ronald55&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;dateTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2006-11-19T00:09:47&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;{&#39;descriptors&#39; object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;{\&quot;basic\&quot; object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<span class="target" id="module-luna_api.app.admin_stats"></span><dl class="class">
+<dt id="luna_api.app.admin_stats.AdminStats">
+<em class="property">class </em><code class="descclassname">luna_api.app.admin_stats.</code><code class="descname">AdminStats</code><span class="sig-paren">(</span><em>series</em>, <em>tags=None</em>, <em>values=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/admin_stats.html#AdminStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.admin_stats.AdminStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure for storing admin stats</p>
+<dl class="method">
+<dt id="luna_api.app.admin_stats.AdminStats.getStrToInfluxRequest">
+<code class="descname">getStrToInfluxRequest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/admin_stats.html#AdminStats.getStrToInfluxRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.admin_stats.AdminStats.getStrToInfluxRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate string for request to influxdb</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string in format “series_name,tag1=tag1_value,tag2=tag2_value,…, value1=value1_value”</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_api.app.admin_stats.AdminStats.series">
+<code class="descname">series</code><em class="property"> = None</em><a class="headerlink" href="#luna_api.app.admin_stats.AdminStats.series" title="Permalink to this definition">¶</a></dt>
+<dd><p>name of series in influxdb</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_api.app.admin_stats.AdminStats.tags">
+<code class="descname">tags</code><em class="property"> = None</em><a class="headerlink" href="#luna_api.app.admin_stats.AdminStats.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict of tags in influxdb</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.admin_stats.AdminStats.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>tags=None</em>, <em>values=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/admin_stats.html#AdminStats.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.admin_stats.AdminStats.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update tags and values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tags</strong> – dict for update self.tags</li>
+<li><strong>values</strong> – dict for update self.values</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_api.app.admin_stats.AdminStats.values">
+<code class="descname">values</code><em class="property"> = None</em><a class="headerlink" href="#luna_api.app.admin_stats.AdminStats.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict of values in influxdb</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAccountStats">
+<code class="descclassname">StorageHandler.</code><code class="descname">generateAccountStats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.generateAccountStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAccountStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate common json-dict to send client statistics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">in case of exception None is returned, in other cases:<dl class="object">
+<dt id="client_stats">
+<!--[client_stats]--><code class="descname">client_stats</code><a class="headerlink" href="#client_stats" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>result</strong> (<a class="reference internal" href="matching.html#identify_result"><code class="xref json json-object docutils literal notranslate"><span class="pre">identify_result</span></code></a>) – json with request results.</li>
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – id account</li>
+<li><strong>event_type</strong> (<em>&quot;match&quot;</em>) – type of event (“match”, “extract”)</li>
+<li><strong>authorization</strong> (<a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a>) – authorization, “basic” or <a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a></li>
+<li><strong>source</strong> (<em>'match'</em>) – request resource (“match”, “descriptors”)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;5bc9b7f8-02fe-4596-928a-f919bf7bbdbc&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.6722170114517212</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;andersontroy&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;37147498-54b6-46cc-9e6e-5cbdef0b618c&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;c2a00099-289c-4081-bc2a-004403ba0bf6&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.6698000431060791</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;wrobinson&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1fb5383f-2de2-48a7-a883-8b13a57d21e4&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;7eb72eac-f467-406b-9687-c5b8c389b95a&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.9594716200008406</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;stonelauren&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;9cee4004-affc-47f6-847b-2ca46028f329&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;8499f3ba-081b-4961-ac0e-3ba263fa06a0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;event_type&quot;</span><span class="p">:</span> <span class="s2">&quot;{\&quot;match\&quot; object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;authorization&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1c73ecec-0d5d-4565-b6e3-ea80c4636ce1&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;19389 Misty Lake&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;{&#39;match&#39; object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAdminStatisticsRequestBody">
+<code class="descclassname">StorageHandler.</code><code class="descname">generateAdminStatisticsRequestBody</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.generateAdminStatisticsRequestBody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAdminStatisticsRequestBody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate body request to send admin statistics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ol class="arabic simple">
+<li>in case of success following string is generated <em>“extract_success,resource=/descriptors,         server=127.0.0.1,account_id=16fd2706-8baf-433b-82eb-8c7fada847da,count_faces=1 value_time=0.33”</em></li>
+<li>in case of failure following string is generated <em>“errors,resource=/descriptors,server=127.0.0.1,         account_id=16fd2706-8baf-433b-82eb-8c7fada847da,error=2 value=2”</em></li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAdminStatistic">
+<code class="descclassname">StorageHandler.</code><code class="descname">setAdditionalDataToAdminStatistic</code><span class="sig-paren">(</span><em>adminStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.setAdditionalDataToAdminStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAdminStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>For childes of  <em>StorageHandler</em> method of set additional admin stats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>adminStats</strong> – common stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAdminStatistic">
+<code class="descclassname">MatcherHandler.</code><code class="descname">setAdditionalDataToAdminStatistic</code><span class="sig-paren">(</span><em>adminStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.setAdditionalDataToAdminStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAdminStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set additional admin stats “limit”, “template”, “candidate”, “value_sim”, “value_time”, “value_size”</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>adminStats</strong> – common stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new admin stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.photo_handler.PhotoHandler.setAdditionalDataToAdminStatistic">
+<code class="descclassname">PhotoHandler.</code><code class="descname">setAdditionalDataToAdminStatistic</code><span class="sig-paren">(</span><em>adminStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/photo_handler.html#PhotoHandler.setAdditionalDataToAdminStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.photo_handler.PhotoHandler.setAdditionalDataToAdminStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set additional stats “count_faces”</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>adminStats</strong> – common stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new admin stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAccountStatistic">
+<code class="descclassname">StorageHandler.</code><code class="descname">setAdditionalDataToAccountStatistic</code><span class="sig-paren">(</span><em>accountStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.setAdditionalDataToAccountStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAccountStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>For childes of  <em>StorageHandler</em> method of set additional account stats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>accountStats</strong> – common stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAccountStatistic">
+<code class="descclassname">MatcherHandler.</code><code class="descname">setAdditionalDataToAccountStatistic</code><span class="sig-paren">(</span><em>accountStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.setAdditionalDataToAccountStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAccountStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set template and candidate to stats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>accountStats</strong> – common request stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.sendStats">
+<code class="descclassname">StorageHandler.</code><code class="descname">sendStats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.sendStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.sendStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to send statistics. Called, when account has already received answer in method <em>on_finish</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.sendStats">
+<code class="descclassname">MatcherHandler.</code><code class="descname">sendStats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.sendStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to send statistics. Called, when account has already received answer in method <em>on_finish</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.matcher_handler.MatcherHandler.on_finish">
+<code class="descclassname">MatcherHandler.</code><code class="descname">on_finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/matcher_handler.html#MatcherHandler.on_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.on_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for sending request statistics</p>
+<p>note: Function is called after request was processed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.photo_handler.PhotoHandler.on_finish">
+<code class="descclassname">PhotoHandler.</code><code class="descname">on_finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/photo_handler.html#PhotoHandler.on_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.photo_handler.PhotoHandler.on_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to send statistics. Called, when account has already received answer.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="testing.html">Testing</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="plugins.html">Plug-ins</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

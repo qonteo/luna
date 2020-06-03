@@ -1,0 +1,60 @@
+v.1.0.0
+========
+
+Improvements:
+-------------
+
+    1) Added TestAsyncLink to main tests.
+
+    #) Optimized  work time of tests.
+
+    #) Added S3_OFF parameters in /test/config.py for skipping test which using S3.
+
+    #) Changed default name db for statistic (admin_stats_db -> luna_api_admin).
+
+    #) Updated information about limiting of influx in install.
+
+    #) Added parameter DNS_SERVER to /configs/config.py, this parameter is used for determinate ip address
+
+    #) Added print about success checking connection to postgres
+
+    #) Added support images and descriptors in base64 encoding. For using see */storage/descriptors* in raml.
+
+    #) Added upload scripts, see :ref:`upload-scripts`.
+
+    #) Add resource "/version" to raml.
+
+    #) Return version of Luna Core in  "/version".
+
+    #) Refactoring docstrings.
+
+    #) Add CORS for resource "/version".
+
+    #) Added description about connection to extarnal hosts, see :ref:`external-hosts`.
+
+    #) Auto generate api version for raml.
+
+    #) Support Upper letters in email.
+
+    #) Added errors in cases when LUNA core unavailable.
+
+    #) Added errors in cases when Image is corrupted (*Error.ConvertImageToJPGError*).
+
+Bugs fixed:
+-----------
+
+    #) Fixed TestAsyncLink check correct status code now
+
+    #) Exceptions are thrown in the function to obtain an IP address without the Internet.
+
+    #) Fixed handler of error in saving portrait with plugins.
+
+    #) Fixed trying to save portrait in plugin when *extract_descriptor=1*.
+
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

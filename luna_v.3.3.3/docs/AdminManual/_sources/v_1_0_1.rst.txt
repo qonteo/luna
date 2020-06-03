@@ -1,0 +1,22 @@
+v.1.0.1
+=======
+
+Improvements:
+-------------
+
+    1) Update luna3 (v.0.0.50)
+
+    #) Add alembic for db migrations, refresh dependecies list
+
+Bugs fixed:
+-----------
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *luna_admin, tests, docs* and update dependencies from
+requirements.txt. Then run the commands:
+
+.. code-block:: bash
+
+	alembic upgrade head

@@ -1,0 +1,347 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.db.db_function &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.db.db_function</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.db.db_function</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="k">import</span> <span class="n">UUID</span>
+
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="k">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">and_</span><span class="p">,</span> <span class="n">func</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="k">import</span> <span class="n">update</span><span class="p">,</span> <span class="n">insert</span><span class="p">,</span> <span class="n">delete</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="k">import</span> <span class="n">Query</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TypeVar</span>
+<span class="kn">from</span> <span class="nn">db</span> <span class="k">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">db.models</span> <span class="k">import</span> <span class="n">Account</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.utils.timer</span> <span class="k">import</span> <span class="n">timer</span>
+<span class="kn">from</span> <span class="nn">configs.config</span> <span class="k">import</span> <span class="n">SQLALCHEMY_DATABASE_URI</span><span class="p">,</span> <span class="n">DB</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.exception</span> <span class="k">import</span> <span class="n">VLException</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">passlib.hash</span> <span class="k">import</span> <span class="n">pbkdf2_sha256</span>
+
+<span class="n">uuidStr</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;uuidStr&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">UUID</span><span class="p">)</span>  <span class="c1">#: uuid4 or uuid4 converted into string</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: poll of connections to postgres, created by every worker at the moment of first connection</span>
+<span class="n">literal_binds</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">if</span> <span class="n">DB</span> <span class="o">==</span> <span class="s1">&#39;postgres&#39;</span><span class="p">:</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">SQLALCHEMY_DATABASE_URI</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;connect_timeout&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">})</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># analogue of connect_timeout for oracle not found or not exists</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">SQLALCHEMY_DATABASE_URI</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="exceptionWrap"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.exceptionWrap">[docs]</a><span class="k">def</span> <span class="nf">exceptionWrap</span><span class="p">(</span><span class="n">wrapFunc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decorator for catching exceptions when composing queries to the database.</span>
+
+<span class="sd">    :return: If exception is not caught, will be raise VLException(Error.CreateQueryError), reraise VLException</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">wrapFunc</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">wrapFunc</span><span class="p">(</span><span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">VLException</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">func_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">CreateQueryError</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrap</span></div>
+
+
+<div class="viewcode-block" id="DBContext"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext">[docs]</a><span class="k">class</span> <span class="nc">DBContext</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for requests to postgres.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+
+<div class="viewcode-block" id="DBContext.checkoutLoginPassword"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.checkoutLoginPassword">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">checkoutLoginPassword</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check of login/password pair existence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            login:  login for authentication</span>
+<span class="sd">            password: password for authentication</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            account id</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(Error.AccountNotFound, 401, isCriticalError = False),</span>
+<span class="sd">            VLException(Error.AccountNotFound, 401, isCriticalError = False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">([</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">account_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">password</span><span class="p">])</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">login</span><span class="p">))</span>
+            <span class="n">acc</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">acc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">AccountNotFound</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">accId</span> <span class="o">=</span> <span class="n">acc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">pwdHash</span> <span class="o">=</span> <span class="n">acc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pbkdf2_sha256</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">pwdHash</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">AccountNotFound</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">accId</span></div>
+
+<div class="viewcode-block" id="DBContext.checkAccountIsActive"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.checkAccountIsActive">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">checkAccountIsActive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if account is active or not.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            accountId: id of account on check.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            true if account is active, else false</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(Error.AccountNotFound)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">active</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">AccountNotFound</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DBContext.createAccountToken"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.createAccountToken">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">createAccountToken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creation of token for the account.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            info: user info for token</span>
+<span class="sd">            accountId: account id, the token is created to.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            token_id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">token_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="n">accountId</span><span class="p">,</span> <span class="n">token_id</span><span class="o">=</span><span class="n">token_id</span><span class="p">,</span>
+                                                    <span class="n">token_info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">token_id</span></div>
+
+<div class="viewcode-block" id="DBContext.updateTokenInfo"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.updateTokenInfo">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">updateTokenInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update of token information.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tokenId: token id, which is updated</span>
+<span class="sd">            accountId: account id, token is linked to.</span>
+<span class="sd">            data: new token data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">update</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span> <span class="o">==</span> <span class="n">tokenId</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">token_info</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DBContext.checkTokenExist"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.checkTokenExist">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">checkTokenExist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if token with id is linked to account.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tokenId:  token id.</span>
+<span class="sd">            accountId: account id.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            True if token is exist else False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span> <span class="o">==</span> <span class="n">tokenId</span><span class="p">,</span>
+                                                <span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">))</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="DBContext.getTokenById"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.getTokenById">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getTokenById</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get token_info by  id token and account token_info.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tokenId: id  token</span>
+<span class="sd">            accountId: account id, token is linked to.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            token data</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(Error.TokenNotFound, 404)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_info</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span> <span class="o">==</span> <span class="n">tokenId</span><span class="p">,</span>
+                                  <span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">))</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">TokenNotFound</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="DBContext.getAccountByAccountId"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.getAccountByAccountId">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getAccountByAccountId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Account</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Receive account by id.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            accountId: account id</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            account (tuple with account_id, status, email, password, organization_name)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">))</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="n">acc</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="p">()</span><span class="o">.</span><span class="n">fillAccount</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">acc</span></div>
+
+<div class="viewcode-block" id="DBContext.getAccountTokens"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.getAccountTokens">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getAccountTokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pageSize</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Receive account token list</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            accountId: account id</span>
+<span class="sd">            page: page</span>
+<span class="sd">            pageSize: page size</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list of token</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">([</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_info</span><span class="p">])</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+                <span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span><span class="o">.</span><span class="n">asc</span><span class="p">())</span><span class="o">.</span><span class="n">offset</span><span class="p">((</span><span class="n">page</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">pageSize</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">pageSize</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="DBContext.getAccountTokenCount"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.getAccountTokenCount">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getAccountTokenCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get account tokens count</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            accountId: account id</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            count of account tokens</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span><span class="p">)</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">)])</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="DBContext.registerAccount"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.registerAccount">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">registerAccount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Account creation. Account and first token are created simultaneously.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: organization name</span>
+<span class="sd">            email: e-mail</span>
+<span class="sd">            password: password</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple with account id and token id</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(Error.EmailExist, 409, isCriticalError = False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">email</span><span class="p">)</span>
+            <span class="n">countRes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">countRes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">accountId</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+                <span class="n">pwdHash</span> <span class="o">=</span> <span class="n">pbkdf2_sha256</span><span class="o">.</span><span class="n">hash</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+                <span class="n">createAccountSt</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Account</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="n">accountId</span><span class="p">,</span> <span class="n">organization_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                                                                <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">pwdHash</span><span class="p">)</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">createAccountSt</span><span class="p">)</span>
+
+                <span class="n">tokenId</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+                <span class="n">createTokenSt</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">account_id</span><span class="o">=</span><span class="n">accountId</span><span class="p">,</span> <span class="n">token_id</span><span class="o">=</span><span class="n">tokenId</span><span class="p">,</span>
+                                                                   <span class="n">token_info</span><span class="o">=</span><span class="s2">&quot;first token&quot;</span><span class="p">)</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">createTokenSt</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">accountId</span><span class="p">,</span> <span class="n">tokenId</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">EmailExist</span><span class="p">,</span> <span class="mi">409</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DBContext.removeTokens"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.removeTokens">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">removeTokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">uuidStr</span><span class="p">],</span> <span class="n">accountId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete list of account.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tokens:  list of tokens</span>
+<span class="sd">            accountId: account id. tokens are linked to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">and_</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">tokens</span><span class="p">),</span>
+                                                        <span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">account_id</span> <span class="o">==</span> <span class="n">accountId</span><span class="p">))</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">st</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DBContext.getAccountIdByToken"><a class="viewcode-back" href="../../../db_functions.html#luna_api.db.db_function.DBContext.getAccountIdByToken">[docs]</a>    <span class="nd">@exceptionWrap</span>
+    <span class="k">def</span> <span class="nf">getAccountIdByToken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokenId</span><span class="p">:</span> <span class="n">uuidStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Receive account id by token.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tokenId: token id</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            account id</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(Error.AccountNotFound, isCriticalError = False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">account_id</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AccountToken</span><span class="o">.</span><span class="n">token_id</span> <span class="o">==</span> <span class="n">tokenId</span><span class="p">)</span>
+            <span class="n">accId</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">statement</span><span class="p">)</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">accId</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">accId</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">AccountNotFound</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">accId</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

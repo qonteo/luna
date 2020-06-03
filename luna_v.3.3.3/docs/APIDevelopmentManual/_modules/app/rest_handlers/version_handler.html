@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>app.rest_handlers.version_handler &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>app.rest_handlers.version_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for app.rest_handlers.version_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tornado.web</span>
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span>
+<span class="kn">import</span> <span class="nn">ujson</span> <span class="k">as</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">version</span> <span class="k">import</span> <span class="n">VERSION</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.base_handler_class</span> <span class="k">import</span> <span class="n">BaseRequestHandler</span>
+
+
+<div class="viewcode-block" id="VersionHandler"><a class="viewcode-back" href="../../../version.html#app.rest_handlers.version_handler.VersionHandler">[docs]</a><span class="k">class</span> <span class="nc">VersionHandler</span><span class="p">(</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler for luna_python_server version</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="VersionHandler.get"><a class="viewcode-back" href="../../../version.html#app.rest_handlers.version_handler.VersionHandler.get">[docs]</a>    <span class="nd">@tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resource is reached by address &#39;/version&#39;</span>
+
+<span class="sd">        .. http:get:: /version</span>
+
+<span class="sd">        Request to receive service version</span>
+
+<span class="sd">        :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">        **Example response**:</span>
+
+<span class="sd">        .. sourcecode:: http</span>
+
+<span class="sd">            HTTP/1.1 200 OK</span>
+<span class="sd">            Vary: Accept</span>
+<span class="sd">            Content-Type: application/json</span>
+<span class="sd">            LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">        .. json:object:: luna_api_version</span>
+
+<span class="sd">            :property api: number of api version</span>
+<span class="sd">            :proptype api: integer</span>
+<span class="sd">            :property major: number of major version</span>
+<span class="sd">            :proptype major: integer</span>
+<span class="sd">            :property minor: number of major version</span>
+<span class="sd">            :proptype minor: integer</span>
+<span class="sd">            :property patch: number of patch version</span>
+<span class="sd">            :proptype patch: integer</span>
+
+<span class="sd">        .. json:object:: version</span>
+
+<span class="sd">            :property major: number of major version</span>
+<span class="sd">            :proptype major: integer</span>
+<span class="sd">            :property minor: number of major version</span>
+<span class="sd">            :proptype minor: integer</span>
+<span class="sd">            :property patch: number of patch version</span>
+<span class="sd">            :proptype patch: integer</span>
+
+<span class="sd">        .. json:object:: luna_core_version</span>
+
+<span class="sd">            :property fsdk: version of fsdk</span>
+<span class="sd">            :proptype fsdk: :json:object:`version`</span>
+<span class="sd">            :property api: number of api version</span>
+<span class="sd">            :proptype api: integer</span>
+<span class="sd">            :property luna: version of fsdk</span>
+<span class="sd">            :proptype luna: :json:object:`version`</span>
+
+<span class="sd">        .. json:object:: all_versions</span>
+
+<span class="sd">            :property luna_api: version of luna api</span>
+<span class="sd">            :proptype luna_api: luna_api_version</span>
+<span class="sd">            :property luna_core: version of luna core</span>
+<span class="sd">            :proptype luna_core: luna_core_version</span>
+
+<span class="sd">        .. json:object:: response normal version</span>
+<span class="sd">            :showexample:</span>
+
+<span class="sd">            :property Version: version of server</span>
+<span class="sd">            :proptype Version: all_versions</span>
+
+<span class="sd">        :statuscode 200: Version successfully received, if versioning was unsuccessful, version\</span>
+<span class="sd">         will have value &quot;UNKNOWN&quot;</span>
+<span class="sd">        :statuscode 500:  Exception caught</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lunaVersionRes</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunaCoreContext</span><span class="o">.</span><span class="n">getLunaVersion</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;Version&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;luna_api&quot;</span><span class="p">:</span> <span class="n">VERSION</span><span class="p">[</span><span class="s2">&quot;Version&quot;</span><span class="p">],</span>
+                                <span class="s2">&quot;luna_core&quot;</span><span class="p">:</span> <span class="n">lunaVersionRes</span><span class="p">}}))</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

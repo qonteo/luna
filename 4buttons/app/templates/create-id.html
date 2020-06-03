@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Document</title>
+
+  <link rel="stylesheet" href="static/css/app.css">
+
+
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/WebPhotoMaker.js"></script>
+  <script src="/static/js/smoother.js"></script>
+  <script src="/static/js/fpsmeter.min.js"></script>
+  <script src="/static/js/app.js"></script>
+
+  <style>
+    #best-shot {
+      position: absolute;
+      top: -1000px;
+      left: -650px;
+      width: 180;
+      height: 240;
+    }
+    
+    /** Notification icon */
+    .icon {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+    }
+
+    /** Notification icon bar */
+    .iconbar {
+      height: 48px;
+    }
+
+
+    #overlay {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+
+      -o-transform : scaleX(-1); /** *rts */
+      -webkit-transform : scaleX(-1); /** *rts */
+      transform : scaleX(-1); /** *rts */
+      -ms-filter : fliph; /*IE*/ /** *rts */
+      filter : fliph; /*IE*/ /** *rts */
+    }
+
+    #guide {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+
+      -o-transform : scaleX(-1); /** *rts */
+      -webkit-transform : scaleX(-1); /** *rts */
+      transform : scaleX(-1); /** *rts */
+      -ms-filter : fliph; /*IE*/ /** *rts */
+      filter : fliph; /*IE*/ /** *rts */
+    }
+
+    #bestShot {
+      /*position: absolute;*/
+      /*top: 0px;*/
+      /*left: 0px;*/
+      /*width: 240px;*/
+      /*height: 320px;  */
+      width: 30rem;
+      height: auto;
+    }
+
+    #videoel {
+      position: absolute;
+      background-color: #000;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+
+      -o-transform : scaleX(-1); /** *rts */
+      -webkit-transform : scaleX(-1); /** *rts */
+      transform : scaleX(-1); /** *rts */
+      -ms-filter : fliph; /*IE*/ /** *rts */
+      filter : fliph; /*IE*/ /** *rts */
+    }
+
+
+    #refreshPhoto {
+      opacity: 0.5;
+      display: inline;
+      position: absolute;
+      width: 10rem;
+      height: 10rem;
+      cursor: pointer;
+    }
+    #refreshPhoto:hover {
+      opacity: 1;
+    }
+    #refreshPhoto:not(.active) {
+      display: none;
+    }
+    #video-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+      #motionBlurIcon {
+          z-index: 100;
+          position: absolute;
+          margin: 2rem;
+      }
+
+
+      .main-content {
+        position: relative;
+      }
+
+    #createIdWarning {
+      color: #d23838;
+      text-align: right;
+      display: block;
+      font-size: 2em;
+    }
+    .loader {
+      background-color: rgba(64, 67, 78, 0.88);
+      width: 100%;
+      height: 100%;
+      margin-left: -4.166666666666666vw;
+      position: absolute;
+      z-index: 100;
+    }
+    @-webkit-keyframes loading_icon {
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+    @keyframes loading_icon {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .loader:not(.active) {
+      display: none;
+    }
+    .loader div {
+      margin: 30% auto 0;
+      width: 10rem;
+      height: 10rem;
+    }
+    .loader .loading_icon {
+      display: block;
+      width: 10rem;
+      height: 10rem;
+      /*border: 2rem solid #783674;*/
+      /*border-top-color: #7d3a78;*/
+      /*border-left-color: #83407e;*/
+
+      /*border: 2rem solid #783674;*/
+      /*border-top-color: #7d3b78;*/
+      /*border-left-color: #7a3975;*/
+      /*border-bottom-color: #784174;*/
+
+      border: 2rem solid #783674;
+      border-top-color: #894483;
+      border-left-color: #803f7b;
+      border-bottom-color: #7e397a;
+
+
+      border-radius: 100%;
+      -webkit-animation: loading_icon linear .7s infinite;
+      animation: loading_icon linear .7s infinite;
+    }
+    .loader .loading_icon:after {
+      content: '';
+      display: block;
+      /*background-color: #83407e;*/
+      border-radius: 100%;
+      width: 2rem;
+      height: 2rem;
+      margin: -1rem 0px 0px 8rem;
+      margin: 0rem 0px 0px 9rem;
+    }
+
+
+    .resultIdCreate {
+      background-color: rgba(27, 132, 45, 0.85);
+      width: 100%;
+      height: 100%;
+      margin-left: -4.166666666666666vw;
+      position: absolute;
+      z-index: 100;
+    }
+    .resultIdCreate span {
+      font-size: 15rem;
+      color: white;
+      text-shadow: 0px 0px 1rem #4e7e56;
+      margin: 20% auto 0;
+      display: block;
+      text-align: center;
+    }
+    .resultIdCreate.error span {
+      font-size: 7rem;
+    }
+    .resultIdCreate.error {
+      background-color: rgba(111, 16, 16, 0.85);
+    }
+    .resultIdCreate:not(.active) {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="main-header">
+      <div class="main-header__left-col">
+        <a href="/" class="main-header__back-btn">
+          <span class="main-header__back-btn-ico"></span>
+          Create ID
+        </a>
+      </div>
+      <div class="main-header__right-col">
+        <img src="static/img/icons/visionlab.png" alt="" class="main-header__right-col-img">
+        <img src="static/img/icons/connect.png" id="connectID_logo" alt="" class="main-header__right-col-img">
+      </div>
+    </header>
+    <div class="main-content">
+      <div class="loader">
+        <div><i class="loading_icon"></i></div>
+      </div>
+
+      <div class="resultIdCreate"><span></span></div>
+      <div class="main-content__create-id-wrap">
+        <div class="main-content__create-id-img-wrap">
+          <div class="main-content__create-id-img-block">
+
+
+                <div id="video-container">
+                  <img id="motionBlurIcon" src="/static/img/motion_blur.png" class="icon" style="display: inline; opacity: 1;">
+                  <video id="videoel" width="640" height="480" preload="auto" loop="" src="blob:https://visionlabs.faceis.ru/900a4783-bee9-47f4-8019-7521a2b0ee2d"></video>
+                  <canvas width="204" height="272" id="best-shot"></canvas>
+                  <canvas id="overlay" width="640" height="480"></canvas>
+                  <canvas id="guide" width="640" height="480"></canvas>
+
+
+
+                  <div id="flash" style="height:100%; width:100%;  background:#FFF; display:none ; position:absolute;"></div>
+                </div>
+
+          </div>
+          <p class="main-content__create-id-img-text">
+            Look into the camera
+          </p>
+        </div>
+        <div class="main-content__create-id-form-wrap">
+
+          <img id="refreshPhoto" src="/static/img/refresh.png" class="icon">
+          <form action="">
+            <div class="main-content__create-id-form-img-wrap" style="background: url('/static/img/no_photo.gif') no-repeat; background-size: cover;">
+                <img id="bestShot" src="/static/img/no_photo.gif" height="272" width="204" style="visibility: visible;">
+            
+            </div>
+            <span id="createIdWarning"></span>
+            <input id="createIdInput" type="text" class="main-input__text" placeholder="Enter Name" value="" autocomplete="off">
+            <button id="createIdBtn" type="submit" class="main-button main-button--purple main-button--full-width" disabled autocomplete="off">
+              Done
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+    var LIST_ID = "{{list_id}}";
+
+    function getBase64ImageImage(image) {
+        return image.src.replace(/data:image\/jpeg;base64,/, '')
+    }
+    function makeRequestBody(imageJson) {
+        return "{\"image\":\"" + imageJson + "\"" +
+            ",\"bare\":" + true +
+            "}";
+    }
+
+    var bestShot = document.getElementById('best-shot');
+    var bestShotCC = bestShot.getContext('2d');
+    var buffer = document.createElement("canvas");
+    var bufferCC = buffer.getContext('2d');
+
+    // Web camera video stream.
+    var localMediaStream = null;
+
+    // Frame buffer parameters.
+    var width;
+    var height;
+    var nativeFrameBuffer;
+    var nativeFrameBufferData;
+
+    var returnPortraitWidth;
+    var returnPortraitHeight;
+    var returnPortraitWidthData;
+    var returnPortraitHeightData;
+
+    var nativeBestShotBuffer;
+    var nativeBestShotBufferData;
+    var bestShotImageData;
+
+    var detectionSmoothing = 0.9999999;
+
+    var photoMaker = null;
+    var smoother = null;
+
+    var alreadyHaveBestShot = false;
+    var alreadyHaveFinalShot = false;
+
+
+    // video & clmtrackr overlay rendering
+    var video = document.getElementById('videoel');
+    var overlay = document.getElementById('overlay');
+    var overlayCC = overlay.getContext('2d');
+
+    // portrait canvas
+
+    //document.body.appendChild(portraitCanvas);
+
+    var haveFinalShot = false;
+    var motionBlurThreshold = 0.1;
+    var timePhotoSeccion = 2 * 1000;
+    var minLunascore = 0.4;
+    var bastShotL = $('#bestShot')[0];
+    bastShotL.style.visibility = 'hidden';
+
+
+    var timeout_id;
+
+    function showCreateIdError(error, text) {
+            console.log('error!');
+            console.log(error);
+            $('.loader').removeClass('active');
+            var $_resultBlock = $('.resultIdCreate');
+            $_resultBlock.addClass('error');
+            $_resultBlock.addClass('active');
+            switch (error.status){
+                case 409:
+                    $('span', $_resultBlock).text('User already exist!');
+                    break;
+                default:
+                    $('span', $_resultBlock).text('Something goes wrong, try again');
+            }
+        }
+
+
+        function createPersonRequest(data, img) {
+            jQuery.ajax({
+                url: '/luna/storage/persons',
+                type: 'POST',
+                contentType: 'application/json',
+                data: data,
+
+                success: function (reply) {
+                    createDescriptorsRequest(getBase64ImageImage(img), reply.person_id);
+                },
+                error: function (error) {
+                    showCreateIdError(error)
+                }
+            })
+        }
+
+    function createDescriptorsRequest(img, person_id){
+        jQuery.ajax({
+                url: '/luna/storage/descriptors',
+                type: 'POST',
+                contentType: 'image/x-jpeg-base64',
+                data: img,
+
+                success: function (reply) {
+                    attachDescriptorToPersonRequest(person_id, reply.faces[0].id);
+                },
+                error: function (error) {
+                    showCreateIdError(error);
+                }
+            })
+    }
+
+    function attachDescriptorToPersonRequest(person_id, descriptor_id){
+        jQuery.ajax({
+            url: '/luna/storage/persons/' + person_id + '/linked_descriptors?descriptor_id=' + descriptor_id + '&do=attach',
+            type: 'PATCH',
+            contentType: 'application/json',
+
+            success: function (reply) {
+                // attachPersonToListRequest(person_id);
+                console.log('done!');
+                console.log(reply);
+                refresh();
+                $('.loader').removeClass('active');
+                var $_resultBlock = $('.resultIdCreate');
+                $_resultBlock.removeClass('error');
+                $_resultBlock.addClass('active');
+
+                $('#createIdInput').val('');
+                $('span', $_resultBlock).text('Done!');
+            },
+            error: function (error) {
+                showCreateIdError(error);
+            }
+        })
+    }
+
+    function attachPersonToListRequest(person_id){
+        jQuery.ajax({
+            url: '/luna/storage/persons/' + person_id + '/linked_lists?list_id=' + LIST_ID + '&do=attach',
+            type: 'PATCH',
+            contentType: 'application/json',
+
+            success: function (reply) {
+                console.log('done!');
+                console.log(reply);
+                refresh();
+                $('.loader').removeClass('active');
+                var $_resultBlock = $('.resultIdCreate');
+                $_resultBlock.removeClass('error');
+                $_resultBlock.addClass('active');
+
+                $('#createIdInput').val('');
+                $('span', $_resultBlock).text('Done!');
+
+            },
+            error: function (error) {
+                showCreateIdError(error);
+            }
+        })
+    }
+
+
+    $('#createIdInput').on('input', function(e){
+        if(timeout_id) {
+            clearTimeout(timeout_id);
+        }
+        if (this.value.length > 0){
+            $('#createIdBtn').prop('disabled', false)
+        }
+    });
+
+    $('.resultIdCreate').on('click', function(){
+        $(this).removeClass('active');
+    });
+
+    $('#createIdBtn').on('click', function (e) {
+            if (timeout_id) {
+                clearTimeout(timeout_id);
+            }
+            $('.loader').addClass('active');
+
+
+            var img = $('#bestShot')[0];
+            var $_input = $('#createIdInput');
+            var value = $_input.val().trim();
+            var data = JSON.stringify({user_data: value});
+
+            createPersonRequest(data, img);
+
+            return false;
+        }).on('submit', function () {
+            e.preventDefault();
+            return false;
+        });
+
+    $('#refreshPhoto')
+        .on('click', function() {
+            refresh();
+        });
+
+    $('form')
+        .on('submit', '.form', function() {
+            e.preventDefault();
+            return false;
+        });
+
+
+
+
+
+    
+
+    function flashIcon(name, cond) {
+        var el = "#" + name; // name for jQuery
+        if (cond) {
+            $(el).show();
+        }
+        else {
+            $(el).fadeOut("fast");
+        }
+    }
+
+
+    function flashFastMove(isFast) {
+        flashIcon("motionBlurIcon", (isFast));
+    }
+
+
+
+    // Draw current detection rectangle.
+    function visualizeDetection(ctx, xywh, radius, color) {
+        ctx.save();
+        ctx.strokeStyle = "rgba("
+            + color[0] + ", "
+            + color[1] + ", "
+            + color[2] + ", "
+            + color[3] + ")";
+
+
+        ctx.lineWidth = 4;
+
+        try {
+            var sx = xywh.x;
+            var sy = xywh.y;
+            var ex = xywh.x + xywh.width;
+            var ey = xywh.y + xywh.height;
+            var r = radius;
+
+            var r2d = Math.PI / 180;
+
+            if ((ex - sx) - (2 * r) < 0) {
+                r = ((ex - sx) / 2);
+            } //ensure that the radius isn't too large for x
+            if ((ey - sy) - (2 * r) < 0) {
+                r = ((ey - sy) / 2);
+            } //ensure that the radius isn't too large for y
+
+            ctx.beginPath();
+            ctx.moveTo(sx + r, sy);
+            ctx.lineTo(ex - r, sy);
+            ctx.arc(ex - r, sy + r, r, r2d * 270, r2d * 360, false);
+            ctx.lineTo(ex, ey - r);
+            ctx.arc(ex - r, ey - r, r, r2d * 0, r2d * 90, false);
+            ctx.lineTo(sx + r, ey);
+            ctx.arc(sx + r, ey - r, r, r2d * 90, r2d * 180, false);
+            ctx.lineTo(sx, sy + r);
+            ctx.arc(sx + r, sy + r, r, r2d * 180, r2d * 270, false);
+            ctx.closePath();
+
+            ctx.stroke();
+            ctx.restore();
+        } catch (err) {
+            console.log("BAD VALUE OF DETECTION");
+            // обработка ошибки
+
+        }
+    }
+
+    function getSize(array4) {
+        var res = 0;
+        var pow2 = 1;
+        for (var i = 0; i < array4.length; i++) {
+            res += array4[i] * pow2;
+            pow2 *= 256;
+        }
+        return res;
+    }
+
+
+
+    function drawLoop() {
+        requestAnimFrame(drawLoop);
+        overlayCC.clearRect(0, 0, 640, 480);
+    }
+
+    /** Converts clmtrackr score to percents.
+     returns a string in form `XX%`
+     */
+    function scoreToPercentage(score) {
+        return Math.round(score * 100.0) + "%";
+    }
+
+
+    function clearGallery() {
+        bestScore = 0;
+        canTakePhoto = true;
+        weHaveShot = false;
+        timeFirstPfoto = -1;
+
+        $("#bestShot").attr('src', "/static/img/no_photo.gif");
+        $("#bestScore").text(scoreToPercentage(bestScore));
+        $("#bestScoreTr").removeClass("success");
+        $("#distance").text("0.00");
+        //document.getElementById('submit').disabled = true;
+
+    }
+
+
+    var acceptBestPhoto = function () {
+            img = $('#bestShot')[0];
+            canTakePhoto = false;
+            jQuery.ajax({
+                url: '/luna/storage/descriptors?estimate_quality=true&quality_threshold=' + minLunascore,
+                type: 'POST',
+                contentType: 'image/x-jpeg-base64',
+                data: getBase64ImageImage(img),
+                timeout: 5000,
+
+                success: function (jsonReply) {
+                    console.log(jsonReply)
+                    if (jsonReply) {
+                        var reply = jsonReply;
+                        if (minLunascore < reply.faces[0].score) {
+                            $('#bestShot')[0].style.visibility = 'visible';
+
+                            //                        $('#submit').removeAttr('disabled');
+                            $('#refreshPhoto').addClass('active');
+                        }
+                    } else {
+                        photoMaker.reset();
+                        alreadyHaveFinalShot = false;
+                        console.error("Luna rejected photo");
+                    }
+                },
+                error: function (err) {
+                    alreadyHaveFinalShot = false;
+                    photoMaker.reset();
+                    console.error("Luna error photo");
+                }
+            });
+    };
+
+
+    function refresh() {
+
+//        $('#submit')[0].setAttribute("disabled", "disabled");
+        $('#createIdBtn').prop('disabled', 'disabled');
+        $('#refreshPhoto').removeClass('active');
+
+        alreadyHaveFinalShot = false;
+        clearGallery();
+        photoMaker.reset();
+        var bestShotL = $('#bestShot')[0];
+//        var bestShotL = $('#bestShot');
+        bestShotL.style.visibility = 'hidden';
+    }
+
+    function process() {
+        // download video frame data to a canvas buffer
+        bufferCC.drawImage(video, 0, 0, width, height);
+
+        // take the buffer contents
+        var bufferImageData = bufferCC.getImageData(0, 0, width, height);
+
+        // convert image data to typed byte array (raw bytes)
+        nativeFrameBufferData.set(bufferImageData.data, 0);
+
+
+        // process raw bytes
+        photoMaker.submitRawImage(nativeFrameBuffer, width, height);
+        photoMaker.update();
+        overlayCC.clearRect(0, 0, overlay.width, overlay.height);
+
+
+        if (photoMaker.haveFaceDetection()) {
+            var detection = photoMaker.getSmoothedFaceDetection();
+            if (!smoother)
+                smoother = new Smoother([
+                    detectionSmoothing,
+                    detectionSmoothing,
+                    detectionSmoothing,
+                    detectionSmoothing], detection);
+            else
+                detection = smoother.smooth(detection);
+
+            var predicted = photoMaker.faceDetectionIsPredicted();
+            //var confidence = photoMaker.getFaceDetectionPredictionConfidence();
+
+            var color = [0, 255, 0, 255];
+
+
+            //var movement = photoMaker.getMovementValue();
+            var verdict = "";
+            var speedSlow = photoMaker.isSlowMovement();
+            if (!speedSlow) flashFastMove(true);
+            else    flashFastMove(false); //verdict = "TOO FAST!!!";
+            if (predicted) verdict = "PREDICT";
+
+            if (predicted || !speedSlow) {
+
+                color = [255, 0, 0, 255];
+            }
+            visualizeDetection(overlayCC, detection, 10, color);
+            //document.getElementById("exp-mov").innerHTML = verdict;
+        }
+        else {
+            smoother = null;
+        }
+
+        // update the best shot if it has changed
+        if (photoMaker.getCurrentFrameNumber() == photoMaker.getBestShotFrameNumber() && !alreadyHaveFinalShot) {
+            alreadyHaveFinalShot = true;
+
+            //photoMaker.getBestShotImageData(
+            //nativeBestShotBuffer,
+            //bestShot.width,
+            //bestShot.height);
+            photoMaker.getBestShotRaw(nativeBestShotBuffer, returnPortraitWidth, returnPortraitHeight);
+            var portraitWidth = getSize(returnPortraitWidthData);
+            var portraitHeight = getSize(returnPortraitHeightData);
+            var tempImageData = bestShotCC.createImageData(portraitWidth, portraitHeight);
+
+            for (var i = 0; i < portraitHeight; i++) {
+                for (var j = 0; j < portraitWidth; j++) {
+                    for (var k = 0; k < 4; k++) {
+                        tempImageData.data[i * 4 * portraitWidth + j * 4 + k] = nativeBestShotBufferData[i * 4 * portraitWidth + j * 4 + k];
+                    }
+                }
+            }
+
+
+            //bestShotImageData = new ImageData(
+            //	nativeBestShotBufferData,
+            //		240, 320);
+
+            bestShot.width = portraitWidth;
+            bestShot.height = portraitHeight;
+            bestShotCC.putImageData(tempImageData, 0, 0);
+            $("#bestShot").attr("width", portraitWidth);
+            $("#bestShot").attr("height", portraitHeight);
+            $("#bestShot").attr("src", bestShot.toDataURL("image/jpeg"));
+
+            acceptBestPhoto();
+            //bestPhotoL.style.visibility = 'visible';
+        }//current shot is best
+    }//process
+
+    // Camera capture.
+    function capture() {
+        if (localMediaStream)
+            process();
+
+        requestAnimationFrame(capture);
+    }
+    // PhotoMaker module initialization.
+    function initialize(frameWidth, frameHeight) {
+        width = frameWidth;
+        height = frameHeight;
+
+        // resize internla buffers accordingly
+        buffer.width = width;
+        buffer.height = height;
+        overlay.width = width;
+        overlay.height = height;
+
+
+        // compute staging memory requirements
+        var bufferSize = width * height * 4;
+
+        // allocate staging memory
+        nativeFrameBuffer = Module._malloc(bufferSize);
+        nativeFrameBufferData = new Uint8ClampedArray(
+            Module.HEAPU8.buffer,
+            nativeFrameBuffer, bufferSize);
+
+
+        returnPortraitWidth = Module._malloc(4);
+        returnPortraitHeight = Module._malloc(4);
+
+        returnPortraitWidthData = new Uint8ClampedArray(
+            Module.HEAPU8.buffer,
+            returnPortraitWidth, 4);
+        returnPortraitHeightData = new Uint8ClampedArray(
+            Module.HEAPU8.buffer,
+            returnPortraitHeight, 4);
+
+
+        bufferSize = width * height * 4;//bestShot.width * bestShot.height * 4;
+
+        nativeBestShotBuffer = Module._malloc(bufferSize);
+        nativeBestShotBufferData = new Uint8ClampedArray(
+            Module.HEAPU8.buffer,
+            nativeBestShotBuffer, bufferSize);
+
+        // bind staging memory from heap to image data usable by canvas
+        //bestShotImageData = new ImageData(
+        //    nativeBestShotBufferData,
+        //    bestShot.width, bestShot.height);
+
+        // Nb: to destroy photoMaker properly, call `photoMaker.delete();`
+        photoMaker = new Module.WebPhotomaker();
+        //photoMaker.initialize();
+        photoMaker.stopAfterBestShot = true;
+        photoMaker.setMovementThreshold(0.01);
+        photoMaker.setBestShotScoreThreshold(0.17);
+        photoMaker.setRotationThreshold(20);
+        photoMaker.setMinFaceScaleFactor(0.2);
+    }
+
+    Module.onRuntimeInitialized = function () {
+
+        // Video constraints.
+        var constraints = {
+            video: {
+                mandatory: {
+                    maxWidth: 640,
+                    maxHeight: 480
+                }
+            }
+        };
+
+        function successCallback(stream) {
+            // Set the source of the video element with the stream from the camera
+            if (video.mozSrcObject !== undefined) {
+                video.mozSrcObject = stream;
+            } else {
+                video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+            }
+
+            localMediaStream = stream;
+
+            video.onloadedmetadata = function () {
+                initialize(
+                    video.videoWidth,
+                    video.videoHeight);
+                capture();
+            };
+            video.play();
+        }
+
+        function errorCallback(error) {
+            console.error('An error occurred: [CODE ' + error.code + ']');
+        }
+
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+
+        // Call the getUserMedia method with our callback functions
+        if (navigator.getUserMedia) {
+            navigator.getUserMedia(constraints, successCallback, errorCallback);
+        } else {
+            console.log('Native web camera streaming (getUserMedia) not supported in this browser.');
+        }
+    };
+
+
+</script>
+</body>
+</html>

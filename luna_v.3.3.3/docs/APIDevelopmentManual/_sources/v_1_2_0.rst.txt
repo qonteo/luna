@@ -1,0 +1,37 @@
+v.1.2.0
+========
+
+Improvements:
+-------------
+
+    1) Updated LUNA CORE api version (13). This version of the LUNA API does not support the previous versions of
+       LUNA Core.
+
+    #) Add handler "LUNA-Request-Id", see raml. Helps uniquely identifying messages, corresponding to particular requests, in system logs.
+       If it was not set system would will be set id in default format ("timestamp,UUID4"). This id would be return
+       with response.
+
+    #) Increase  connection to postgres count (2).
+
+    #) Changed the library for work with images, now we use Pillow (pillow-simd_). It is faster then wand. Requirements
+       is updated.
+
+    #) Changed store for portraits. Now we use luna-image-store for portraits.
+
+    #) Fix name of log files ("Luna_python_server_*" -> "luna-api_*")
+
+Bugs fixed:
+-----------
+
+
+    1) Fixed matching by empty list if after removing element from list.
+
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.
+
+.. _pillow-simd: https://github.com/uploadcare/pillow-simd.

@@ -1,0 +1,13 @@
+v.2.2.3
+=======
+
+Improvements:
+-------------
+
+    1) Add eyeglasses estimation result to basic attributes
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *luna_api, tests, docs* and update dependencies from
+requirements.txt.

@@ -1,0 +1,348 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Faces handler &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Faces attributes handler" href="faces_attributes_handler.html" />
+    <link rel="prev" title="Base handler" href="base_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>Faces handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="base_handler.html">Base handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="faces_attributes_handler.html">Faces attributes handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_faces.app.handlers.faces_handler">
+<span id="faces-handler"></span><h1>Faces handler<a class="headerlink" href="#module-luna_faces.app.handlers.faces_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_faces.app.handlers.faces_handler.FacesHandler">
+<em class="property">class </em><code class="descclassname">luna_faces.app.handlers.faces_handler.</code><code class="descname">FacesHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_handler.html#FacesHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_handler.FacesHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Faces handler.</p>
+<dl class="method">
+<dt id="luna_faces.app.handlers.faces_handler.FacesHandler.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_handler.html#FacesHandler.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_handler.FacesHandler.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete faces</p>
+<p>Resource is reached by address ‘/faces’</p>
+<dl class="delete">
+<dt id="delete--faces">
+<code class="descname">DELETE </code><code class="descname">/faces</code><a class="headerlink" href="#delete--faces" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>account_id</strong> – account id, this parameter determinate, that action must be done with only with objects
+of this account.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/faces/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="list-of-faces-ids">
+<!--[list-of-faces-ids]--><code class="descname">list of faces ids</code><a class="headerlink" href="#list-of-faces-ids" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>face_ids</strong> (<em>_list_(uuid4)</em>) – faces ids</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;face_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;83f72b94-2e44-4a6c-b177-6c0606694a0d&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;d36c049e-100c-4dd0-991b-ccfb9b8f288d&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;21a2ea35-76ab-4737-b317-1e6e6584a251&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 204
+Begin-Request-Time: 1526039272.9173293
+End-Request-Time: 1526039272.9505265
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5">204 No Content</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – one or more faces not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.app.handlers.faces_handler.FacesHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_handler.html#FacesHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_handler.FacesHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource is reached by address ‘/faces’</p>
+<dl class="get">
+<dt id="get--faces">
+<code class="descname">GET </code><code class="descname">/faces</code><a class="headerlink" href="#get--faces" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>page</strong> – page count, default 1</li>
+<li><strong>page_size</strong> – page size, default 10</li>
+<li><strong>user_data</strong> – user data</li>
+<li><strong>time__lt</strong> – upper bound of face create time</li>
+<li><strong>time__gte</strong> – lower bound of face create time</li>
+<li><strong>event_id</strong> – event id</li>
+<li><strong>list_id</strong> – list id</li>
+<li><strong>account_id</strong> – account id</li>
+<li><strong>face_ids</strong> – list of face ids</li>
+<li><strong>externalId</strong> – external id of the face, if it has its own mapping in external system</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/faces</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Begin-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9173293</span>
+<span class="na">End-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9505265</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="list-of-faces">
+<!--[list-of-faces]--><code class="descname">list of faces</code><a class="headerlink" href="#list-of-faces" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>faces</strong> (_list_(<a class="reference internal" href="handlers.html#luna_face"><code class="xref json json-object docutils literal notranslate"><span class="pre">luna_face</span></code></a>)) – faces</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – face count</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;faces&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;luna_face&quot;</span><span class="p">:</span> <span class="s2">&quot;{luna_face object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;luna_face&quot;</span><span class="p">:</span> <span class="s2">&quot;{luna_face object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;luna_face&quot;</span><span class="p">:</span> <span class="s2">&quot;{luna_face object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">6044</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.app.handlers.faces_handler.FacesHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_handler.html#FacesHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_handler.FacesHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource is reached by address ‘/faces’</p>
+<dl class="post">
+<dt id="post--faces">
+<code class="descname">POST </code><code class="descname">/faces</code><a class="headerlink" href="#post--faces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request to create face.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/faces</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="luna_create_face">
+<!--[luna_create_face]--><code class="descname">luna_create_face</code><a class="headerlink" href="#luna_create_face" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – id of account, required</li>
+<li><strong>attributes_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – attributes id</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – face information</li>
+<li><strong>event_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – reference to event which created face</li>
+<li><strong>externalId</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>str</em></a>) – external id of the face, if it has its own mapping in external system</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;99f19c0b-4eff-41ae-b554-21200035ab7d&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;attributes_id&quot;</span><span class="p">:</span> <span class="s2">&quot;e0742634-d7dd-4fe2-9876-0aabc29d0852&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;hunter13&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;event_id&quot;</span><span class="p">:</span> <span class="s2">&quot;65da5210-bc28-4305-bd68-547df629629a&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;externalId&quot;</span><span class="p">:</span> <span class="s2">&quot;ogSqdPZOEOXukStiYUBg&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Begin-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9173293</span>
+<span class="na">End-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9505265</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f</span>
+<span class="na">Location</span><span class="o">:</span> <span class="l">/faces/{face_id}</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt>
+<code class="descname">face_id</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>face_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – id of created face</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;face_id&quot;</span><span class="p">:</span> <span class="s2">&quot;d96e5660-2d77-4be5-aa4f-7c27ae7794f8&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned on format <code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – face successfully create</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>user_data</em> is too large</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>user_data</em> has wrong type, <em>string</em> type is required</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10">409 Conflict</a> – face with sane attribute_id already exist</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="base_handler.html">Base handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="faces_attributes_handler.html">Faces attributes handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

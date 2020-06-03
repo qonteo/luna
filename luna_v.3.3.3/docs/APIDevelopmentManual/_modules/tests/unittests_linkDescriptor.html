@@ -1,0 +1,345 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tests.unittests_linkDescriptor &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>tests.unittests_linkDescriptor</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for tests.unittests_linkDescriptor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">uuid</span>
+
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">tests.classes</span> <span class="k">import</span> <span class="n">TestBase</span><span class="p">,</span> <span class="n">authStr</span>
+<span class="kn">from</span> <span class="nn">tests</span> <span class="k">import</span> <span class="n">luna_api_functions</span>
+
+
+<div class="viewcode-block" id="TestLinkDescriptor"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor">[docs]</a><span class="k">class</span> <span class="nc">TestLinkDescriptor</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests link descriptor to person</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestLinkDescriptor.setUp"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createAccountAndToken</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.createPersonAndDescriptor"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.createPersonAndDescriptor">[docs]</a>    <span class="k">def</span> <span class="nf">createPersonAndDescriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headers</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create person person and descriptor</span>
+
+<span class="sd">        :param headers: header for creating</span>
+
+<span class="sd">        :return: personId, photoId</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">personId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPhoto</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.createPersonWithListAndDescriptor"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.createPersonWithListAndDescriptor">[docs]</a>    <span class="k">def</span> <span class="nf">createPersonWithListAndDescriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headers</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create person person with list and descriptor</span>
+
+<span class="sd">        :param headers: header for creating</span>
+
+<span class="sd">        :return: personId, photoId</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">personId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonWithList</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPhoto</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_descriptor_to_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_descriptor_to_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_descriptor_to_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_attach_descriptor_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: success attaching descriptor to person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">linkDescriptorTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">linkDescriptorTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_descriptor_with_person_to_other_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_descriptor_with_person_to_other_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_descriptor_with_person_to_other_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_attach_descriptor_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: try to attach descriptor with person to other person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">linkDescriptorTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+
+            <span class="n">personId2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId2</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">409</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">LinkDescriptorAlreadyExist</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">linkDescriptorTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_descriptor_to_person_with_list"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_descriptor_to_person_with_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_descriptor_to_person_with_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_link_descriptor_to_person_with_list</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: success attaching descriptor to person which in list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">linkDescriptorTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonWithListAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">linkDescriptorTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_get_linking_descriptors_to_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_get_linking_descriptors_to_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_get_linking_descriptors_to_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_get_linking_descriptors_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: success getting descriptors of person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">getLinkedDescriptorTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonWithListAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+
+            <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getLinkedDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">photoId</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">getLinkedDescriptorTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_duplicate_link_descriptor_to_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_duplicate_link_descriptor_to_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_duplicate_link_descriptor_to_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_duplicate_link_descriptor_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: trying linking descriptor already attach to person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">duplicateLinkedDescriptorTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonWithListAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+
+            <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">409</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">LinkDescriptorAlreadyExist</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">duplicateLinkedDescriptorTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_detach_descriptor_from_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_detach_descriptor_from_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_detach_descriptor_from_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_detach_descriptor_from_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: success detaching descriptor from person in list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">detachPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonWithListAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getLinkedDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">((</span><span class="n">photoId</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;detach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getLinkedDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">photoId</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">detachPerson</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_detach_descriptor_from_person_without_list"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_detach_descriptor_from_person_without_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_detach_descriptor_from_person_without_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_detach_descriptor_from_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: success detaching descriptor from person in not list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">detachPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getLinkedDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">((</span><span class="n">photoId</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;detach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getLinkedDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="ow">not</span> <span class="p">(</span><span class="n">photoId</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]),</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">detachPerson</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_two_descriptors_to_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_two_descriptors_to_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_two_descriptors_to_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_attach_two_descriptors_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: success attaching two descriptor to person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">attachTwoDescriptorsToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonWithListAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">photoId2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPhoto</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId1</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId2</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getLinkedDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">photoId1</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">photoId2</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">],</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId1</span><span class="p">,</span> <span class="s2">&quot;detach&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getLinkedDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">photoId2</span> <span class="ow">in</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">])</span>
+
+        <span class="n">attachTwoDescriptorsToPerson</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_non_exist_descriptor_to_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_non_exist_descriptor_to_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_non_exist_descriptor_to_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_attach_two_descriptors_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: tying attach non exist descriptor to person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">attachToNonExistPhoto</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="s2">&quot;attach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">DescriptorNotFound</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="s2">&quot;detach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">DescriptorNotFound</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">attachToNonExistPhoto</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_descriptor_to_non_exist_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_descriptor_to_non_exist_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_descriptor_to_non_exist_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_attach_descriptor_to_non_exist_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: tying attach  descriptor to non exist person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">attachToNonExistPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPhoto</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;attach&quot;</span><span class="p">,</span> <span class="s2">&quot;detach&quot;</span><span class="p">]:</span>
+                <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">photoId</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">PersonNotFound</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">attachToNonExistPerson</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_bad_format_descriptor_to_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_bad_format_descriptor_to_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_bad_format_descriptor_to_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_attach_bad_format_descriptor_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: tying attach  descriptor to person with bad format uuid in parameter &quot;descriptor_id&quot;</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">badTypeDescriptorParameter</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;attach&quot;</span><span class="p">,</span> <span class="s2">&quot;detach&quot;</span><span class="p">]:</span>
+                <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                                                                      <span class="n">action</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadQueryParams</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">),</span>
+                                           <span class="n">msgFormat</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;descriptor_id&quot;</span><span class="p">])</span>
+
+        <span class="n">badTypeDescriptorParameter</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestLinkDescriptor.test_link_attach_descriptor_to_person_bad_format_do"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkDescriptor.TestLinkDescriptor.test_link_attach_descriptor_to_person_bad_format_do">[docs]</a>    <span class="k">def</span> <span class="nf">test_link_attach_descriptor_to_person_bad_format_do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_link_attach_descriptor_to_person_bad_format_do</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: tying attach  descriptor to  person with bad format parameter &quot;do&quot;</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">badDoParameter</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createPersonAndDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">photoId</span><span class="p">,</span> <span class="s2">&quot;dettach&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadQueryParams</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">),</span> <span class="n">msgFormat</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;do&quot;</span><span class="p">])</span>
+
+        <span class="n">badDoParameter</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

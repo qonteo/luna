@@ -1,0 +1,80 @@
+<head>
+    <link rel="stylesheet" href="/../../static/styles/style.css">
+    <style type="text/css">
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #container {
+            width: 600px;
+            height: 384px; 
+            margin: 8px auto;
+        }
+
+    </style>
+</head>
+<h3>View</h3>
+
+<div id="video-container">
+    <img id="canvasStop" src="/../../static/img/stop.png">
+    <img id="canvasOk" src="/../../static/img/suc2.png">
+</div>
+
+<script type="text/javascript" src="/static/js/socket.io.min.js"></script>
+<script src="/static/js/websocket.js"></script>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/static/js/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/static/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        namespace = "{{namespace}}"; // change to an empty string to use the global namespace
+        var troom = "mobile_room";
+        // the socket.io documentation recommends sending an explicit package upon connection
+        // this is specially important when using the global namespace
+
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
+        socket.on('event', function (msg) {
+            eventT = msg.data;
+            if(msg.data["data"] == "wait")
+            {
+                var stopImg = $('#canvasStop')[0];
+                stopImg.style.visibility = 'hidden';
+                var okImg = $('#canvasOk')[0];
+                okImg.style.visibility = 'hidden';
+            }
+            else {
+                if (msg.data["data"]["persons"][0]["similarity"] > 0.8) {
+                    var stopImg = $('#canvasStop')[0];
+                    stopImg.style.visibility = 'hidden';
+                    var okImg = $('#canvasOk')[0];
+                    okImg.style.visibility = 'visible';
+                }
+                else{
+                    var stopImg = $('#canvasStop')[0];
+                    stopImg.style.visibility = 'visible';
+                    var okImg = $('#canvasOk')[0];
+                    okImg.style.visibility = 'hidden';
+                }
+            }
+            console.log(eventT)
+        });
+
+        // event handler for new connections
+        socket.on('connect', function () {
+            socket.emit('join', {room: troom});
+        });
+
+    });
+    var stopImg = $('#canvasStop')[0];
+    stopImg.style.visibility = 'hidden';
+    var okImg = $('#canvasOk')[0];
+    okImg.style.visibility = 'hidden';
+
+
+</script>
+
+<br>

@@ -1,0 +1,1212 @@
+{
+"dashboard" :
+	{
+	  "annotations": {
+		"list": []
+	  },
+	  "editable": true,
+	  "gnetId": null,
+	  "graphTooltip": 0,
+	  "hideControls": false,
+	  "id": null,
+	  "links": [],
+	  "refresh": "5m",
+	  "rows": [
+		{
+		  "collapse": false,
+		  "height": "250px",
+		  "panels": [
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 1,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "all match",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": []
+				},
+				{
+				  "alias": "identify",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "B",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "identify"
+					}
+				  ]
+				},
+				{
+				  "alias": "match",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "C",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "match"
+					}
+				  ]
+				},
+				{
+				  "alias": "search",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "D",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "search"
+					}
+				  ]
+				},
+				{
+				  "alias": "verify",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "E",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "verify"
+					}
+				  ]
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "Match count",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			},
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 2,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "all",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_time"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "mean"
+					  }
+					]
+				  ],
+				  "tags": []
+				},
+				{
+				  "alias": "identify",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "B",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_time"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "mean"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "identify"
+					}
+				  ]
+				},
+				{
+				  "alias": "match",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "C",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_time"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "mean"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "match"
+					}
+				  ]
+				},
+				{
+				  "alias": "search",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "D",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_time"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "mean"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "search"
+					}
+				  ]
+				},
+				{
+				  "alias": "verify",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "E",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_time"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "mean"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "verify"
+					}
+				  ]
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "Mean time of match",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			}
+		  ],
+		  "repeat": null,
+		  "repeatIteration": null,
+		  "repeatRowId": null,
+		  "showTitle": false,
+		  "title": "Dashboard Row",
+		  "titleSize": "h6"
+		},
+		{
+		  "collapse": false,
+		  "height": 250,
+		  "panels": [
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 4,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "by dynamic list",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "candidate",
+					  "operator": "=",
+					  "value": "0"
+					}
+				  ]
+				},
+				{
+				  "alias": "by static list",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "B",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "candidate",
+					  "operator": "=",
+					  "value": "1"
+					}
+				  ]
+				},
+				{
+				  "alias": "person",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "C",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "template",
+					  "operator": "=",
+					  "value": "1"
+					}
+				  ]
+				},
+				{
+				  "alias": "descriptor",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "matching_success",
+				  "policy": "autogen",
+				  "refId": "D",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "value_sim"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "template",
+					  "operator": "=",
+					  "value": "0"
+					}
+				  ]
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "Template and candidate types",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			},
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 3,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "All",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10s"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "hide": true,
+				  "measurement": "errors",
+				  "policy": "autogen",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "error_code"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "identify"
+					},
+					{
+					  "condition": "OR",
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "search"
+					},
+					{
+					  "condition": "OR",
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "verify"
+					},
+					{
+					  "condition": "OR",
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "match"
+					}
+				  ]
+				},
+				{
+				  "alias": "identify",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10s"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "hide": true,
+				  "measurement": "errors",
+				  "policy": "autogen",
+				  "refId": "B",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "error_code"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "identify"
+					}
+				  ]
+				},
+				{
+				  "alias": "match",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10s"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "hide": true,
+				  "measurement": "errors",
+				  "policy": "autogen",
+				  "refId": "C",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "error_code"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "match"
+					}
+				  ]
+				},
+				{
+				  "alias": "search",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10s"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "hide": true,
+				  "measurement": "errors",
+				  "policy": "autogen",
+				  "refId": "D",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "error_code"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "search"
+					}
+				  ]
+				},
+				{
+				  "alias": "verify",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10s"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "hide": true,
+				  "measurement": "errors",
+				  "policy": "autogen",
+				  "refId": "E",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "error_code"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "verify"
+					}
+				  ]
+				},
+				{
+				  "alias": "search to many faces",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"10s"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "errors",
+				  "policy": "autogen",
+				  "refId": "F",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "error_code"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": [
+					{
+					  "key": "resource",
+					  "operator": "=",
+					  "value": "search"
+					},
+					{
+					  "condition": "AND",
+					  "key": "error",
+					  "operator": "=",
+					  "value": "12015"
+					}
+				  ]
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "Errors",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			}
+		  ],
+		  "repeat": null,
+		  "repeatIteration": null,
+		  "repeatRowId": null,
+		  "showTitle": false,
+		  "title": "Dashboard Row",
+		  "titleSize": "h6"
+		}
+	  ],
+	  "schemaVersion": 14,
+	  "style": "dark",
+	  "tags": [],
+	  "templating": {
+		"list": []
+	  },
+	  "time": {
+		"from": "now-7d",
+		"to": "now"
+	  },
+	  "timepicker": {
+		"refresh_intervals": [
+		  "5s",
+		  "10s",
+		  "30s",
+		  "1m",
+		  "5m",
+		  "15m",
+		  "30m",
+		  "1h",
+		  "2h",
+		  "1d"
+		],
+		"time_options": [
+		  "5m",
+		  "15m",
+		  "1h",
+		  "6h",
+		  "12h",
+		  "24h",
+		  "2d",
+		  "7d",
+		  "30d"
+		]
+	  },
+	  "timezone": "browser",
+	  "title": "$dashboard_name",
+	  "version": 10
+	}
+}

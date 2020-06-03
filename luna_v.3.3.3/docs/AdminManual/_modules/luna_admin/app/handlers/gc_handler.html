@@ -1,0 +1,315 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_admin.app.handlers.gc_handler &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_admin.app.handlers.gc_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_admin.app.handlers.gc_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Generator</span>
+
+<span class="kn">from</span> <span class="nn">common.query_validators</span> <span class="k">import</span> <span class="n">uuid4Getter</span><span class="p">,</span> <span class="n">getterGCNonLinkedFacesTaskType</span><span class="p">,</span> <span class="n">getterTarget</span><span class="p">,</span> <span class="n">getterTaskType</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.utils.timer</span> <span class="k">import</span> <span class="n">timer</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">app.long_tasks.tasks</span> <span class="k">import</span> <span class="n">GCNonLinkedFacesTask</span>
+<span class="kn">from</span> <span class="nn">app.handlers.base_handler</span> <span class="k">import</span> <span class="n">BaseHandlerWithAuth</span>
+
+
+<div class="viewcode-block" id="GCHandler"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.GCHandler">[docs]</a><span class="k">class</span> <span class="nc">GCHandler</span><span class="p">(</span><span class="n">BaseHandlerWithAuth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GC handler.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        task(GCNonLinkedFacesTask): new task</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GCHandler.initialize"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.GCHandler.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add to instance attribute task</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GCHandler.post"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.GCHandler.post">[docs]</a>    <span class="nd">@BaseHandlerWithAuth</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create new task for remove not linked faces</span>
+
+<span class="sd">        .. http:post:: /gc</span>
+
+
+<span class="sd">            :query task_type: required param, only descriptors at the moment</span>
+<span class="sd">            :query target: target for task (&quot;all&quot;, &quot;account&quot;)</span>
+<span class="sd">            :query target_id: account id if target account</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 201 Created</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+<span class="sd">                    LUNA-Request-Id: 1516179740,d3abc2f6-70f1-4ae0-9d10-475103e0891d</span>
+<span class="sd">                    Location: /tasks/12</span>
+
+<span class="sd">                .. json:object:: task</span>
+<span class="sd">                    :showexample:</span>
+
+<span class="sd">                    :property task_id: task</span>
+<span class="sd">                    :proptype task_id: integer</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 201: task has been created</span>
+<span class="sd">            :statuscode 400: Bad query param</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s2">&quot;task_type&quot;</span><span class="p">,</span> <span class="n">getterGCNonLinkedFacesTaskType</span><span class="p">,</span> <span class="n">require</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">getterTarget</span><span class="p">,</span> <span class="n">require</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">targetId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s2">&quot;target_id&quot;</span><span class="p">,</span> <span class="n">uuid4Getter</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">GCNonLinkedFacesTask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbApiContext</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">targetId</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s2">&quot;Location&quot;</span><span class="p">,</span> <span class="s2">&quot;/tasks/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">taskId</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;task_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">taskId</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="GCHandler.on_finish"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.GCHandler.on_finish">[docs]</a>    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start execute task</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;task&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">senderToExecute</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TasksHandler"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.TasksHandler">[docs]</a><span class="k">class</span> <span class="nc">TasksHandler</span><span class="p">(</span><span class="n">BaseHandlerWithAuth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tasks handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TasksHandler.get"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.TasksHandler.get">[docs]</a>    <span class="nd">@BaseHandlerWithAuth</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get Tasks.</span>
+
+<span class="sd">        .. http:get:: /tasks</span>
+
+
+<span class="sd">            :query page: page count, default 1</span>
+<span class="sd">            :query page_size: page size, default 10</span>
+
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">                :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 200 Ok</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+
+<span class="sd">                .. json:object:: tasks</span>
+<span class="sd">                    :showexample:</span>
+
+<span class="sd">                    :property tasks: task</span>
+<span class="sd">                    :proptype tasks: _list_(task_type)</span>
+<span class="sd">                    :property task_count: task count</span>
+<span class="sd">                    :proptype task_count: task_count</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 200: ok</span>
+<span class="sd">            :statuscode 400: Bad query param</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPagination</span><span class="p">()</span>
+        <span class="n">taskType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s2">&quot;task_type&quot;</span><span class="p">,</span> <span class="n">getterTaskType</span><span class="p">)</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="o">.</span><span class="n">getTasks</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span><span class="p">,</span> <span class="n">taskType</span><span class="p">)</span>
+        <span class="n">taskCount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="o">.</span><span class="n">getCountTasks</span><span class="p">(</span><span class="n">taskType</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tasks&quot;</span><span class="p">:</span> <span class="n">tasks</span><span class="p">,</span> <span class="s2">&quot;task_count&quot;</span><span class="p">:</span> <span class="n">taskCount</span><span class="p">})</span></div></div>
+
+
+<div class="viewcode-block" id="TaskHandler"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.TaskHandler">[docs]</a><span class="k">class</span> <span class="nc">TaskHandler</span><span class="p">(</span><span class="n">BaseHandlerWithAuth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Task handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskHandler.get"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.TaskHandler.get">[docs]</a>    <span class="nd">@BaseHandlerWithAuth</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taskId</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get Tasks.</span>
+
+<span class="sd">        .. http:get:: /tasks/{taskId}</span>
+
+<span class="sd">            :param taskId: task id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 200 Ok</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+
+
+<span class="sd">                Output account will be represent in  :json:object:`task_type`</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 200: ok</span>
+<span class="sd">            :statuscode 400: Bad query param</span>
+<span class="sd">            :statuscode 404: Task not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="o">.</span><span class="n">getGCTask</span><span class="p">(</span><span class="n">taskId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">Error</span><span class="o">.</span><span class="n">TaskNotFound</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">task</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TaskHandler.delete"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.TaskHandler.delete">[docs]</a>    <span class="nd">@BaseHandlerWithAuth</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taskId</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stop task.</span>
+
+<span class="sd">        .. http:delete:: /tasks/{taskId}</span>
+
+<span class="sd">            :param taskId: task id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 204 Stoped</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+
+
+<span class="sd">                Output account will be represent in  :json:object:`task_type`</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 204: stoped</span>
+<span class="sd">            :statuscode 400: Bad query param</span>
+<span class="sd">            :statuscode 404: Task not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="o">.</span><span class="n">finishTask</span><span class="p">(</span><span class="n">taskId</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="TaskErrorsHandler"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.TaskErrorsHandler">[docs]</a><span class="k">class</span> <span class="nc">TaskErrorsHandler</span><span class="p">(</span><span class="n">BaseHandlerWithAuth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Task errors handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TaskErrorsHandler.get"><a class="viewcode-back" href="../../../../tasks_handlers.html#luna_admin.app.handlers.gc_handler.TaskErrorsHandler.get">[docs]</a>    <span class="nd">@BaseHandlerWithAuth</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taskId</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get error of the a task.</span>
+
+<span class="sd">        .. http:get:: /tasks/{taskId}/errors</span>
+
+<span class="sd">            :param taskId: task id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 200 Ok</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+
+<span class="sd">                .. json:object:: error</span>
+
+<span class="sd">                    :property error_time:  error time</span>
+<span class="sd">                    :proptype error_time: iso8601</span>
+<span class="sd">                    :proptype message: error details</span>
+<span class="sd">                    :property code:  error code</span>
+<span class="sd">                    :proptype code: integer</span>
+<span class="sd">                    :property id:  error number</span>
+<span class="sd">                    :proptype id: integer</span>
+<span class="sd">                    :property task_type:  type of task</span>
+<span class="sd">                    :proptype task_type: _enum_(removing old descriptors)_(re-extract descriptors)</span>
+
+<span class="sd">                .. json:object:: errors</span>
+<span class="sd">                    :showexample:</span>
+
+<span class="sd">                    :property errors:  The name of current series</span>
+<span class="sd">                    :proptype errors: _list_(:json:object:`error`)</span>
+<span class="sd">                    :property error_count:  count of errors</span>
+<span class="sd">                    :proptype error_count: integer</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 200: ok</span>
+<span class="sd">            :statuscode 400: Bad query param</span>
+<span class="sd">            :statuscode 404: Task not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPagination</span><span class="p">()</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="o">.</span><span class="n">getGCTask</span><span class="p">(</span><span class="n">taskId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">Error</span><span class="o">.</span><span class="n">TaskNotFound</span><span class="p">)</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="o">.</span><span class="n">prepareErrorOfTaskToRender</span><span class="p">(</span><span class="n">taskId</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

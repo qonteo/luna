@@ -1,0 +1,40 @@
+<link href="/static/css/bootstrap.icon-large.min.css" rel="stylesheet">
+
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>List id</th>
+        <th>List type</th>
+        <th>List info</th>
+        <th>Count element</th>
+    </tr>
+    <tbody>
+    {% for item in lists %}
+    <tr>
+        <td id='{{ "list_id_" +  escape(item["account_id"])}}'>{{ escape(item["list_id"]) }}</td>
+        <td id='{{ "list_type_" +  escape(item["account_id"])}}'>{% if item["type"]%} persons {% else %} descriptors {% end%}</td>
+        <td id='{{ "list_info_" +  escape(item["account_id"])}}'>{{ escape(item["user_data"]) }}</td>
+        <td id='{{ "count_element_" +  escape(item["account_id"])}}'>{{ item["count_object_in_list"] }}</td>
+    </tr>
+    {% end %}
+    </tbody>
+</table>
+<div class="card-footer p-0">
+    <nav aria-label="...">
+        <ul class="pagination justify-content-end mt-3 mr-3">
+            <li class="page-item"><a onclick="getLists('{{account_id}}', '{{prev_page}}', '{{page_size}}')">
+                Previous
+            </a>
+            </li>
+            <li class="page-item"><a onclick="getLists('{{account_id}}',1, '{{page_size}}')">1</a></li>
+            <li class="page-item active">
+                        <span class="page-link"> {{escape(page)}}<span class="sr-only">(current)</span>
+                        </span>
+            </li>
+            <li class="page-item"><a onclick="getLists('{{account_id}}', '{{max_page}}', '{{page_size}}')">{{escape(max_page)}}</a>
+            </li>
+            <li class="page-item">
+                <a onclick="getLists('{{account_id}}', '{{next_page}}', '{{page_size}}')">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

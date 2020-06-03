@@ -1,0 +1,15 @@
+[Unit]
+Description=Luna Extractor-%i
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+Environment=VERBOSE=0
+SyslogIdentifier=luna-extractor-%i
+WorkingDirectory=/var/lib/luna/current/
+ExecStart=/var/lib/luna/current/bin/luna-extractor --config-path ./conf/extractor.conf --log-to-stderr --log-verbosity $VERBOSE
+
+[Install]
+WantedBy=multi-user.target

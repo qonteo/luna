@@ -1,0 +1,7 @@
+SQLAlchemy==1.2.5
+flask==1.0.2
+Flask-SQLAlchemy==2.3.2
+tornado==5.0.1
+logbook==1.1.0
+psycopg2==2.7.1
+cx_oracle==6.3.1

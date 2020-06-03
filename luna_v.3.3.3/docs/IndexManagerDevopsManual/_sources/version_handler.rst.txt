@@ -1,0 +1,5 @@
+Version handler
+===============
+
+.. automodule:: luna_index_manager.app.handlers.version_handler
+	:members:

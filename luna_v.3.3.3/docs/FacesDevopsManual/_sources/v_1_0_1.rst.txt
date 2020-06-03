@@ -1,0 +1,17 @@
+v.1.0.1
+=======
+
+Improvements:
+-------------
+
+Bugs fixed:
+-----------
+
+
+    1) Fix documentation for resources */lists/{listId}/attributes*, */lists/{listId}*
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests*.

@@ -1,0 +1,5 @@
+Buckets handler
+===============
+
+.. automodule:: luna_image_store.app.handlers.buckets_handler
+	:members:

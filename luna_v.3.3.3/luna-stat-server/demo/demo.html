@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>StatService API Explorer</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        .footer {
+            width: 100%;
+            /* Set the fixed height of the footer here */
+            height: 60px;
+            line-height: 60px; /* Vertically center the text there */
+            background-color: #f5f5f5;
+        }
+
+        .width-350px {
+            width: 350px !important;
+        }
+
+        pre {
+            word-wrap: break-word;
+            white-space: normal;
+            padding: 1.5em;
+            background: rgb(29, 31, 33);
+            color: #f5f5f5;
+        }
+
+        .no-select {
+            user-select: none;
+            cursor: pointer;
+        }
+    </style>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.3.0/Rx.js"></script>
+</head>
+
+<body>
+
+<div id="root" class="h-100"></div>
+
+
+<!-- React -->
+<script type="text/babel">
+    let zip = (...rows) => [...rows[0]].map((_,c) => rows.map(row => row[c]));
+
+    function range(limit) {
+        return Array.apply(null, Array(limit)).map(function (_, i) {return i;});
+    }
+
+    function create_websocket(address, params) {
+        address += '?' + Object.entries(params).filter(
+            ([key, value]) => value !== '' && value
+        ).map(
+            ([key, value]) => key + '=' + value
+        ).join('&');
+
+
+        let ws = new WebSocket(address);
+
+        return new Promise(
+            (resolve, reject) => {
+                ws.onopen = () => {
+                    resolve(
+                        Rx.Observable.create(
+                            function (obs) {
+                                // Handle messages
+                                ws.onmessage = msg => obs.next.bind(obs)(JSON.parse(msg.data));
+                                ws.onerror = obs.error.bind(obs);
+                                ws.onclose = obs.complete.bind(obs);
+
+                                // Return way to unsubscribe
+                                return ws.close.bind(ws);
+                            }
+                        )
+                    );
+                };
+                ws.onerror = reject;
+            }
+        );
+    }
+
+
+    class ApiService {
+        constructor(host_change_callback, auth_change_callback) {
+            this.host = null;
+            this.auth_type = null;
+            this.auth_callback = auth_change_callback;
+            this.host_callback = host_change_callback;
+        }
+
+        _callHttp(url, method, params, allowed_statuses, timeout) {
+            if (params != null)
+                url += '?' + Object.entries(params).filter(
+                    ([key, value]) => value !== '' && value
+                ).map(
+                    ([key, value]) => key + '=' + value
+                ).join('&');
+
+            return new Promise(
+                (resolve, reject) => {
+                    fetch(
+                        url, {
+                            method: method
+                        }
+                    ).then(
+                        res => {
+                            resolve(
+                                new Promise(
+                                    resolve => resolve(res)
+                                )
+                            );
+                        },
+                        reason => reject(reason)
+                    );
+                    setTimeout(reject, timeout, 'Timeout');
+                }
+            );
+        }
+
+        checkHost(host) {
+            return this._callHttp(
+                'http://' + host + '/api/version',
+                'GET', null, [200, 201], 2000
+            ).then(
+                (res) => {
+                    if (res.status != 200)
+                        throw {
+                            status: res.status,
+                            content: res.content
+                        };
+
+                    this.approveHost(host);
+                    return res.json();
+                }
+            ).then(
+                (res) => {
+                    this.host_callback(this.host);
+                    return res;
+                }
+            ).catch(
+                (reason) => {
+                    throw reason;
+                }
+            );
+        }
+
+        approveHost(host) {
+            this.host = host;
+        }
+
+        checkAuth(type, credentials) {
+            let params = {event_type: 'match'};
+            params[type] = credentials;
+
+            return this._callHttp(
+                'http://' + this.host + '/api/events', 'GET',
+                params, [200, 400], 2000
+            ).then(
+                (res) => {
+                    this.approveAuth(type, credentials);
+                    return res;
+                }
+            ).then(
+                (res) => {
+                    let a = {};
+                    a[this.auth_type] = this.auth_credentials;
+                    this.auth_callback(a);
+                    return res;
+                }
+            ).catch(
+                status => {
+                    if (status > 500)
+                        throw 'Unexpected status 500 was returned from host.';
+                    throw 'Wrong credentials';
+                }
+            );
+        }
+
+        approveAuth(type, credentials) {
+            this.auth_type = type;
+            this.auth_credentials = credentials;
+        }
+
+        query(resource, method, parameters) {
+            if (this.host == null || this.host === '' || this.auth_credentials == null)
+                return new Promise(
+                    (resolve, reject) => {
+                        if (this.host == null || this.host === '')
+                            reject('Remote host not configured yet');
+                        else
+                            reject('User credentials not configured yet');
+                    }
+                );
+
+            let url = this.host + '/' + resource;
+            let auth = {};
+            auth[this.auth_type] = this.auth_credentials;
+
+            if (method !== 'ws') {
+                return this._callHttp(
+                    'http://' + url, method, Object.assign(auth, parameters), [200, 201], 5000
+                ).then(
+                    res => {
+                        if (res.status != 200)
+                            throw 'Unexpected status code received ' + res.status;
+                        return res;
+                    }
+                );
+            } else {
+                return create_websocket('ws://' + url, Object.assign(auth, parameters));
+            }
+        }
+    }
+
+
+    class SettingsMenu extends React.Component {
+        createCheckingDescription() {
+            return {
+                loading: false,
+                loading_description: '',
+                status: null,
+                status_description: ''
+            };
+        }
+
+        constructor() {
+            super();
+
+            this.auth_types = {
+                basic: {
+                    label: 'Basic',
+                    fields: {
+                        login: {
+                            label: 'Login',
+                            placeholder: 'Your LUNA login',
+                            type: 'text'
+                        },
+                        password: {
+                            label: 'Password',
+                            placeholder: 'Your LUNA password',
+                            type: 'password'
+                        }
+                    },
+                    postprocessor: function(values) {
+                        return 'Basic ' + btoa(
+                            values.login + ':' + values.password
+                        );
+                    }
+                },
+                auth_token: {
+                    label: 'Auth token',
+                    fields: {
+                        token: {
+                            label: 'Auth token',
+                            placeholder: '',
+                            type: 'text'
+                        }
+                    },
+                    postprocessor: function(values) {
+                        return values.token;
+                    }
+                }
+            };
+
+            let checking_auth_state = {};
+            Object.entries(this.auth_types).forEach(
+                ([type, auth]) => {
+                    checking_auth_state[type] = this.createCheckingDescription();
+                }
+            );
+
+            let data = {
+                host: '',
+                type: Object.keys(this.auth_types)[0]
+            };
+            Object.keys(this.auth_types).forEach(
+                type => data[type] = ''
+            );
+
+            this.state = {
+                checking_host_state: this.createCheckingDescription(),
+                checking_auth_state: checking_auth_state,
+                data: data
+            };
+
+            setTimeout(
+                () => {
+                    let s = this.state;
+                    s.data.host = window.location.hostname + (
+                        window.location.port !== '' ? ':' + window.location.port : ''
+                    );
+                    this.setState(s);
+                    this.checkHost();
+                }
+            )
+        }
+
+        _checkDelayed(
+            checker_promise_factory, value_getter,
+            checking_state_getter, checking_state_setter, loading_description_factory,
+            done_promise_resolver, done_promise
+        ) {
+            if (!checking_state_getter().loading) {
+                if (done_promise_resolver == null && done_promise == null) {
+                    done_promise = new Promise(resolve => {
+                        done_promise_resolver = resolve;
+                    });
+                }
+
+                checking_state_setter(
+                    Object.assign(
+                        checking_state_getter(),
+                        {
+                            loading: true,
+                            loading_description: loading_description_factory()
+                        }
+                    )
+                );
+
+                let orig_value = value_getter();
+                let maybe_retry_caller = function(success) {
+                    if (value_getter() !== orig_value)
+                        this._checkDelayed(
+                            checker_promise_factory, value_getter,
+                            checking_state_getter, checking_state_setter,
+                            loading_description_factory,
+                            done_promise_resolver, done_promise
+                        );
+                    else if (success)
+                        done_promise_resolver();
+                }.bind(this);
+
+                checker_promise_factory().then(
+                    (res) => {
+                        checking_state_setter(
+                            Object.assign(
+                                checking_state_getter(),
+                                {
+                                    loading: false,
+                                    status: 'success',
+                                    status_description: res
+                                }
+                            )
+                        );
+                        maybe_retry_caller(true);
+                    }
+                ).catch(
+                    (reason) => {
+                        checking_state_setter(
+                            Object.assign(
+                                checking_state_getter(),
+                                {
+                                    loading: false,
+                                    status: 'failed',
+                                    status_description: reason
+                                }
+                            )
+                        );
+                        maybe_retry_caller(true);
+                    }
+                );
+
+                return done_promise;
+            }
+        }
+
+        checkHost() {
+            this._checkDelayed.bind(this)(
+                () => this.props.api_service.checkHost(
+                    this.state.data.host
+                ).then(
+                    res => 'Server available, version: ' + res.version
+                ).catch(
+                    reason => {
+                        throw (
+                            reason.status != null ?
+                                'Server respond with unknown status ' + reason.status :
+                                'Request error: ' + reason
+                        )
+                    }
+                ),
+                () => this.state.data.host,
+                () => this.state.checking_host_state,
+                (new_state) => this.setState(Object.assign(this.state, {checking_host_state: new_state})),
+                () => 'checking host ' + this.state.data.host + ' ...'
+            ).then(
+                () => this.checkAuth(this.state.data.type)
+            );
+        }
+
+        checkAuth(type) {
+            if (
+                this.state.checking_host_state.loading ||
+                this.state.checking_host_state.status != 'success'
+            )
+                return;
+
+            if (!Object.keys(this.auth_types[type].fields).every(
+                    field_id => (
+                        this.state.data[field_id] != null &&
+                        this.state.data[field_id] !== ''
+                    )
+                ))
+                return;
+
+            let getter = () => {
+                return this.auth_types[type].postprocessor(
+                    Object.assign(
+                        ...Object.keys(this.auth_types[type].fields).map(
+                            fid => {
+                                let res = {};
+                                res[fid] = this.state.data[fid];
+                                return res;
+                            }
+                        )
+                    )
+                );
+            };
+
+            this._checkDelayed(
+                () => this.props.api_service.checkAuth(
+                    this.state.data.type, getter()
+                ).then(
+                    res => 'Valid credentials'
+                ),
+                getter.bind(this),
+                () => this.state.checking_auth_state[type],
+                (new_state) => {
+                    let old_state = this.state.checking_auth_state;
+                    old_state[type] = new_state;
+                    this.setState(
+                        Object.assign(
+                            this.state, {checking_auth_state: old_state}
+                        )
+                    )
+                },
+                () => 'Checking ' + this.auth_types[type].label
+            );
+        }
+
+        handleValueChange(fid, new_value) {
+            let state = this.state;
+            state.data[fid] = new_value;
+            this.setState(state);
+
+            if (fid === 'host') {
+                this.checkHost();
+            }
+        }
+
+        handleAuthValuesChange(fid, type, new_value) {
+            this.handleValueChange(fid, new_value);
+
+            this.checkAuth(type);
+        }
+
+        handleTabClick(type) {
+            let state = this.state;
+            state.data.type = type;
+            this.setState(state);
+        }
+
+        renderInput(fields, checking_state, type) {
+            let handlers;
+            if (type != null) {
+                handlers = fields.map(
+                  field => this.handleAuthValuesChange.bind(
+                        this, field.id, type
+                    )
+                );
+            } else {
+                handlers = fields.map(
+                    field => this.handleValueChange.bind(
+                        this, field.id
+                    )
+                );
+            }
+
+            return (
+                <div
+                    className={
+                        "form-group m-3 has-feedback " + {
+                            null: '', failed: 'has-danger', success: 'has-success'
+                        }[checking_state.status]
+                    }
+                >
+                    {
+                        zip(fields, handlers).map(
+                            ([field, handler]) => (
+                                <div key={field.id} className="form-group">
+                                    <label>
+                                        <strong>{field.label}</strong>
+                                    </label>
+                                    <div className="input-group">
+                                        <input
+                                            className="form-control"
+                                            type={field.type}
+                                            placeholder={field.placeholder}
+                                            value={this.state.data[field.id]}
+                                            onChange={
+                                                event => handler(event.target.value)
+                                            }
+                                        />
+                                        {
+                                            function () {
+                                                if (fields.length == 1 && checking_state.loading)
+                                                return (
+                                                    <span className="input-group-addon">
+                                                        <i className='fa fa-spinner fa-spin'></i>
+                                                    </span>
+                                                );
+                                            }()
+                                        }
+                                    </div>
+                                </div>
+                            )
+                        )
+                    }
+                    <div>
+                        {
+                            function() {
+                                if (!checking_state.loading) {
+                                    return (
+                                        <div className="form-control-feedback">
+                                            {checking_state.status_description}
+                                        </div>
+                                    )
+                                }
+                            }.bind(this)()
+                        }
+                    </div>
+                </div>
+            )
+        }
+
+        render() {
+            return (
+                <div className="float-none width-350px">
+                    <div className="form-group">
+                        {
+                            this.renderInput(
+                                [
+                                    {
+                                        id: 'host',
+                                        type: 'text',
+                                        placeholder: '10.0.0.0:8080',
+                                        label: 'Host'
+                                    }
+                                ], this.state.checking_host_state
+                            )
+                        }
+                    </div>
+
+                    <ul className="ml-2 mr-2 nav nav-tabs justify-content-center">
+                        {
+                            Object.entries(this.auth_types).map(
+                                ([type, auth]) => (
+                                    <li
+                                        className="nav-item"
+                                        onClick={this.handleTabClick.bind(this, type)}
+                                        key={type}
+                                    >
+                                        <a className={
+                                            "nav-link " + (this.state.data.type == type ? "active" : "")
+                                        }>{auth.label}</a>
+                                    </li>
+                                )
+                            )
+                        }
+                    </ul>
+                    <div>
+                        {
+                            this.renderInput.bind(this)(
+                                Object.entries(
+                                    this.auth_types[this.state.data.type].fields
+                                ).map(
+                                    ([fid, field]) => Object.assign(
+                                        field, {id: fid}
+                                    )
+                                ),
+                                this.state.checking_auth_state[this.state.data.type],
+                                this.state.data.type
+                            )
+                        }
+                    </div>
+                </div>
+            );
+        }
+    }
+
+
+    class ApiApp extends React.Component {
+        constructor() {
+            super();
+
+            this.api_service = new ApiService(
+                this.handleHostChanged.bind(this),
+                this.handleCredentialsChanged.bind(this)
+            );
+
+            this.resources = [
+                {
+                    path: 'api/subscribe',
+                    label: 'Subscribe',
+                    method: 'ws',
+                    fields: {
+                        list: {
+                            comparators: ['eq'],
+                            label: 'List id'
+                        },
+                        event_type: {
+                            comparators: ['eq'],
+                            label: 'Event type',
+                            type: {
+                                type: 'select',
+                                values: [
+                                    'match', 'extract', ''
+                                ]
+                            },
+                            value: ''
+                        },
+                        similarity: {
+                            comparators: ['gt'],
+                            label: 'Similarity'
+                        },
+                        event_source: {
+                            comparators: ['eq'],
+                            label: 'Event source'
+                        }
+                    }
+                },
+                {
+                    path: 'api/events',
+                    label: 'Events',
+                    method: 'get',
+                    fields: {
+                        time: {
+                            comparators: ['lt', 'gt'],
+                            label: 'Time event occurs',
+                        },
+                        event_type: {
+                            comparators: ['eq'],
+                            label: 'Event type',
+                            type: {
+                                type: 'select',
+                                values: [
+                                    'match', 'extract'
+                                ]
+                            },
+                            value: 'match'
+                        },
+                        auth_type: {
+                            comparators: ['eq'],
+                            label: 'Authorization type'
+                        },
+                        source: {
+                            comparators: ['eq'],
+                            label: 'Event source'
+                        },
+                        face_score: {
+                            comparators: ['gt'],
+                            label: 'Face score (quality)'
+                        },
+                        gender: {
+                            comparators: ['eq'],
+                            label: 'Sex <span style="color: white">, Drugs & Rock\'n Roll</span>',
+                            type: {
+                                type: 'select',
+                                values: [
+                                    '', 'male', 'female'
+                                ]
+                            },
+                            value: ''
+                        },
+                        skin_color: {
+                            comparators: ['lt', 'gt'],
+                            label: 'Skin color',
+                        },
+                        over_exposed: {
+                            comparators: ['lt', 'gt'],
+                            label: 'Overexposed value'
+                        },
+                        glasses: {
+                            comparators: ['lt', 'gt'],
+                            label: 'Glasses likelihood'
+                        },
+                        similarity: {
+                            comparators: ['lt', 'gt'],
+                            label: 'Person similarity'
+                        }
+                    }
+                }
+            ];
+
+            this.cached_values = {};
+            this.parsed_resources = {};
+            for (let v in this.resources) {
+                if (!this.resources.hasOwnProperty(v))
+                    continue;
+
+                let r = this.resources[v];
+
+                let api_fields = [];
+                this.parsed_resources[r.path] = {
+                    api_resource: r.path,
+                    api_method: r.method,
+                    api_fields: api_fields
+                };
+
+                let values = {};
+                this.cached_values[r.path] = values;
+
+                for (let f_id in r.fields) {
+                    if (!r.fields.hasOwnProperty(f_id))
+                        continue;
+
+                    let field = r.fields[f_id];
+
+                    if (field.hasOwnProperty('value')) {
+                        values[f_id] = field.value;
+                    }
+
+                    field.id = f_id;
+                    api_fields[api_fields.length + 1] = field;
+                }
+            }
+
+            this.state = {
+                resources: this.resources,
+                current_tab: {
+                    resource: this.resources[0].path,
+                    values: this.cached_values[this.resources[0].path]
+                },
+                parsed_resources: this.parsed_resources,
+                host: '',
+                credentials: ['basic', '']
+            };
+        }
+
+        handleHostChanged(host) {
+            let s = this.state;
+            s.host = host;
+            this.setState(s);
+        }
+
+        handleCredentialsChanged(credentials) {
+            let s = this.state;
+            s.credentials = [
+                Object.keys(credentials)[0], Object.values(credentials)[0]
+            ];
+            this.setState(s);
+        }
+
+        handleTabClick(tab_resource) {
+            this.setState(
+                {
+                    current_tab: {
+                        resource: tab_resource,
+                        values: this.cached_values[tab_resource]
+                    }
+                }
+            )
+        }
+
+        handleFieldChange(field_id, field_value) {
+            let new_values = {};
+            new_values[field_id] = field_value;
+            this.setState(
+                Object.assign(
+                    this.state.current_tab.values,
+                    new_values
+                )
+            )
+        }
+
+        render() {
+            return (
+                <div className="clearfix">
+                    <nav className="navbar navbar-toggleable-md navbar-light bg-faded">
+                        <button
+                            className="navbar-toggler navbar-toggler-right"
+                            type="button"
+                            data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false"
+                            aria-label="Toggle navigation"
+                        >
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <a className="navbar-brand" href="#">Statistic Service API Explorer</a>
+
+                        <div
+                            className="collapse navbar-collapse"
+                            id="navbarSupportedContent"
+                        >
+                            <ul className="navbar-nav">
+                                {
+                                    this.state.resources.map(
+                                        resource => this.renderNavLink(resource)
+                                    )
+                                }
+                                <li className="dropdown">
+                                    <a
+                                        className="nav-link no-select dropdown-toggle"
+                                        onClick={
+                                            () => {
+                                                let s = this.state;
+                                                let o = s.settings_open;
+                                                if (o == null)
+                                                    o = false;
+                                                s.settings_open = !o;
+                                                this.setState(s);
+                                            }
+                                        }
+                                    >
+                                        Settings
+                                    </a>
+                                    <div
+                                        className={
+                                            "dropdown-menu " + (
+                                                this.state.settings_open ? "d-block" : ""
+                                            )
+                                        }
+                                    >
+                                        <SettingsMenu
+                                            api_service={this.api_service}
+                                        />
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <ul className="nav navbar-nav navbar-right">
+                            <li>
+                                <a className="nav-link text-nowrap active" href="/ss_lib.js">
+                                    <strong>JS Lib</strong>
+                                </a>
+                            </li>
+                            <li>
+                                <a className="nav-link text-nowrap active" href="/raml">RAML Spec</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    {this.renderTabs()}
+                    <footer className="footer text-center mt-5">
+                        <span className="text-muted">
+                            &copy; 2017, D.Danilkin, <a href="http://visionlabs.ru">Visionlabs</a>
+                        </span>
+                    </footer>
+                </div>
+            )
+        }
+
+        renderNavLink(resource) {
+            return (
+                <li
+                    className={
+                        'nav-item ' + (
+                            resource.path == this.state.current_tab.resource ? 'active' : ''
+                        )
+                    }
+                    onClick={event => this.handleTabClick(resource.path)}
+                    key={resource.path}
+                >
+                    <a className="nav-link">
+                        {resource.label}
+                    </a>
+                </li>
+            )
+        }
+
+        renderTabs() {
+            let resource = this.state.current_tab.resource;
+            return (
+                <div className="tab-content">
+                    {
+                        Object.entries(this.parsed_resources).map(
+                            ([r, t]) => (
+                                <div className={
+                                    "tab-pane fade " + ((r === resource) ? "show active" : "")
+                                }>
+                                    <ApiExplorer
+                                        api_resource={t.api_resource}
+                                        api_method={t.api_method}
+                                        api_host_url={this.state.host}
+                                        api_auth={this.state.credentials}
+                                        api_fields={t.api_fields}
+                                        api_service={this.api_service}
+                                        field_values={this.cached_values[r]}
+                                        field_change_callback={this.handleFieldChange.bind(this)}
+                                    />
+                                </div>
+                            )
+                        )
+                    }
+                </div>
+            )
+        }
+    }
+
+
+    class ApiExplorer extends React.Component {
+        constructor(args) {
+            super(args);
+            this.state = {
+                request_loading: false,
+                loading_error: null,
+                result: {}
+            };
+            this.result_preview = null;
+        }
+
+        handleSendRequest() {
+            let s = this.state;
+            s.request_loading = true;
+            s.loading_error = null;
+            this.setState(s);
+
+            this.props.api_service.query(
+                this.props.api_resource,
+                this.props.api_method,
+                this.props.field_values
+            ).then(
+                res => {
+                    this._dealWithQueryResult(res);
+                }
+            ).catch(
+                err => {
+                    this._stopLoad(err);
+                }
+            );
+        }
+
+        _stopLoad(reason) {
+            let s = this.state;
+            s.request_loading = false;
+            s.loading_error = reason;
+            this.setState(s);
+        }
+
+        _dealWithQueryResult(result) {
+            if (result != null) {
+                if (result instanceof Response) {
+                    result.json().then(
+                        msg => {
+                            this._stopLoad();
+                            this.result_preview.clearMessages();
+                            this.result_preview.receiveMessage(msg);
+                        }
+                    )
+                } if (result instanceof Rx.Observable) {
+                    result.subscribe(
+                        msg => this.result_preview.receiveMessage(msg),
+                        this._stopLoad.bind(this),
+                        this._stopLoad.bind(this)
+                    );
+                } else {
+                    this.setState(
+                        {result: [result]}
+                    )
+                }
+            }
+        }
+
+        render() {
+            return (
+                <div>
+                    <h2 className="bg-primary p-3 text-white">
+                        <strong className="mr-3">[{this.props.api_method.toUpperCase()}]</strong> {'/ ' + this.props.api_resource.replace('/', ' / ')}
+                    </h2>
+                    <div className="container mt-3">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <h3>
+                                    Build query
+                                </h3>
+                                <ApiQueryBuilder
+                                    api_fields={
+                                        this.props.api_fields
+                                    }
+                                    request_loading={this.state.request_loading}
+                                    request_callback={this.handleSendRequest.bind(this)}
+                                    field_values={this.props.field_values}
+                                    field_change_callback={this.props.field_change_callback}
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <h2>Request preview</h2>
+                                <ApiQueryPreview
+                                    api_resource={this.props.api_resource}
+                                    api_fields={this.props.api_fields}
+                                    api_method={this.props.api_method}
+                                    api_url={this.props.api_host_url}
+                                    api_auth={this.props.api_auth}
+                                    field_values={this.props.field_values}
+                                />
+
+                                <button
+                                    className={
+                                        "btn btn-block rounded-0 " + (
+                                            (!this.state.request_loading) ?
+                                            "btn-primary" : "btn-warning disabled"
+                                        )
+                                    }
+                                    onClick={
+                                        this.handleSendRequest.bind(this)
+                                    }
+                                >
+                                    {
+                                        (this.state.request_loading) ?
+                                        "In progress ..." :
+                                        <strong>Send</strong>
+                                    }
+                                </button>
+                                {
+                                    (this.state.loading_error != null) ? (
+                                        <label className="btn btn-danger btn-block rounded-0 mt-0">
+                                            {this.state.loading_error + ''}
+                                        </label>
+                                    ) : null
+                                }
+
+                                <h2 className="mt-3">
+                                    Result
+                                </h2>
+                                <ApiResultPreview
+                                    ref={(r) => this.result_preview = r}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    class ApiQueryBuilder extends React.Component {
+        render() {
+            return (
+                <div className="form-group">
+                    {
+                        this.props.api_fields.map(
+                            field => this.renderField(field)
+                        )
+                    }
+                </div>
+            )
+        }
+
+        renderLoading() {
+            if (this.props.request_loading)
+                return (
+                    <i className='fa fa-spinner fa-spin float-left'></i>
+                );
+            else
+                return (
+                  <i/>
+                )
+        }
+
+        getFieldValue(field_descr, comp) {
+            if (comp == null)
+                return this.props.field_values[field_descr.id];
+            else
+                return this.props.field_values[field_descr.id + '__' + comp];
+        }
+
+        renderField(field_descr) {
+            let render_input = function(field_descr, comp) {
+                if (field_descr.hasOwnProperty('type')) {
+                    if (field_descr.type.type === 'select') {
+                        return (
+                            <div className="btn-group" key={field_descr.id}>
+                                <button
+                                    className="btn btn-secondary dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                    {
+                                        this.getFieldValue(field_descr) !== '' &&
+                                        this.getFieldValue(field_descr) != null ?
+                                        this.getFieldValue(field_descr) : (
+                                            <span className="text-muted">(Not set)</span>
+                                        )
+                                    }
+                                </button>
+                                <div className="dropdown-menu">
+                                    {field_descr.type.values.map(
+                                        val => (
+                                            <a
+                                                className={
+                                                    "dropdown-item " + (
+                                                        val === this.getFieldValue(field_descr) && val !== '' ?
+                                                        'bg-primary text-white' : ''
+                                                    ) + (
+                                                        val === '' ? 'text-muted' : ''
+                                                    )
+                                                }
+                                                onClick={
+                                                    () => this.handleChange(field_descr.id, val)
+                                                }
+                                                key={val}
+                                            >
+                                                {
+                                                    val !== '' ? val : 'Not set'
+                                                }
+                                            </a>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        )
+                    }
+                } else {
+                    return (
+                        <input
+                            className="form-control"
+                            type="text"
+                            id={field_descr.id}
+                            value={this.getFieldValue(field_descr)}
+                            onChange={
+                                function(event) {
+                                    this.handleChange(
+                                        field_descr.id, event.target.value, comp
+                                    )
+                                }.bind(this)
+                            }
+                        />
+                    )
+                }
+            }.bind(this);
+
+            if (field_descr.comparators.length > 1) {
+                const humanized_comp_map = {
+                    'eq': '',
+                    'gt': 'greater then',
+                    'lt': 'less then'
+                };
+                return (
+                    <div className="row">
+                        {
+                            field_descr.comparators.map(
+                                comp => (
+                                    <div className="col-md-6" key={field_descr.id + comp}>
+                                        <label
+                                            className="col-form-label d-block"
+                                            dangerouslySetInnerHTML={
+                                                {
+                                                    '__html': '<strong>' +
+                                                    field_descr.label + ' ' + humanized_comp_map[comp] +
+                                                    '</strong>'
+                                                }
+                                            }
+                                        >
+                                        </label>
+                                        {render_input(field_descr, comp)}
+                                    </div>
+                                )
+                            )
+                        }
+                    </div>
+                )
+            }
+            return (
+                <div key={field_descr.id}>
+                    <label
+                        className="col-form-label d-block"
+                        dangerouslySetInnerHTML={
+                            {'__html': '<strong>' + field_descr.label + '</strong>'}
+                        }
+                    >
+                    </label>
+                    {render_input(field_descr)}
+                </div>
+            )
+        }
+
+
+        handleSendClick() {
+            this.props.request_callback();
+        }
+
+        handleChange(field_id, new_value, comp) {
+            let full_field_id;
+            if (comp != null) {
+                full_field_id = field_id + '__' + comp;
+            } else {
+                full_field_id = field_id;
+            }
+
+            this.props.field_change_callback(full_field_id, new_value);
+        }
+    }
+
+    class ApiResultPreview extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                result: []
+            };
+        }
+
+        receiveMessage(message) {
+            this.setState(
+                {
+                    result: this.state.result.reverse().concat(
+                        message
+                    ).reverse()
+                }
+            )
+        }
+
+        clearMessages() {
+            this.setState(
+                {result: []}
+            )
+        }
+
+        renderResult(r) {
+            let s = JSON.stringify(
+                r, null, 2
+            );
+            if (s != null) {
+                return (
+                    <code>
+                        {
+                            s.split('\n').map(
+                                line => (
+                                    <div className="line">
+                                        {
+                                            range(
+                                                line.split('  ').filter(elem => elem === '').length
+                                            ).map(
+                                                () => (
+                                                    <span className="ml-3"></span>
+                                                )
+                                            )
+                                        }
+                                        {line}
+                                    </div>
+                                )
+                            )
+                        }
+                    </code>
+                )
+            } else
+                return null;
+        }
+
+        render() {
+            return (
+                <div>
+                    <pre>
+                        {
+                            this.state.result.map(
+                                part => (
+                                    <div className="part">
+                                        {this.renderResult(part)}
+                                    </div>
+                                )
+                            )
+                        }
+                    </pre>
+                </div>
+            );
+        }
+    }
+
+    class ApiQueryPreview extends React.Component {
+        renderCode() {
+            let query_string = this.props.api_url + '/' + this.props.api_resource +
+            '?' + this.props.api_auth[0] + '=' + this.props.api_auth[1] + (
+                Object.values(
+                    this.props.field_values
+                ).some(
+                    f => f !== '' && f != null
+                ) ? '&' : ''
+            ) + (
+                Object.entries(
+                    this.props.field_values
+                ).filter(
+                    ([field_id, field]) => field !== '' && field
+                ).map(
+                    ([field_id, field]) => field_id + '=' + field
+                ).join('&')
+            );
+
+            let code;
+            if (this.props.api_method !== 'ws') {
+                code = 'fetch(\n  ' +
+                    '\"http://' + query_string + '\"' +
+                    ',\n  {method: \"' + this.props.api_method + '\"}\n)';
+            } else {
+                code = 'let ws = new WebSocket(\n  "ws://' + query_string + '"\n);\n' +
+                       'ws.onmessage = (msg) => console.log(msg.data);';
+            }
+            console.log(code);
+
+            return code.split('\n').map(
+                line => (
+                    <div className="line">
+                        {
+                            range(
+                                line.split('  ').filter(elem => elem === '').length
+                            ).map(
+                                () => (
+                                    <span className="ml-3"></span>
+                                )
+                            )
+                        }
+                        {line}
+                    </div>
+                )
+            );
+        }
+
+        render() {
+            return (
+                <pre className="mb-0">
+                    <code className="python">
+                        {this.renderCode()}
+                    </code>
+                </pre>
+            )
+        }
+    }
+
+    let destination = document.querySelector("#root");
+    ReactDOM.render(
+        <ApiApp/>,
+        destination
+    );
+</script>
+
+
+<!-- Bootstrap core JavaScript ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+<script>
+    // prevent navbar dropdown being closing on click
+    let dropdown_li = $('li.custom-close-dropdown');
+
+
+    $('li.custom-close-dropdown > a').on('click', function (event) {
+        $(this).parent().toggleClass("open show");
+    });
+
+    $('body').on('click', function (e) {
+        if (
+            !dropdown_li.is(e.target) &&
+            dropdown_li.has(e.target).length === 0 &&
+            dropdown_li.has(e.target).length === 0
+        ) {
+                dropdown_li.removeClass('open show');
+            }
+        }
+    );
+
+</script>
+
+</body>
+<div class="clearfix"></div>
+</html>

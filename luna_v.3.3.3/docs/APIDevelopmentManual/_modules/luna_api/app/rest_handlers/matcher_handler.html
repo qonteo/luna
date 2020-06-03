@@ -1,0 +1,818 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.app.rest_handlers.matcher_handler &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.app.rest_handlers.matcher_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.app.rest_handlers.matcher_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tornado</span>
+<span class="kn">from</span> <span class="nn">luna3.common.exceptions</span> <span class="k">import</span> <span class="n">LunaApiException</span>
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span><span class="p">,</span> <span class="n">web</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">app.rest_handlers</span> <span class="k">import</span> <span class="n">validators</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.storage_handlers</span> <span class="k">import</span> <span class="n">StorageHandler</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.validators</span> <span class="k">import</span> <span class="n">Params</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.utils.timer</span> <span class="k">import</span> <span class="n">timer</span>
+
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span><span class="p">,</span> <span class="n">ErrorInfo</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.exception</span> <span class="k">import</span> <span class="n">VLException</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="sortBySimilarity"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.sortBySimilarity">[docs]</a><span class="k">def</span> <span class="nf">sortBySimilarity</span><span class="p">(</span><span class="n">el</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns similarity from matching result.</span>
+
+<span class="sd">    :param el: one matching result</span>
+<span class="sd">    :return: -el[&#39;similarity&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">el</span><span class="p">[</span><span class="s1">&#39;similarity&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="sortMatchingResult"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.sortMatchingResult">[docs]</a><span class="k">def</span> <span class="nf">sortMatchingResult</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sort array by similarity to respond to matching.</span>
+
+<span class="sd">    :param arr: respond array to matching</span>
+<span class="sd">    :return: sorted array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sortBySimilarity</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getSimilarity"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.getSimilarity">[docs]</a><span class="k">def</span> <span class="nf">getSimilarity</span><span class="p">(</span><span class="n">matchingRes</span><span class="p">,</span> <span class="n">descriptorId</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get similarity for id descriptor from LUNA.</span>
+
+<span class="sd">    :param matchingRes: matching result in LUNA</span>
+<span class="sd">    :param descriptorId: descriptor id</span>
+<span class="sd">    :return: 0, id descriptor with descriptorId was not found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">matchingRes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">descriptorId</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;similarity&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="MatchValidatorClass"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatchValidatorClass">[docs]</a><span class="k">class</span> <span class="nc">MatchValidatorClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Structure for parsing query parameters during matching.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        For every parameter Param must be class instance</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        :ivar limit:           maximum number of objects in responce, limited by MAX_CANDIDATE_IN_RESPONSE,\</span>
+<span class="sd">         default 3.</span>
+<span class="sd">        :ivar descriptor_id:   id of template descriptor</span>
+<span class="sd">        :ivar list_id:         account list id</span>
+<span class="sd">        :ivar descriptor_ids:  dynamic set of descriptor ids</span>
+<span class="sd">        :ivar person_ids:      dynamic set of person ids</span>
+<span class="sd">        :ivar candidateLength: number of candodates (for statistics).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="n">Params</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">validators</span><span class="o">.</span><span class="n">limitValidator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_id</span> <span class="o">=</span> <span class="n">Params</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">validators</span><span class="o">.</span><span class="n">validatorUUID</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;descriptor_id&quot;</span><span class="p">),</span>
+                                    <span class="n">validators</span><span class="o">.</span><span class="n">descriptorValidator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">person_id</span> <span class="o">=</span> <span class="n">Params</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">validators</span><span class="o">.</span><span class="n">validatorUUID</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;person_id&quot;</span><span class="p">),</span>
+                                <span class="n">validators</span><span class="o">.</span><span class="n">personIdValidator</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span> <span class="o">=</span> <span class="n">Params</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">validators</span><span class="o">.</span><span class="n">validatorUUID</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;list_id&quot;</span><span class="p">),</span>
+                              <span class="n">validators</span><span class="o">.</span><span class="n">accountListValidator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_ids</span> <span class="o">=</span> <span class="n">Params</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">validators</span><span class="o">.</span><span class="n">validatorListUUIDStr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">),</span>
+                                     <span class="n">validators</span><span class="o">.</span><span class="n">descriptorsListValidator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">person_ids</span> <span class="o">=</span> <span class="n">Params</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">validators</span><span class="o">.</span><span class="n">validatorListUUIDStr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">),</span>
+                                 <span class="n">validators</span><span class="o">.</span><span class="n">personsListValidator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidateLength</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="MatcherHandler"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler">[docs]</a><span class="k">class</span> <span class="nc">MatcherHandler</span><span class="p">(</span><span class="n">StorageHandler</span><span class="p">,</span> <span class="n">MatchValidatorClass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic handler for matching</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">)</span>
+        <span class="n">MatchValidatorClass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MatcherHandler.generateEmptyMatchingResult"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.generateEmptyMatchingResult">[docs]</a>    <span class="k">def</span> <span class="nf">generateEmptyMatchingResult</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send empty matching result</span>
+
+<span class="sd">        :return: success(201, {&quot;candidates&quot;: []})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[]})</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.matchAndUnion"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.matchAndUnion">[docs]</a>    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">matchAndUnion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">candidateLists</span><span class="p">,</span> <span class="n">prevMatchingResult</span><span class="p">,</span> <span class="n">searchByLists</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for matching template with candidates list and for joining with previous results</span>
+
+<span class="sd">        :param template:  reference descriptor id</span>
+<span class="sd">        :param candidateLists: candidate list, list uuids</span>
+<span class="sd">        :param prevMatchingResult: previous matching results</span>
+<span class="sd">        :return: in case of success refer to connectResultMatching</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidateLength</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidateLists</span><span class="p">)</span>
+
+        <span class="n">matchRes</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunaCoreContext</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">candidateLists</span><span class="p">,</span> <span class="n">searchByLists</span><span class="p">)</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">matchRes</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">]</span>
+
+        <span class="n">connectResultRes</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectResultMatching</span><span class="p">(</span><span class="n">prevMatchingResult</span><span class="p">,</span> <span class="n">matches</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">connectResultRes</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.setQueryParameters"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setQueryParameters">[docs]</a>    <span class="k">def</span> <span class="nf">setQueryParameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listParams</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Install lists parameters, that satisfy the query.</span>
+
+<span class="sd">        :param listParams: list of possible query parameters</span>
+<span class="sd">        :return: in case of success system returns Result with 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">listParams</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">paramValue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_query_argument</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">BadQueryParams</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">paramValue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">paramValue</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">BadQueryParams</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.generateErrorForHead"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.generateErrorForHead">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generateErrorForHead</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="n">LunaApiException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ErrorInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate error for method head (now body with error)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exception: luna3 exception</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            if status code 404 - object not found error otherwise Error.UnknownErrorFromLunaFaces</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(error, e.statusCode, False): if method head and request failed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">exception</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">exception</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;lists&quot;</span><span class="p">):</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">ListNotFound</span>
+            <span class="k">elif</span> <span class="n">exception</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;faces&quot;</span><span class="p">):</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">FaceNotFound</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">PersonNotFound</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">UnknownErrorFromLunaFaces</span>
+        <span class="k">return</span> <span class="n">error</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.getCandidatesForMatching"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getCandidatesForMatching">[docs]</a>    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">getCandidatesForMatching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get list of candidates for matching</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: set of query parameters to get candidate list</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            in case of success list of descriptors or list ids from LUNA is returned</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">isDefault</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">resCheck</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">dbValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span>
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">resCheck</span>
+                <span class="k">except</span> <span class="n">VLException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">exception</span> <span class="o">=</span> <span class="n">VLException</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">exception</span>
+                <span class="k">except</span> <span class="n">LunaApiException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">!=</span> <span class="s2">&quot;HEAD&quot;</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="mi">599</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateErrorForHead</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">statusCode</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="mi">404</span> <span class="k">else</span> <span class="mi">400</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">RequiredQueryParameterNotFound</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.getTemplateForMatching"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTemplateForMatching">[docs]</a>    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">getTemplateForMatching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Receive list of template descriptors.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            List of query parameters</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            in case of success system returns Result with list of template descriptors</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            VLException(error, e.statusCode, False): if method head and request failed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">isDefault</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">resCheck</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">dbValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span>
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">resCheck</span>
+                <span class="k">except</span> <span class="n">VLException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">exception</span> <span class="o">=</span> <span class="n">VLException</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">exception</span>
+                <span class="k">except</span> <span class="n">LunaApiException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">!=</span> <span class="s2">&quot;HEAD&quot;</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="mi">599</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateErrorForHead</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">statusCode</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">statusCode</span> <span class="o">!=</span> <span class="mi">404</span> <span class="k">else</span> <span class="mi">400</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">RequiredQueryParameterNotFound</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.getTypeTemplate"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTypeTemplate">[docs]</a>    <span class="k">def</span> <span class="nf">getTypeTemplate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get template type</span>
+<span class="sd">        :return:  If type = person return 1, else return 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">person_id</span><span class="o">.</span><span class="n">isDefault</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.getTypeCandidate"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getTypeCandidate">[docs]</a>    <span class="k">def</span> <span class="nf">getTypeCandidate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get candidate type (dynamic or static list).</span>
+
+<span class="sd">        :return:  If type = dynamic return 1, else return 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">isDefault</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.getStatSimilarity"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getStatSimilarity">[docs]</a>    <span class="k">def</span> <span class="nf">getStatSimilarity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get maximum similarity from response.</span>
+
+<span class="sd">        :return: 0, if list is empty, else number in range from 0 to 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">statistiData</span><span class="o">.</span><span class="n">responseJson</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistiData</span><span class="o">.</span><span class="n">responseJson</span><span class="p">[</span><span class="s2">&quot;candidates&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;similarity&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.setAdditionalDataToAdminStatistic"><a class="viewcode-back" href="../../../../statistics.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAdminStatistic">[docs]</a>    <span class="k">def</span> <span class="nf">setAdditionalDataToAdminStatistic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adminStats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set additional admin stats &quot;limit&quot;, &quot;template&quot;, &quot;candidate&quot;, &quot;value_sim&quot;, &quot;value_time&quot;, &quot;value_size&quot;</span>
+
+<span class="sd">        :param adminStats: common stats</span>
+<span class="sd">        :return: new admin stats</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">newTags</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+                   <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getTypeTemplate</span><span class="p">()),</span>
+                   <span class="s2">&quot;candidate&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getTypeCandidate</span><span class="p">())}</span>
+        <span class="n">newValues</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value_sim&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getStatSimilarity</span><span class="p">()),</span>
+                     <span class="s2">&quot;value_time&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistiData</span><span class="o">.</span><span class="n">requestTime</span><span class="p">),</span>
+                     <span class="s2">&quot;value_size&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">candidateLength</span><span class="p">)}</span>
+        <span class="n">adminStats</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">newTags</span><span class="p">,</span> <span class="n">newValues</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">adminStats</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.setAdditionalDataToAccountStatistic"><a class="viewcode-back" href="../../../../statistics.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.setAdditionalDataToAccountStatistic">[docs]</a>    <span class="k">def</span> <span class="nf">setAdditionalDataToAccountStatistic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accountStats</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set template and candidate to stats</span>
+
+<span class="sd">        :param accountStats: common request stats</span>
+<span class="sd">        :return: new stats</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">getResource</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;verify&quot;</span><span class="p">:</span>
+            <span class="n">accountStats</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRequestParam</span><span class="p">([</span><span class="s2">&quot;descriptor_id&quot;</span><span class="p">])</span>
+            <span class="n">accountStats</span><span class="p">[</span><span class="s2">&quot;candidate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRequestParam</span><span class="p">([</span><span class="s2">&quot;person_id&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">accountStats</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRequestParam</span><span class="p">([</span><span class="s2">&quot;person_id&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_id&quot;</span><span class="p">])</span>
+            <span class="n">accountStats</span><span class="p">[</span><span class="s2">&quot;candidate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRequestParam</span><span class="p">([</span><span class="s2">&quot;person_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;list_id&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">accountStats</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.getRequestParam"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.getRequestParam">[docs]</a>    <span class="k">def</span> <span class="nf">getRequestParam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get query parameters of request</span>
+
+<span class="sd">        note: It&#39;s assumed that at least one parameter exists</span>
+
+<span class="sd">        :param params: list of possible parameters</span>
+<span class="sd">        :return: dict is returned</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">isDefault</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="n">param</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;params not found, list params: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">params</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.on_finish"><a class="viewcode-back" href="../../../../statistics.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.on_finish">[docs]</a>    <span class="nd">@tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for sending request statistics</span>
+
+<span class="sd">        note: Function is called after request was processed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">sendStats</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MatcherHandler.connectResultMatching"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherHandler.connectResultMatching">[docs]</a>    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">connectResultMatching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">currentResult</span><span class="p">,</span> <span class="n">newMatchingResult</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Join new matching result with previous result. This operation is necessary as far as we do search,</span>
+<span class="sd">        based on several reference person photos.</span>
+
+<span class="sd">        :param currentResult: Current results</span>
+<span class="sd">        :param newMatchingResult: New matching result</span>
+<span class="sd">        :return: In case of success system returns joined result, list with dictionary with keys\</span>
+<span class="sd">         person_id, similarity (best matching for all person descriptors), user_data,\</span>
+<span class="sd">         descriptor_id of the best match.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">newMatchingResult</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">currentResult</span>
+        <span class="n">photos</span> <span class="o">=</span> <span class="p">[</span><span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">newMatchingResult</span><span class="p">]</span>
+
+        <span class="n">personsReply</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getPersons</span><span class="p">(</span><span class="n">faceIds</span><span class="o">=</span><span class="n">photos</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">personsReply</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s1">&#39;persons&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">photo</span> <span class="ow">in</span> <span class="n">photos</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">photo</span> <span class="ow">in</span> <span class="n">person</span><span class="p">[</span><span class="s1">&#39;faces&#39;</span><span class="p">]:</span>
+                    <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;person_id&#39;</span><span class="p">:</span> <span class="n">person</span><span class="p">[</span><span class="s1">&#39;person_id&#39;</span><span class="p">],</span> <span class="s1">&#39;face_id&#39;</span><span class="p">:</span> <span class="n">photo</span><span class="p">})</span>
+        <span class="n">persons</span> <span class="o">=</span> <span class="p">{</span><span class="n">person</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]:</span> <span class="n">person</span> <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">personsReply</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;persons&quot;</span><span class="p">]}</span>
+
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">currentResult</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">currentResult</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;person_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">currentResult</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;similarity&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">getSimilarity</span><span class="p">(</span><span class="n">newMatchingResult</span><span class="p">,</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;face_id&quot;</span><span class="p">]):</span>
+                        <span class="n">currentResult</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;similarity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">getSimilarity</span><span class="p">(</span><span class="n">newMatchingResult</span><span class="p">,</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;face_id&quot;</span><span class="p">])</span>
+                        <span class="n">currentResult</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;descriptor_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;face_id&quot;</span><span class="p">]</span>
+                    <span class="k">break</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">currentResult</span><span class="p">):</span>
+                <span class="n">currentResult</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;similarity&quot;</span><span class="p">:</span> <span class="n">getSimilarity</span><span class="p">(</span><span class="n">newMatchingResult</span><span class="p">,</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;face_id&quot;</span><span class="p">]),</span>
+                                      <span class="s2">&quot;person_id&quot;</span><span class="p">:</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">],</span> <span class="s2">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;face_id&quot;</span><span class="p">],</span>
+                                      <span class="s2">&quot;user_data&quot;</span><span class="p">:</span> <span class="n">persons</span><span class="p">[</span><span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]][</span><span class="s2">&quot;user_data&quot;</span><span class="p">],</span>
+                                      <span class="s2">&quot;external_id&quot;</span><span class="p">:</span> <span class="n">persons</span><span class="p">[</span><span class="n">candidate</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]][</span><span class="s2">&quot;external_id&quot;</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="n">currentResult</span></div>
+
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">getTemplatesAndCandidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">templatesParamNames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">candidatesParamNames</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">templatesParamNames</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">candidatesParamNames</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="n">candidates</span><span class="p">,</span> <span class="n">templates</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">templatesParamNames</span><span class="p">:</span>
+                <span class="n">candidates</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTemplateForMatching</span><span class="p">(</span><span class="n">candidatesParamNames</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">candidatesParamNames</span><span class="p">:</span>
+                <span class="n">templates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTemplateForMatching</span><span class="p">(</span><span class="n">templatesParamNames</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">candidates</span><span class="p">,</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">yield</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">getCandidatesForMatching</span><span class="p">(</span><span class="n">candidatesParamNames</span><span class="p">),</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">getTemplateForMatching</span><span class="p">(</span><span class="n">templatesParamNames</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="n">LunaApiException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span> <span class="n">e</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">],</span> <span class="n">e</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">error</span> <span class="o">==</span> <span class="n">Error</span><span class="o">.</span><span class="n">ListNotFound</span> <span class="ow">or</span> <span class="n">error</span> <span class="o">==</span> <span class="n">Error</span><span class="o">.</span><span class="n">PersonNotFound</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span> <span class="o">==</span> <span class="n">Error</span><span class="o">.</span><span class="n">FaceNotFound</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">DescriptorNotFound</span>
+                <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">templates</span></div>
+
+
+<div class="viewcode-block" id="MatcherSearchHandler"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherSearchHandler">[docs]</a><span class="k">class</span> <span class="nc">MatcherSearchHandler</span><span class="p">(</span><span class="n">MatcherHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler of photo search request.</span>
+
+<span class="sd">    .. http:post:: /matching/search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1</span>
+
+<span class="sd">        :optparam person_ids: dynamic list of candidate ids</span>
+<span class="sd">        :optparam descriptor_ids: dynamic list of candidate ids</span>
+<span class="sd">        :optparam list_id: account list id</span>
+<span class="sd">        :optparam limit: maximum number of results in request</span>
+<span class="sd">        :optparam estimate_emotions: Whether to estimate emotions from the image.</span>
+
+<span class="sd">        :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">        :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">        :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">        For more information refer to :ref:`extract-label`, doesn&#39;t support flag &quot;don&#39;t extract descriptor&quot;</span>
+
+<span class="sd">        :reqheader Content-Type:  &quot;image/png&quot;, &quot;image/x-portable-pixmap&quot;, &quot;image/bmp&quot;, &quot;image/tiff&quot;, &quot;image/gif&quot;,</span>
+<span class="sd">                         &quot;image/x-windows-bmp&quot;</span>
+
+<span class="sd">        For data in base64 is sent:</span>
+
+<span class="sd">        :reqheader Content-Type:  &#39;image/x-jpeg-base64&#39;,</span>
+<span class="sd">          &#39;image/x-windows-bmp-base64&#39;, &#39;image/x-png-base64&#39;, &#39;image/x-portable-pixmap-base64&#39;,</span>
+<span class="sd">          &#39;image/x-bmp-base64&quot;, &#39;image/x-tiff-base64&#39;, &#39;image/x-gif-base64&#39;</span>
+
+<span class="sd">        .. sourcecode:: http</span>
+
+<span class="sd">            POST /matching/search?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1 HTTP/1.1</span>
+<span class="sd">            Accept: &quot;image/png&quot;, &quot;image/x-portable-pixmap&quot;, &quot;image/bmp&quot;, &quot;image/tiff&quot;, &quot;image/gif&quot;,</span>
+<span class="sd">                     &quot;image/x-windows-bmp&quot;,</span>
+<span class="sd">                    &#39;image/x-windows-bmp-base64&#39;, &#39;image/x-png-base64&#39;, &#39;image/x-portable-pixmap-base64&#39;,</span>
+<span class="sd">                    &#39;image/x-bmp-base64&quot;, &#39;image/x-tiff-base64&#39;, &#39;image/x-gif-base64&#39;</span>
+
+<span class="sd">        **Example response**:</span>
+
+<span class="sd">        :statuscode 201: matching is successful.</span>
+
+<span class="sd">        .. sourcecode:: http</span>
+
+<span class="sd">           HTTP/1.1 201 Created</span>
+<span class="sd">           Vary: Accept</span>
+<span class="sd">           Content-Type: application/json</span>
+<span class="sd">           LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">        Search  by persons list</span>
+
+<span class="sd">        .. json:object:: search_result_persons</span>
+<span class="sd">            :showexample:</span>
+
+<span class="sd">            :property candidates: matching result</span>
+<span class="sd">            :proptype candidates: _list_(:json:object:`one_match_result_person`)</span>
+<span class="sd">            :property face: extraction and matching were made for this face</span>
+<span class="sd">            :proptype face: :json:object:`extract_one_descriptor`</span>
+<span class="sd">            :property  exif: Select image EXIF tags. See CIPA DC-008-2016 for details. Tag to string conversions \</span>
+<span class="sd">             are handled by libEXIF.</span>
+<span class="sd">            :proptype exif: :json:object:`exif`</span>
+
+<span class="sd">        Search by descriptors list.</span>
+
+<span class="sd">        .. json:object:: search_result_descriptors</span>
+<span class="sd">            :showexample:</span>
+
+<span class="sd">            :property candidates: matching result</span>
+<span class="sd">            :proptype candidates: _list_(:json:object:`one_match_result_descriptor`)</span>
+<span class="sd">            :property face: extraction and matching were made for this face</span>
+<span class="sd">            :proptype face: :json:object:`extract_one_descriptor`</span>
+<span class="sd">            :property  exif: Select image EXIF tags. See CIPA DC-008-2016 for details. Tag to string conversions \</span>
+<span class="sd">             are handled by libEXIF.</span>
+<span class="sd">            :proptype exif: :json:object:`exif`</span>
+
+<span class="sd">        Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">        :statuscode 400: wrong type of query parameter</span>
+<span class="sd">        :statuscode 400: too many faces in the picture</span>
+<span class="sd">        :statuscode 500: internal server error</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MatcherSearchHandler.post"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherSearchHandler.post">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setQueryParameters</span><span class="p">([</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">])</span>
+        <span class="n">qParams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fillQueryParams</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">qParams</span><span class="p">[</span><span class="s2">&quot;extract_descriptor&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">UnsupportedQueryParm</span><span class="p">,</span> <span class="s2">&quot;extract_descriptor&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+
+        <span class="n">resLuna</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunaCoreContext</span><span class="o">.</span><span class="n">aggregateRequestParamAndSendPhotoToLuna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+                                                                                     <span class="n">qParams</span><span class="p">)</span>
+
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">resLuna</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>
+            <span class="n">photoId</span> <span class="o">=</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">putFace</span><span class="p">(</span><span class="n">photoId</span><span class="p">,</span> <span class="n">attributesId</span><span class="o">=</span><span class="n">photoId</span><span class="p">,</span> <span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span>
+                                                     <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">generateError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">ManyFaces</span><span class="p">,</span> <span class="n">resLuna</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="n">face</span> <span class="o">=</span> <span class="n">faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_id</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">face</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+
+        <span class="n">candidates</span><span class="p">,</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTemplatesAndCandidates</span><span class="p">(</span><span class="n">candidatesParamNames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">,</span>
+                                                                                           <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">])</span>
+
+        <span class="k">def</span> <span class="nf">generateEmptyMatchingResult</span><span class="p">(</span><span class="n">extractingFace</span><span class="p">):</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;candidates&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;face&quot;</span><span class="p">:</span> <span class="n">extractingFace</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">qParams</span><span class="p">[</span><span class="s2">&quot;extract_exif&quot;</span><span class="p">]:</span>
+                <span class="n">response</span><span class="p">[</span><span class="s2">&quot;exif&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resLuna</span><span class="p">[</span><span class="s2">&quot;exif&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">response</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty luna list for identify&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">generateEmptyMatchingResult</span><span class="p">(</span><span class="n">face</span><span class="p">))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">searchByList</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">isDefault</span>
+        <span class="n">listType</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">needPersonInAnswer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">listType</span><span class="p">:</span>
+            <span class="n">matchingRes</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">matchAndUnion</span><span class="p">(</span><span class="n">face</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">searchByList</span><span class="p">)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">matchingRes</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">matchingRes</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunaCoreContext</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">face</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">searchByList</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">matchingRes</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">]</span>
+
+        <span class="n">sortedResult</span> <span class="o">=</span> <span class="n">sortMatchingResult</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sortedResult</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty search result&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">generateEmptyMatchingResult</span><span class="p">(</span><span class="n">face</span><span class="p">))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">sortedResult</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">))]</span>
+
+        <span class="n">responseJs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;candidates&#39;</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span> <span class="s2">&quot;face&quot;</span><span class="p">:</span> <span class="n">face</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">qParams</span><span class="p">[</span><span class="s2">&quot;extract_exif&quot;</span><span class="p">]:</span>
+            <span class="n">responseJs</span><span class="p">[</span><span class="s2">&quot;exif&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resLuna</span><span class="p">[</span><span class="s2">&quot;exif&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">responseJs</span><span class="p">)</span></div>
+
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">needPersonInAnswer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">isDefault</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">person_ids</span><span class="o">.</span><span class="n">isDefault</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lunaListResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getList</span><span class="p">(</span><span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">pageSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                                                        <span class="n">listId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">lunaListResponse</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="MatcherVerifyHandler"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherVerifyHandler">[docs]</a><span class="k">class</span> <span class="nc">MatcherVerifyHandler</span><span class="p">(</span><span class="n">MatcherHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler for verification request. This request is necessary to match descriptor with person.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MatcherVerifyHandler.post"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherVerifyHandler.post">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handler for request to search for similar person</span>
+
+<span class="sd">        .. http:post:: /matching/verify?descriptor_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;person_id=22fd2706\</span>
+<span class="sd">            -8baf-433b-82eb-8c7fada847d1</span>
+
+<span class="sd">            :optparam person_id:  Reference person id for matching</span>
+<span class="sd">            :optparam descriptor_id:  descriptor id of candidate</span>
+
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                    **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 201: Matching successful</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">               HTTP/1.1 201 Created</span>
+<span class="sd">               Vary: Accept</span>
+<span class="sd">               Content-Type: application/json</span>
+
+<span class="sd">            .. json:object:: verify_result</span>
+<span class="sd">               :showexample:</span>
+
+<span class="sd">               :property candidates: matching result (array with one element)</span>
+<span class="sd">               :proptype candidates: :json:object:`one_match_result_person`</span>
+
+<span class="sd">            Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 400: wrong type of query parameter</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setQueryParameters</span><span class="p">([</span><span class="s2">&quot;descriptor_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_id&quot;</span><span class="p">])</span>
+        <span class="n">candidates</span><span class="p">,</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTemplatesAndCandidates</span><span class="p">([</span><span class="s2">&quot;descriptor_id&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty luna list for identify&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateEmptyMatchingResult</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">templates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty luna list for identify&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateEmptyMatchingResult</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">searchByList</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">isDefault</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">matchAndUnion</span><span class="p">(</span><span class="n">templates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">searchByList</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty verify result&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateEmptyMatchingResult</span><span class="p">()</span>
+
+        <span class="n">sortedResult</span> <span class="o">=</span> <span class="n">sortMatchingResult</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">sortedResult</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">responseJs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;candidates&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">candidate</span><span class="p">]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">responseJs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MatcherIdentifyHandler"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherIdentifyHandler">[docs]</a><span class="k">class</span> <span class="nc">MatcherIdentifyHandler</span><span class="p">(</span><span class="n">MatcherHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler for identification request. This request is used to compare descriptors or persons</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MatcherIdentifyHandler.post"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherIdentifyHandler.post">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handler for similar person search</span>
+
+<span class="sd">        .. http:post:: /matching/identify?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706\</span>
+<span class="sd">            -8baf-433b-82eb-8c7fada847d1</span>
+
+<span class="sd">            :optparam person_ids: list of candidate person ids for matching</span>
+<span class="sd">            :optparam list_id: account list id</span>
+<span class="sd">            :optparam limit: maximum number of results in response</span>
+<span class="sd">            :optparam person_id:  id of reference person</span>
+<span class="sd">            :optparam descriptor_id:  id  of reference descriptor</span>
+
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                    **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 201: Matching successful</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">               HTTP/1.1 201 Created</span>
+<span class="sd">               Vary: Accept</span>
+<span class="sd">               Content-Type: application/json</span>
+
+<span class="sd">            .. json:object:: identify_result</span>
+<span class="sd">               :showexample:</span>
+
+<span class="sd">               :property candidates: matching result</span>
+<span class="sd">               :proptype candidates: _list_(:json:object:`one_match_result_person`)</span>
+
+<span class="sd">            Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 400: wrong type of query parameter</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setQueryParameters</span><span class="p">([</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;person_id&quot;</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">])</span>
+
+        <span class="n">candidates</span><span class="p">,</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTemplatesAndCandidates</span><span class="p">([</span><span class="s2">&quot;person_id&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_id&quot;</span><span class="p">],</span>
+                                                                     <span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_ids&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">templates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty luna list for identify&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateEmptyMatchingResult</span><span class="p">()</span>
+
+        <span class="n">resultMatch</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">searchByList</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">isDefault</span>
+        <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
+            <span class="n">resultMatch</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">matchAndUnion</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">resultMatch</span><span class="p">,</span> <span class="n">searchByList</span><span class="p">)</span>
+
+        <span class="n">sortedResult</span> <span class="o">=</span> <span class="n">sortMatchingResult</span><span class="p">(</span><span class="n">resultMatch</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sortedResult</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty identify result&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateEmptyMatchingResult</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">sortedResult</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">resultMatch</span><span class="p">))]</span>
+
+        <span class="n">responseJs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;candidates&#39;</span><span class="p">:</span> <span class="n">result</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">responseJs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MatcherDescriptorHandler"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherDescriptorHandler">[docs]</a><span class="k">class</span> <span class="nc">MatcherDescriptorHandler</span><span class="p">(</span><span class="n">MatcherHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler for similar descriptor search</span>
+
+<span class="sd">    .. http:post:: /matching/match?list_id=16fd2706-8baf-433b-82eb-8c7fada847d1&amp;limit=1&amp;person_id=22fd2706\</span>
+<span class="sd">        -8baf-433b-82eb-8c7fada847d1</span>
+
+<span class="sd">        :optparam descriptor_ids: list of candidate person ids for matching</span>
+<span class="sd">        :optparam list_id: id of descriptor list for account</span>
+<span class="sd">        :optparam limit: maximum number of results in response</span>
+<span class="sd">        :optparam person_id: id of reference person</span>
+<span class="sd">        :optparam descriptor_id: id of reference decriptor</span>
+
+<span class="sd">        :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">        :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">        :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">        **Example response**:</span>
+
+<span class="sd">        :statuscode 201: Matching successful</span>
+
+<span class="sd">        .. sourcecode:: http</span>
+
+<span class="sd">           HTTP/1.1 201 Created</span>
+<span class="sd">           Vary: Accept</span>
+<span class="sd">           Content-Type: application/json</span>
+
+<span class="sd">        .. json:object:: match_result</span>
+<span class="sd">            :showexample:</span>
+
+<span class="sd">            :property candidates: list with matching result</span>
+<span class="sd">            :proptype candidates: _list_(:json:object:`one_match_result_descriptor`)</span>
+
+<span class="sd">        Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">        :statuscode 400: wrong type of query parameter</span>
+<span class="sd">        :statuscode 500: internal server error</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MatcherDescriptorHandler.post"><a class="viewcode-back" href="../../../../matching.html#luna_api.app.rest_handlers.matcher_handler.MatcherDescriptorHandler.post">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setQueryParameters</span><span class="p">([</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_id&quot;</span><span class="p">,</span> <span class="s2">&quot;person_id&quot;</span><span class="p">,</span> <span class="s2">&quot;limit&quot;</span><span class="p">])</span>
+
+        <span class="n">candidates</span><span class="p">,</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTemplatesAndCandidates</span><span class="p">([</span><span class="s2">&quot;person_id&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_id&quot;</span><span class="p">],</span>
+                                                                     <span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">,</span> <span class="s2">&quot;descriptor_ids&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">templates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty luna list for identify&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateEmptyMatchingResult</span><span class="p">()</span>
+
+        <span class="n">resultMatch</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">searchByList</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span><span class="o">.</span><span class="n">isDefault</span>
+        <span class="k">for</span> <span class="n">photo</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
+            <span class="n">matchRes</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">lunaCoreContext</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">photo</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">searchByList</span><span class="p">)</span>
+
+            <span class="n">resultMatch</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">matchRes</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">])</span>
+
+        <span class="k">def</span> <span class="nf">removeDuplicateDescriptorsFromResults</span><span class="p">(</span><span class="n">sortResult</span><span class="p">):</span>
+            <span class="n">descriptorIds</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">matchResult</span> <span class="ow">in</span> <span class="n">sortResult</span><span class="p">:</span>
+                <span class="n">descriptorId</span> <span class="o">=</span> <span class="n">matchResult</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">descriptorId</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">descriptorIds</span><span class="p">:</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matchResult</span><span class="p">)</span>
+                    <span class="n">descriptorIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descriptorId</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">res</span>
+
+        <span class="n">sortedResult</span> <span class="o">=</span> <span class="n">sortMatchingResult</span><span class="p">(</span><span class="n">resultMatch</span><span class="p">)</span>
+        <span class="n">sortedResult</span> <span class="o">=</span> <span class="n">removeDuplicateDescriptorsFromResults</span><span class="p">(</span><span class="n">sortedResult</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sortedResult</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;empty identify result&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generateEmptyMatchingResult</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">sortedResult</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">resultMatch</span><span class="p">))]</span>
+        <span class="n">responseJs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;candidates&#39;</span><span class="p">:</span> <span class="n">result</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">responseJs</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

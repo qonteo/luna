@@ -1,0 +1,16 @@
+v.1.0.2
+=======
+
+Improvements:
+-------------
+
+    1) Return resource */attributes* .
+
+Bugs fixed:
+-----------
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests*.

@@ -1,0 +1,9 @@
+Documentation of tornado-handlers
+=================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   base_handler
+   version_handler

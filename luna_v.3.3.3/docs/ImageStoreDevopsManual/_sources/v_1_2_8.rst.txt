@@ -1,0 +1,16 @@
+v.1.2.8
+=======
+
+Improvements:
+-------------
+
+    1) Update luna3 (v.0.0.50)
+
+Bugs fixed:
+-----------
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace all folders with files and update dependencies from
+requirements.txt.

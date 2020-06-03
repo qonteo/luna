@@ -1,0 +1,18 @@
+v.2.1.0
+=======
+
+Improvements:
+-------------
+
+    1) Up luna3 version.
+
+    #) Added head angles estimations and head angle thresholds.
+
+    #) Now will return LowThreshold(11027) instead DescriptorQuality(4010) if face does not satisfy the score threshold.
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_api, tests, uploads_scripts*
+and update dependencies from requirements.txt.

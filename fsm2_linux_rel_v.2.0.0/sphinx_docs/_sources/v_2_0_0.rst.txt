@@ -1,0 +1,15 @@
+=======
+v.2.0.0
+=======
+
+-----------
+Improvements:
+-----------
+
+    1) work with luna platfrom version 3
+
+------------------------------------
+How to update from previous version:
+------------------------------------
+
+Copy project to directory with current project. Update dependencies from requirements.txt.

@@ -1,0 +1,12 @@
+[Unit]
+Description=Luna Admin Back service
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/lib/luna/current/luna-admin/luna_admin
+ExecStart=/var/lib/luna/current/luna-admin/venv/bin/python3.6 /var/lib/luna/current/luna-admin/luna_admin/run.py --back-port=5010 --config=./configs/config.conf --service_type=admin_backend
+
+[Install]
+WantedBy=multi-user.target

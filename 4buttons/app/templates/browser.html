@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Document</title>
+
+    <link rel="stylesheet" href="static/css/app.css">
+    <link rel="stylesheet" href="static/css/WebPhotoMaker.css">
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/WebPhotoMaker.js"></script>
+    <script src="/static/js/smoother.js"></script>
+    <script src="/static/js/fpsmeter.min.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+    <header class="main-header">
+        <div class="main-header__left-col">
+            <a href="/" class="main-header__back-btn">
+                <span class="main-header__back-btn-ico"></span>
+                Web Browser Recognition
+            </a>
+        </div>
+        <div class="main-header__right-col">
+            <img src="static/img/icons/visionlab.png" alt="" class="main-header__right-col-img">
+            <img src="static/img/icons/connect.png" id="connectID_logo" alt="" class="main-header__right-col-img">
+        </div>
+    </header>
+    <div class="main-content main-content--browser">
+        <div class="browser-page__block">
+
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div id="video-container">
+                        <video id="webcam"></video>
+                        <canvas id="overlay"></canvas>
+                        <canvas width=180 height=240 id="best-shot"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var LISTS_FOR_ID = [];
+    {% for list in lists_for_matching %}
+    LISTS_FOR_ID.push("{{list}}");
+    {% endfor %}
+    initWebPhotoMaker();
+</script>
+</body>
+</html>

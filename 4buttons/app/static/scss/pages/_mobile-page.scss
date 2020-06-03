@@ -1,0 +1,53 @@
+.main-content--mobile {
+  position: relative;
+  padding-left: 0;
+  padding-right: 0;
+}
+.recognition-block {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-left: 2vw;
+  padding-right: 2vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  &:before {
+    background-image: url('../img/phone-photo.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
+  &:after {
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color .2s;
+  }
+}
+.recognition-block--granted:after {
+  background-color: rgba(76, 217, 100, 0.5);
+}
+.recognition-block--denied:after {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+.recognition-block__text {
+  position: relative;
+  margin-bottom: 9.25925925925926vh;
+  font-family: $base-font;
+  font-size: 12rem;
+  letter-spacing: .18rem;
+  text-align: center;
+  color: white;
+  text-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}

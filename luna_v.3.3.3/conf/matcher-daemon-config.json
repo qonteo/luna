@@ -1,0 +1,11 @@
+{
+"indexer_host": "localhost",
+"index_holding_dir": "/var/lib/luna/index",
+"index_download_dir": "/var/lib/matcher-daemon/index_download",
+"index_reload_dir": "/var/lib/matcher-daemon/index_reload",
+"matcher_service": "luna-indexed-matcher",
+"ssh_key": "/home/matcher-daemon/.ssh/id_rsa",
+"store_index_days": 2,
+"port": 6000
+}
+

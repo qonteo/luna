@@ -1,0 +1,136 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Check connections &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documentation of tornado-handlers" href="handlers.html" />
+    <link rel="prev" title="Service launch" href="run.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Check connections</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="run.html">Service launch</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="handlers.html">Documentation of tornado-handlers</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="check-connections">
+<h1>Check connections<a class="headerlink" href="#check-connections" title="Permalink to this headline">¶</a></h1>
+<p>Function for connection to used services checking.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Make check for statistics services.</p>
+</div>
+<span class="target" id="module-luna_api.app.check_connection"></span><p>Check Connections</p>
+<p>Module is used for check of connection with outer services, that use the server.
+At this step we check connection with LUNA brokers, availability of required bucket in luna-image-store and availability
+of required table from config in DB.</p>
+<dl class="function">
+<dt id="luna_api.app.check_connection.checkConnectionToBroker">
+<code class="descclassname">luna_api.app.check_connection.</code><code class="descname">checkConnectionToBroker</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/app/check_connection.html#checkConnectionToBroker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.check_connection.checkConnectionToBroker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for check connection with LUNA broker. Requests LUNA version.
+Uri of base is taken from config.py</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True, if check was passed successfully (200 code is returned), else False.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.check_connection.checkConnectionToDatabase">
+<code class="descclassname">luna_api.app.check_connection.</code><code class="descname">checkConnectionToDatabase</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/app/check_connection.html#checkConnectionToDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.check_connection.checkConnectionToDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for check of connection to DB Luna_python_server. Connection and table availability are checked.
+Uri of base is taken from config.py</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True, if check was passed successfully, else False.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.check_connection.checkConnectionToIndexManager">
+<code class="descclassname">luna_api.app.check_connection.</code><code class="descname">checkConnectionToIndexManager</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/app/check_connection.html#checkConnectionToIndexManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.check_connection.checkConnectionToIndexManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for check connection to LUNA Index Manager. Requests LUNA Index Manager version.
+Uri of base is taken from config.py</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True, if check was passed successfully (200 code is returned), else False.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.check_connection.checkConnectionToLIS">
+<code class="descclassname">luna_api.app.check_connection.</code><code class="descname">checkConnectionToLIS</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/app/check_connection.html#checkConnectionToLIS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.check_connection.checkConnectionToLIS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for check of connection to luna-image-store. Checks connection itself.
+Data for connection is taken from config.py. If flag SEND_TO_LUNA_IMAGE_STORE is set to 0, no check is done.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True, if check was passed successfully, else False.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.check_connection.checkConnectionToLunaFaces">
+<code class="descclassname">luna_api.app.check_connection.</code><code class="descname">checkConnectionToLunaFaces</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/app/check_connection.html#checkConnectionToLunaFaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.check_connection.checkConnectionToLunaFaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to check connection to luna-faces. Checks connection itself.
+Data for connection is taken from config.py.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True, if check was passed successfully, else False.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.check_connection.checkConnections">
+<code class="descclassname">luna_api.app.check_connection.</code><code class="descname">checkConnections</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/app/check_connection.html#checkConnections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.check_connection.checkConnections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function calls check of all available connections.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>True, if check was passed successfully, else False.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="run.html">Service launch</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="handlers.html">Documentation of tornado-handlers</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

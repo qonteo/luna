@@ -1,0 +1,16 @@
+v.1.2.7
+=======
+
+Improvements:
+-------------
+
+    1) Add submodule to projects, some features, such as baseHandler, errors, utils, regexps and log moved there
+
+Bugs fixed:
+-----------
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, errors, image, preview, storage, tests, docs* and \
+file *version.py*.

@@ -1,0 +1,930 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Database context &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration" href="config.html" />
+    <link rel="prev" title="Version handler" href="version_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>Database context</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="version_handler.html">Version handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="config.html">Configuration</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_faces.db.context">
+<span id="database-context"></span><h1>Database context<a class="headerlink" href="#module-luna_faces.db.context" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_faces.db.context.DBContext">
+<em class="property">class </em><code class="descclassname">luna_faces.db.context.</code><code class="descname">DBContext</code><span class="sig-paren">(</span><em>logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>DB context</p>
+<dl class="attribute">
+<dt id="luna_faces.db.context.DBContext.logger">
+<code class="descname">logger</code><a class="headerlink" href="#luna_faces.db.context.DBContext.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>request logger</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.cleanLog">
+<code class="descname">cleanLog</code><span class="sig-paren">(</span><em>updateTimeLt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.cleanLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.cleanLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove notes from unlink tables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>updateTimeLt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]) – lower bound of update time</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.createFace">
+<code class="descname">createFace</code><span class="sig-paren">(</span><em>externalFaceId=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.createFace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.createFace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create face</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>externalFaceId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – external faceId</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>event_id</strong> – reference to event which created face</li>
+<li><strong>attributes_id</strong> – attribute id</li>
+<li><strong>user_data</strong> – face information</li>
+<li><strong>account_id</strong> – id of account, required</li>
+<li><strong>external_id</strong> – external id of the face, if it has its own mapping in external system</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IntegrityError</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">face id in uuid4 format</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">faceId</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.createList">
+<code class="descname">createList</code><span class="sig-paren">(</span><em>account_id</em>, <em>user_data=''</em>, <em>type=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.createList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.createList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create list for account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – list type, 1 - persons, 0 - faces</li>
+<li><strong>account_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – account id</li>
+<li><strong>user_data</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – user data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list id</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.createPerson">
+<code class="descname">createPerson</code><span class="sig-paren">(</span><em>externalPersonId=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.createPerson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.createPerson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create person</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>externalPersonId</strong> (<em>str</em>) – external id of the person, if it has its own mapping in external system</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>user_data</strong> – face information</li>
+<li><strong>account_id</strong> – id of account, required</li>
+<li><strong>external_id</strong> – external id of the person, if it has its own mapping in external system</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.deleteFaces">
+<code class="descname">deleteFaces</code><span class="sig-paren">(</span><em>faces</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.deleteFaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.deleteFaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove faces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – faces account id</li>
+<li><strong>faces</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – faces ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.deleteLists">
+<code class="descname">deleteLists</code><span class="sig-paren">(</span><em>lists</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.deleteLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.deleteLists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove lists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – lists account id</li>
+<li><strong>lists</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – lists</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.deletePersons">
+<code class="descname">deletePersons</code><span class="sig-paren">(</span><em>persons</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.deletePersons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.deletePersons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove persons.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – faces account id</li>
+<li><strong>persons</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – person ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getAttributes">
+<code class="descname">getAttributes</code><span class="sig-paren">(</span><em>listId=None</em>, <em>accountId=None</em>, <em>updateTimeLt=None</em>, <em>updateTimeGte=None</em>, <em>page=1</em>, <em>pageSize=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getAttributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get attributes by lists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id (if listId is None)</li>
+<li><strong>listId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – list id</li>
+<li><strong>updateTimeLt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]) – upper bound of face create time</li>
+<li><strong>updateTimeGte</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]) – lower bound of face create time</li>
+<li><strong>page</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page</li>
+<li><strong>pageSize</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page size</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple with count of attributes and attributes ids list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getFaces">
+<code class="descname">getFaces</code><span class="sig-paren">(</span><em>eventId=None</em>, <em>accountId=None</em>, <em>userData=None</em>, <em>listId=None</em>, <em>createTimeLt=None</em>, <em>createTimeGte=None</em>, <em>faceIds=None</em>, <em>page=1</em>, <em>pageSize=100</em>, <em>externalId=None</em>, <em>calculateFaceCount=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getFaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getFaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search faces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>eventId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – event id</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>userData</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – user data</li>
+<li><strong>listId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – list id</li>
+<li><strong>createTimeLt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]) – upper bound of face create time</li>
+<li><strong>createTimeGte</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]) – lower bound of face create time</li>
+<li><strong>faceIds</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – face ids</li>
+<li><strong>page</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page</li>
+<li><strong>pageSize</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page size</li>
+<li><strong>externalId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – external id of the face, if it has its own mapping in external system</li>
+<li><strong>calculateFaceCount</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – flag: 1 - calculates number of faces; 0 - not calculates number of faces and returns -1</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple with count of faces and faces list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getFacesAttributes">
+<code class="descname">getFacesAttributes</code><span class="sig-paren">(</span><em>facesIds</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getFacesAttributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getFacesAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return faces attributes id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>facesIds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – list of faces id</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of attributes id</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getListMinusDelta">
+<code class="descname">getListMinusDelta</code><span class="sig-paren">(</span><em>listId</em>, <em>unlinkKeyGte=None</em>, <em>unlinkKeyLt=None</em>, <em>limit=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getListMinusDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getListMinusDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get history of detach attribute to lists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> – list id</li>
+<li><strong>unlinkKeyLt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – upper bound of unlink key value</li>
+<li><strong>unlinkKeyGte</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – lower bound of unlink key value</li>
+<li><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – limit</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">“attributes_id”, “link_key”, “unlink_key”</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List of dicts with following keys</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getListPlusDelta">
+<code class="descname">getListPlusDelta</code><span class="sig-paren">(</span><em>listId</em>, <em>linkKeyGte=None</em>, <em>linkKeyLt=None</em>, <em>limit=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getListPlusDelta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getListPlusDelta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get attach attributes to lists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> – list id</li>
+<li><strong>linkKeyLt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – upper bound of link key value</li>
+<li><strong>linkKeyGte</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – lower bound of link key value</li>
+<li><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – limit</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">“attributes_id”, “link_key”</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List of dicts with following keys</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getLists">
+<code class="descname">getLists</code><span class="sig-paren">(</span><em>accountId=None</em>, <em>userData=None</em>, <em>listIds=None</em>, <em>listType=None</em>, <em>page=1</em>, <em>pageSize=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getLists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listType</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – type of list, 0 -</li>
+<li><strong>listIds</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – list ids</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>userData</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – user data</li>
+<li><strong>page</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page</li>
+<li><strong>pageSize</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page size</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple, count lists and list with lists</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getListsWithKeys">
+<code class="descname">getListsWithKeys</code><span class="sig-paren">(</span><em>listIds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getListsWithKeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getListsWithKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get lists with last link and unlink keys
+:type listIds: <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]
+:param listIds: list ids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Tuple with list ids, link and unlink keys</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getPersonIdByFaceId">
+<code class="descname">getPersonIdByFaceId</code><span class="sig-paren">(</span><em>faceId</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getPersonIdByFaceId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getPersonIdByFaceId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to find face_id and person_id by face_id and account_id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>faceId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – face id</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple(faceId, personId) if face found
+None if face not found</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getPersons">
+<code class="descname">getPersons</code><span class="sig-paren">(</span><em>accountId=None</em>, <em>userData=None</em>, <em>listId=None</em>, <em>personIds=None</em>, <em>faceIds=None</em>, <em>createTimeLt=None</em>, <em>createTimeGte=None</em>, <em>page=1</em>, <em>pageSize=100</em>, <em>externalId=None</em>, <em>calculateFaceCount=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getPersons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getPersons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of persons</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>personIds</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – person ids</li>
+<li><strong>faceIds</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – face ids</li>
+<li><strong>listId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – list id</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>userData</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – user data</li>
+<li><strong>createTimeLt</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]) – upper bound of person create time</li>
+<li><strong>createTimeGte</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]) – lower bound of person create time</li>
+<li><strong>page</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page</li>
+<li><strong>pageSize</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – page size</li>
+<li><strong>externalId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – external id of the person, if it has its own mapping in external system</li>
+<li><strong>calculateFaceCount</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – flag: 1 - calculates number of faces; 0 - not calculates number of faces and returns -1</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">first element - person count, second - list with persons</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.getPersonsAttributes">
+<code class="descname">getPersonsAttributes</code><span class="sig-paren">(</span><em>personsIds</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.getPersonsAttributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.getPersonsAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return faces attributes id of persons</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>personsIds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – list of person id</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of persons with all attributes ids</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.isFaceExist">
+<code class="descname">isFaceExist</code><span class="sig-paren">(</span><em>faceId</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.isFaceExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.isFaceExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking to exist face or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>faceId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – face id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">true if face exist else false</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.isFaceFree">
+<code class="descname">isFaceFree</code><span class="sig-paren">(</span><em>faceId</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.isFaceFree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.isFaceFree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking is face free or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>faceId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – face id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if person id is None else false</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.isFacesExist">
+<code class="descname">isFacesExist</code><span class="sig-paren">(</span><em>faceIds</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.isFacesExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.isFacesExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking to exist faces or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>faceIds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – face ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if all faces exist else false</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.isListExist">
+<code class="descname">isListExist</code><span class="sig-paren">(</span><em>listId</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.isListExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.isListExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking to exist list or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>listId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – list id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if list exist else false</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.isListsExist">
+<code class="descname">isListsExist</code><span class="sig-paren">(</span><em>listIds</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.isListsExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.isListsExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking to exist lists or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>listIds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – list ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if all lists exist else false</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.isPersonsExist">
+<code class="descname">isPersonsExist</code><span class="sig-paren">(</span><em>personIds</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.isPersonsExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.isPersonsExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking to exist faces or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+<li><strong>personIds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – person ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if all faces exist else false</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.linkFaceToPerson">
+<code class="descname">linkFaceToPerson</code><span class="sig-paren">(</span><em>personId</em>, <em>faceId</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.linkFaceToPerson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.linkFaceToPerson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Link face to person.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>personId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – person id</li>
+<li><strong>faceId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – face id</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id of the face</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first">NotUpdatedError if no rows were updated</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.linkFacesToList">
+<code class="descname">linkFacesToList</code><span class="sig-paren">(</span><em>listId</em>, <em>faces</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.linkFacesToList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.linkFacesToList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach faces to list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – list id</li>
+<li><strong>faces</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – face ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">IntegrityError</span></code></li>
+<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of success link faces and failed link faces.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.linkPersonsToList">
+<code class="descname">linkPersonsToList</code><span class="sig-paren">(</span><em>listId</em>, <em>persons</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.linkPersonsToList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.linkPersonsToList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach persons to list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – list id</li>
+<li><strong>persons</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – person ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of success link persons and failed link persons</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.removeFreeFaces">
+<code class="descname">removeFreeFaces</code><span class="sig-paren">(</span><em>timeLt=None</em>, <em>accountId=None</em>, <em>limit=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.removeFreeFaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.removeFreeFaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove not linked faces
+:type timeLt: <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]
+:param timeLt: upper bound of face update time
+:type accountId: <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]
+:param accountId: account id
+:type limit: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>
+:param limit: max count faces for removing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list with deleted faces’ ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.unlinkFaceFromPerson">
+<code class="descname">unlinkFaceFromPerson</code><span class="sig-paren">(</span><em>personId</em>, <em>faceId</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.unlinkFaceFromPerson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.unlinkFaceFromPerson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlink face from person.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>personId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – person id</li>
+<li><strong>faceId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – face id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first">NotUpdatedError if no rows were updated</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.unlinkFacesFromList">
+<code class="descname">unlinkFacesFromList</code><span class="sig-paren">(</span><em>listId</em>, <em>faces</em>, <em>accountId=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.unlinkFacesFromList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.unlinkFacesFromList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlink faces from list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>listId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – list id</li>
+<li><strong>faces</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – face ids</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.unlinkPersonsFromList">
+<code class="descname">unlinkPersonsFromList</code><span class="sig-paren">(</span><em>listId</em>, <em>persons</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.unlinkPersonsFromList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.unlinkPersonsFromList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlink persons from list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – list id</li>
+<li><strong>persons</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – person ids</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.updateFace">
+<code class="descname">updateFace</code><span class="sig-paren">(</span><em>faceId</em>, <em>accountId=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.updateFace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.updateFace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update face.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>faceId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – face id</li>
+<li><strong>accountId</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – account id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>attribute_id</strong> – attribute id</li>
+<li><strong>user_data</strong> – face information</li>
+<li><strong>event_id</strong> – reference to event which created face</li>
+<li><strong>external_id</strong> – external id of the face, if it has its own mapping in external system</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IntegrityError</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.updateListUserData">
+<code class="descname">updateListUserData</code><span class="sig-paren">(</span><em>listId</em>, <em>userData</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.updateListUserData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.updateListUserData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update user data of list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – list id</li>
+<li><strong>userData</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – user data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_faces.db.context.DBContext.updatePerson">
+<code class="descname">updatePerson</code><span class="sig-paren">(</span><em>personId</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#DBContext.updatePerson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.DBContext.updatePerson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update user data of person</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>personId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – person id</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>user_data</strong> – user data</li>
+<li><strong>external_id</strong> – external id of the face, if it has its own mapping in external system</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="luna_faces.db.context.NotUpdatedError">
+<em class="property">exception </em><code class="descclassname">luna_faces.db.context.</code><code class="descname">NotUpdatedError</code><a class="reference internal" href="_modules/luna_faces/db/context.html#NotUpdatedError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.NotUpdatedError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception for failed update queries.</p>
+<p>Raise this exception if your update did not work</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_faces.db.context.currentTimestamp">
+<code class="descclassname">luna_faces.db.context.</code><code class="descname">currentTimestamp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#currentTimestamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.currentTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function get time (local or UTC, depends on TIME_STORAGE in config)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">%M:%S.%fZ’</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Timestamp if format ‘%Y-%m-%dT%H</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_faces.db.context.exceptionWrap">
+<code class="descclassname">luna_faces.db.context.</code><code class="descname">exceptionWrap</code><span class="sig-paren">(</span><em>wrapFunc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/context.html#exceptionWrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.context.exceptionWrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for catching exceptions when composing queries to the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wrapFunc</strong> – function</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">If exception is not caught, function result is returned, else Result        with value of exception is returned</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="version_handler.html">Version handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="config.html">Configuration</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+=======
+v.0.2.8
+=======
+
+-------------
+Improvements:
+-------------
+
+1) removed test skip and sleeps in tests
+2) remove millis from "/api/events" in raml, add maxTimeDelta <-> minGroupStep description for "/api/events"
+3) change default setting "HTTP_TIMEOUT" from 5 to 20
+4) freeze libraries' versions in "setup.py"
+5) remove "requirements.txt" from sources
+
+-----------
+Bugs fixed:
+-----------
+
+1) Redis session close bug fix - sometime could cause test fail

@@ -1,0 +1,28 @@
+v.0.1.5
+=======
+
+Improvements:
+-------------
+
+	1) Possibility to update version with *versioneer.py* script and *version* parameter is added (no package installation is required).
+
+	#) What_is_new page is added for version change control.
+
+	#) Debug logging is extended (blocks, erroneous requests).
+
+	#) Code comments are improved.
+
+	#) Default configs are changes, shortened config is added.
+
+Bugs fixed:
+-----------
+
+	1) Paths to sources are fixed in .rst files.
+
+	#) Platform check is deleted.
+
+	#) Waste query parameters are fixed in /search.
+
+	#) Bug about wrong order of persons and list blocking is fixed.
+
+	#) Bug about person removed from list is fixed.

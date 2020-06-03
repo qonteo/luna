@@ -1,0 +1,121 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.app.plugin_manager &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.app.plugin_manager</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.app.plugin_manager</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pluginbase</span> <span class="k">import</span> <span class="n">PluginBase</span>
+<span class="kn">from</span> <span class="nn">plugins.list_enable_plugins</span> <span class="k">import</span> <span class="n">ENABLE_PLUGINS</span>
+<span class="kn">from</span> <span class="nn">pluginbase</span> <span class="k">import</span> <span class="n">_shutdown_module</span>
+
+<span class="c1">#: temporary storage of callback functions</span>
+<span class="n">SETTER_PORTRAITS_PLUGINS_</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">GETTER_PORTRAITS_PLUGINS_</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ADMIN_STATISTICS_PLUGINS_</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ACCOUNT_STATISTICS_PLUGINS_</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1">#: list of callback functions</span>
+<span class="n">LIST_NAME_CALLBACK_FUNCTION</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;save_portrait&quot;</span><span class="p">:</span> <span class="n">SETTER_PORTRAITS_PLUGINS_</span><span class="p">,</span>
+                               <span class="s2">&quot;get_portrait&quot;</span><span class="p">:</span> <span class="n">GETTER_PORTRAITS_PLUGINS_</span><span class="p">,</span>
+                               <span class="s2">&quot;send_admin_statistics&quot;</span><span class="p">:</span> <span class="n">ADMIN_STATISTICS_PLUGINS_</span><span class="p">,</span>
+                               <span class="s2">&quot;send_account_statistics&quot;</span><span class="p">:</span> <span class="n">ACCOUNT_STATISTICS_PLUGINS_</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="loadPlugins"><a class="viewcode-back" href="../../../plugins.html#luna_api.app.plugin_manager.loadPlugins">[docs]</a><span class="k">def</span> <span class="nf">loadPlugins</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plug-in download function.</span>
+<span class="sd">    </span>
+<span class="sd">    :return: Result of make_plugin_source</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plugin_base</span> <span class="o">=</span> <span class="n">PluginBase</span><span class="p">(</span><span class="n">package</span> <span class="o">=</span> <span class="s1">&#39;app.plugins&#39;</span><span class="p">)</span>
+    <span class="n">plugin_source</span> <span class="o">=</span> <span class="n">plugin_base</span><span class="o">.</span><span class="n">make_plugin_source</span><span class="p">(</span>
+        <span class="n">searchpath</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;./plugins&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">plugin_source</span></div>
+
+
+<div class="viewcode-block" id="register_plugin_callback"><a class="viewcode-back" href="../../../plugins.html#luna_api.app.plugin_manager.register_plugin_callback">[docs]</a><span class="k">def</span> <span class="nf">register_plugin_callback</span><span class="p">(</span><span class="n">dictNameFunc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Callback function, which is transfered by *setup* method of plug-in and loads all necessary functions from plug-in.</span>
+<span class="sd">        </span>
+<span class="sd">    note: plug-in must call this function in *setup* method.</span>
+<span class="sd">            </span>
+<span class="sd">    &gt;&gt;&gt; register_plugin_callback({&quot;save_portrait&quot;: save_visionlabs_portrait, &quot;get_portrait&quot;: get_visionlabs_portrait})</span>
+<span class="sd">    </span>
+<span class="sd">    :param dictNameFunc: dictionary with allowable keys: &quot;save_portrait&quot;, &quot;get_portrait&quot;, &quot;send_admin_statistics&quot;,\</span>
+<span class="sd">        &quot;send_account_statistics&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">nameCallback</span> <span class="ow">in</span> <span class="n">LIST_NAME_CALLBACK_FUNCTION</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nameCallback</span> <span class="ow">in</span> <span class="n">dictNameFunc</span><span class="p">:</span>
+            <span class="n">LIST_NAME_CALLBACK_FUNCTION</span><span class="p">[</span><span class="n">nameCallback</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dictNameFunc</span><span class="p">[</span><span class="n">nameCallback</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="registerCallbackFunctionsOfPlugin"><a class="viewcode-back" href="../../../plugins.html#luna_api.app.plugin_manager.registerCallbackFunctionsOfPlugin">[docs]</a><span class="k">def</span> <span class="nf">registerCallbackFunctionsOfPlugin</span><span class="p">(</span><span class="n">pluginModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to register downloads of callback functions from plug-in. Function calls *setup* method from plug-in.</span>
+
+<span class="sd">    :param pluginModule: </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pluginModule</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">register_plugin_callback</span><span class="p">)</span></div>
+
+
+<span class="n">plugin_source</span> <span class="o">=</span> <span class="n">loadPlugins</span><span class="p">()</span> <span class="c1">#: initiate plug-in download</span>
+
+
+<span class="k">for</span> <span class="n">enablePlugin</span> <span class="ow">in</span> <span class="n">ENABLE_PLUGINS</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">plugin_source</span><span class="p">:</span>
+        <span class="n">plug</span> <span class="o">=</span> <span class="n">plugin_source</span><span class="o">.</span><span class="n">load_plugin</span><span class="p">(</span><span class="n">enablePlugin</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">registerCallbackFunctionsOfPlugin</span><span class="p">(</span><span class="n">plug</span><span class="p">)</span> <span class="c1">#: register callback function</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">_shutdown_module</span><span class="p">(</span><span class="n">plug</span><span class="p">)</span>
+
+<span class="c1">#: copy downloaded functions to persistent storage</span>
+<span class="n">SETTER_PORTRAITS_PLUGINS</span> <span class="o">=</span> <span class="n">SETTER_PORTRAITS_PLUGINS_</span>
+<span class="n">GETTER_PORTRAITS_PLUGINS</span> <span class="o">=</span> <span class="n">GETTER_PORTRAITS_PLUGINS_</span>
+<span class="n">ADMIN_STATISTICS_PLUGINS</span> <span class="o">=</span> <span class="n">ADMIN_STATISTICS_PLUGINS_</span>
+<span class="n">ACCOUNT_STATISTICS_PLUGINS</span> <span class="o">=</span> <span class="n">ACCOUNT_STATISTICS_PLUGINS_</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

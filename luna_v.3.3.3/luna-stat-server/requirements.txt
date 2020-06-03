@@ -1,0 +1,17 @@
+fastcache==1.0.2
+ujson==1.35
+aiohttp==2.0.7
+influxdb==4.1.0
+ws4py==0.4.2
+SQLAlchemy==1.1.6
+tornado==4.4.2
+voluptuous==0.9.3
+redis==2.10.5
+aioredis==0.3.0
+python-dateutil==2.6.0
+websockets==3.4
+tzlocal==1.4
+uvloop==0.11.2
+httptools==0.0.11
+aiofiles==0.4.0
+extras/sanic-0.5.1-remastered.zip

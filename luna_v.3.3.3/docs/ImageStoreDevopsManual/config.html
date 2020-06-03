@@ -1,0 +1,217 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuration &#8212; luna-image-store v.1.2.8 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Service errors" href="errors.html" />
+    <link rel="prev" title="Version handler" href="version_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-image-store v.1.2.8 documentation</span></a></h1>
+        <h2 class="heading"><span>Configuration</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="version_handler.html">Version handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="errors.html">Service errors</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="configuration-files-for-administrator">
+<h2>Configuration files for administrator<a class="headerlink" href="#configuration-files-for-administrator" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STORAGE_TYPE</span> <span class="o">=</span> <span class="s2">&quot;LOCAL&quot;</span>                           <span class="c1">#: storage type; one of: LOCAL, S3</span>
+
+<span class="n">LOCAL_STORAGE</span> <span class="o">=</span> <span class="s2">&quot;./local_storage&quot;</span>                <span class="c1">#: path to store images on hard drive</span>
+
+<span class="n">FOLDER_WITH_LOGS</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span>                          <span class="c1">#: folder, where logs are saved</span>
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>                               <span class="c1">#: level of debug print, by priority: ERROR, WARNING, INFO, DEBUG</span>
+<span class="n">LOG_TIME</span> <span class="o">=</span> <span class="s2">&quot;LOCAL&quot;</span>								 <span class="c1">#: time for records in logs: LOCAL or UTC</span>
+
+<span class="n">CACHE_ENABLED</span> <span class="o">=</span> <span class="kc">False</span>                            <span class="c1">#: Enable cache for store objects in fast storage: True or False</span>
+<span class="n">AEROSPIKE_HOSTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;127.0.0.1:3000&quot;</span><span class="p">]</span>             <span class="c1">#: aerospike hosts list. Each host in format &quot;ip:port[:tls-name]&quot;</span>
+                                                 <span class="c1">#: example: [&quot;127.0.0.1:3000:tls-name&quot;, &quot;127.0.0.2:3000:tls-name&quot;]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">STORAGE_TYPE</span> <span class="o">=</span> <span class="s2">&quot;S3&quot;</span>
+
+<span class="n">S3_AWS_PUBLIC_ACCESS_KEY</span> <span class="o">=</span> <span class="s2">&quot;ZNKIA8F7EAKF3VAS93DC&quot;</span>   <span class="c1">#: public *access key* to access s3</span>
+<span class="n">S3_AWS_SECRET_ACCESS_KEY</span> <span class="o">=</span> <span class="s2">&quot;YsC9dDiyA3JE18ATR3wusi9y7RMRItpjQHAmUgMu&quot;</span>   <span class="c1">#: private *access key* to access s3</span>
+<span class="n">S3_HOST</span> <span class="o">=</span> <span class="s2">&quot;https://s3.eu-central-1.amazonaws.com&quot;</span>                   <span class="c1">#: endpoint of S3</span>
+
+<span class="n">S3_REGION</span> <span class="o">=</span> <span class="s2">&quot;eu-central-1&quot;</span>										<span class="c1">#: region of amazon s3</span>
+<span class="n">S3_AUTHORIZATION_SIGNATURE</span> <span class="o">=</span> <span class="s2">&quot;s3v4&quot;</span>					<span class="c1">#: version of authorization signature (&quot;s3v2&quot; or &quot;s3v4&quot;)</span>
+
+
+<span class="n">FOLDER_WITH_LOGS</span><span class="o">=</span><span class="s2">&quot;./&quot;</span>                            <span class="c1">#: folder, where logs are saved</span>
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="s2">&quot;DEBUG&quot;</span>                              <span class="c1">#: level of debug print, by priority: ERROR, WARNING, INFO, DEBUG</span>
+<span class="n">LOG_TIME</span> <span class="o">=</span> <span class="s2">&quot;LOCAL&quot;</span>								 <span class="c1">#: time for records in logs: LOCAL or UTC</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-configs.config">
+<span id="extended-administrator-configuration"></span><h2>Extended administrator configuration<a class="headerlink" href="#module-configs.config" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="configs.config.AEROSPIKE_HOSTS">
+<code class="descclassname">configs.config.</code><code class="descname">AEROSPIKE_HOSTS</code><em class="property"> = ['127.0.0.1:3000']</em><a class="headerlink" href="#configs.config.AEROSPIKE_HOSTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>aerospike hosts list.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.AEROSPIKE_NAMESPACE">
+<code class="descclassname">configs.config.</code><code class="descname">AEROSPIKE_NAMESPACE</code><em class="property"> = 'luna_temporary'</em><a class="headerlink" href="#configs.config.AEROSPIKE_NAMESPACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>aerospike default namespace.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.APP_NAME">
+<code class="descclassname">configs.config.</code><code class="descname">APP_NAME</code><em class="property"> = 'luna-image-store'</em><a class="headerlink" href="#configs.config.APP_NAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>application name</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.CACHE_ENABLED">
+<code class="descclassname">configs.config.</code><code class="descname">CACHE_ENABLED</code><em class="property"> = False</em><a class="headerlink" href="#configs.config.CACHE_ENABLED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable cache for store objects in fast storage</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.CONNECT_TIMEOUT">
+<code class="descclassname">configs.config.</code><code class="descname">CONNECT_TIMEOUT</code><em class="property"> = 30</em><a class="headerlink" href="#configs.config.CONNECT_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>timeout for connect to external services (LUNA, statistics)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.FOLDER_WITH_LOGS">
+<code class="descclassname">configs.config.</code><code class="descname">FOLDER_WITH_LOGS</code><em class="property"> = './'</em><a class="headerlink" href="#configs.config.FOLDER_WITH_LOGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>folder to save logs</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LOCAL_STORAGE">
+<code class="descclassname">configs.config.</code><code class="descname">LOCAL_STORAGE</code><em class="property"> = './local_storage'</em><a class="headerlink" href="#configs.config.LOCAL_STORAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>directory for images storing</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LOG_LEVEL">
+<code class="descclassname">configs.config.</code><code class="descname">LOG_LEVEL</code><em class="property"> = 'INFO'</em><a class="headerlink" href="#configs.config.LOG_LEVEL" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>level of debug printing, by priority</em> – ERROR, WARNING, INFO, DEBUG</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.LOG_TIME">
+<code class="descclassname">configs.config.</code><code class="descname">LOG_TIME</code><em class="property"> = 'LOCAL'</em><a class="headerlink" href="#configs.config.LOG_TIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>“time for records in logs</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.MAX_CACHEABLE_SIZE">
+<code class="descclassname">configs.config.</code><code class="descname">MAX_CACHEABLE_SIZE</code><em class="property"> = 1000000</em><a class="headerlink" href="#configs.config.MAX_CACHEABLE_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Max size for caching objects. In bytes.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.REQUEST_TIMEOUT">
+<code class="descclassname">configs.config.</code><code class="descname">REQUEST_TIMEOUT</code><em class="property"> = 60</em><a class="headerlink" href="#configs.config.REQUEST_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>timeout for http-request to external services (LUNA, statistics)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.S3_AUTHORIZATION_SIGNATURE">
+<code class="descclassname">configs.config.</code><code class="descname">S3_AUTHORIZATION_SIGNATURE</code><em class="property"> = 's3v4'</em><a class="headerlink" href="#configs.config.S3_AUTHORIZATION_SIGNATURE" title="Permalink to this definition">¶</a></dt>
+<dd><p>version of authorization signature</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.S3_AWS_PUBLIC_ACCESS_KEY">
+<code class="descclassname">configs.config.</code><code class="descname">S3_AWS_PUBLIC_ACCESS_KEY</code><em class="property"> = None</em><a class="headerlink" href="#configs.config.S3_AWS_PUBLIC_ACCESS_KEY" title="Permalink to this definition">¶</a></dt>
+<dd><p>public <em>access key</em> to access s3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.S3_AWS_SECRET_ACCESS_KEY">
+<code class="descclassname">configs.config.</code><code class="descname">S3_AWS_SECRET_ACCESS_KEY</code><em class="property"> = None</em><a class="headerlink" href="#configs.config.S3_AWS_SECRET_ACCESS_KEY" title="Permalink to this definition">¶</a></dt>
+<dd><p>private <em>access key</em> to access s3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.S3_HOST">
+<code class="descclassname">configs.config.</code><code class="descname">S3_HOST</code><em class="property"> = 'http://localhost:7480'</em><a class="headerlink" href="#configs.config.S3_HOST" title="Permalink to this definition">¶</a></dt>
+<dd><p>endpoint of s3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.S3_REGION">
+<code class="descclassname">configs.config.</code><code class="descname">S3_REGION</code><em class="property"> = ''</em><a class="headerlink" href="#configs.config.S3_REGION" title="Permalink to this definition">¶</a></dt>
+<dd><p>region of amazon s3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.STORAGE_TYPE">
+<code class="descclassname">configs.config.</code><code class="descname">STORAGE_TYPE</code><em class="property"> = 'LOCAL'</em><a class="headerlink" href="#configs.config.STORAGE_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>repository type for images, <cite>LOCAL</cite> or <cite>S3</cite></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="configs.config.THUMBNAILS">
+<code class="descclassname">configs.config.</code><code class="descname">THUMBNAILS</code><em class="property"> = [32, 64, 96, 160]</em><a class="headerlink" href="#configs.config.THUMBNAILS" title="Permalink to this definition">¶</a></dt>
+<dd><p>thumbnails size</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="configs.config.replacePythonPathIfNeed">
+<code class="descclassname">configs.config.</code><code class="descname">replacePythonPathIfNeed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/configs/config.html#replacePythonPathIfNeed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#configs.config.replacePythonPathIfNeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determinate need set python path to root or not</p>
+<p>If run sphinx, db_create, influx_db_create, s3_bucket_create, db_migrate set python path to root app.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="configs.config.setPythonPathToAPP">
+<code class="descclassname">configs.config.</code><code class="descname">setPythonPathToAPP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/configs/config.html#setPythonPathToAPP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#configs.config.setPythonPathToAPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set python path to root of app.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="version_handler.html">Version handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="errors.html">Service errors</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

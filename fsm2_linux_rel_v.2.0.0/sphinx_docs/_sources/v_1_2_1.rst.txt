@@ -1,0 +1,15 @@
+=======
+v.1.2.1
+=======
+
+-----------
+Bugs fixed:
+-----------
+
+    #) Fix "no objects for clusterization" bug.
+
+------------------------------------
+How to update from previous version:
+------------------------------------
+
+Copy project to directory with current project. Update dependencies from requirements.txt.

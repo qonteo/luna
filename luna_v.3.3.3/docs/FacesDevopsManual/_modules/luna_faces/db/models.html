@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_faces.db.models &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_faces.db.models</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_faces.db.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="k">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">,</span> <span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">Index</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="k">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="k">import</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">engine</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+<span class="n">LINK_SEQUENCE</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">(</span><span class="s1">&#39;link_key&#39;</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">UNLINK_SEQUENCE</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">(</span><span class="s1">&#39;unlink_key&#39;</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Face"><a class="viewcode-back" href="../../../database.html#luna_faces.db.models.Face">[docs]</a><span class="k">class</span> <span class="nc">Face</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Database table model for faces.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;face&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Table of faces.&#39;</span><span class="p">}</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="c1">#: str: face id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">face_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: face id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: attributes id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">attributes_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: face attributes id&quot;</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: str: descriptor id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">account_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: id of the account to which the face belongs&quot;</span><span class="p">)</span>
+
+    <span class="c1"># : str: event id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;, reference to event which created</span>
+    <span class="c1"># the face</span>
+    <span class="n">event_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: id of the event that caused the face creation&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: client info about the face</span>
+    <span class="n">user_data</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;str: face user data&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: DateTime: date and time of creating face</span>
+    <span class="n">create_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;date: face creation time&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: DateTime: date and time of last changed of the face</span>
+    <span class="n">last_update_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;date: last update time of face&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: person id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">person_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: id of person to which the face is attached&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: external id of the face, if it has its own mapping in external system</span>
+    <span class="n">external_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;str: the face external id&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;Faces </span><span class="si">%r</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">face_id</span></div>
+
+
+<div class="viewcode-block" id="Person"><a class="viewcode-back" href="../../../database.html#luna_faces.db.models.Person">[docs]</a><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Database table model for persons.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;person&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Table of persons.&#39;</span><span class="p">}</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="c1">#: str: person id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">person_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: person id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: descriptor id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">account_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: id of the account to which the person belongs&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: client info about the face</span>
+    <span class="n">user_data</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;str: person user data&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: DateTime: date and time of creating face</span>
+    <span class="n">create_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;date: person create time&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: external id of the person, if it has its own mapping in external system</span>
+    <span class="n">external_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;str: person external id&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;Persons </span><span class="si">%r</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">person_id</span></div>
+
+
+<div class="viewcode-block" id="List"><a class="viewcode-back" href="../../../database.html#luna_faces.db.models.List">[docs]</a><span class="k">class</span> <span class="nc">List</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Database table model for lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Table of lists.&#39;</span><span class="p">}</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="c1">#: str: list id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">list_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: list id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: descriptor id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">account_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: id of the account to which the list belongs&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: client info about the list</span>
+    <span class="n">user_data</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;str: list user data&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: integer: type of list (persons - 1, faces - 0)</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;int: list type: 0 - face list, 1 - person list&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: DateTime: date and time of creating list</span>
+    <span class="n">create_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;date: list create time&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: DateTime: date and time of last changed of the list</span>
+    <span class="n">last_update_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;date: last update time of the list&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;Lists </span><span class="si">%r</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span></div>
+
+
+<div class="viewcode-block" id="ListFace"><a class="viewcode-back" href="../../../database.html#luna_faces.db.models.ListFace">[docs]</a><span class="k">class</span> <span class="nc">ListFace</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Database table model for links between faces and lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;list_face&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Relationship table for lists and faces.&#39;</span><span class="p">}</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="c1">#: str: list id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">list_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;list.list_id&#39;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;CASCADE&#39;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: list id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: face id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">face_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;face.face_id&#39;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;CASCADE&#39;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: face id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: reference to person id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">person_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: person id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: DateTime: date and time of last attach/detach face to list</span>
+    <span class="n">last_update_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: last update time of list and face relation&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: int: number of link face to list</span>
+    <span class="n">link_key</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">LINK_SEQUENCE</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;int: list and face relation key&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;listface_list_id </span><span class="si">%r</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span></div>
+
+
+<span class="n">Index</span><span class="p">(</span><span class="s1">&#39;index_list_id_link_key&#39;</span><span class="p">,</span> <span class="n">ListFace</span><span class="o">.</span><span class="n">list_id</span><span class="p">,</span> <span class="n">ListFace</span><span class="o">.</span><span class="n">link_key</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="ListPerson"><a class="viewcode-back" href="../../../database.html#luna_faces.db.models.ListPerson">[docs]</a><span class="k">class</span> <span class="nc">ListPerson</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Database table model for links between persons and lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;list_person&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Relationship table for lists and persons.&#39;</span><span class="p">}</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="c1">#: str: list id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">list_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;list.list_id&#39;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;CASCADE&#39;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: list id&quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: person id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">person_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;person.person_id&#39;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;CASCADE&#39;</span><span class="p">),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: person id&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;listperson_list_id </span><span class="si">%r</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_id</span></div>
+
+
+<div class="viewcode-block" id="UnlinkAttributesLog"><a class="viewcode-back" href="../../../database.html#luna_faces.db.models.UnlinkAttributesLog">[docs]</a><span class="k">class</span> <span class="nc">UnlinkAttributesLog</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Database table model for history attach and detach attributes to lists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;unlink_attributes_log&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Log of face and list links deletions.&#39;</span><span class="p">}</span>
+    <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span>
+
+    <span class="c1">#: str: list id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">list_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;list.list_id&#39;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;CASCADE&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: list id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: str: attributes id, uuid4 in format &quot;xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx&quot;</span>
+    <span class="n">attributes_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">36</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;uuid4: attributes id&quot;</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#: int: number of link face to list</span>
+    <span class="n">link_key</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;int: link id&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: int: number of unlink face to list</span>
+    <span class="n">unlink_key</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">UNLINK_SEQUENCE</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;int: id of link deletion&quot;</span><span class="p">)</span>
+
+    <span class="c1">#: DateTime: date and time of detach attributes from list</span>
+    <span class="n">update_time</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">TIMESTAMP</span><span class="p">,</span> <span class="n">server_default</span><span class="o">=</span><span class="n">func</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;date: last update time&quot;</span><span class="p">)</span></div>
+
+
+<span class="n">Index</span><span class="p">(</span><span class="s1">&#39;index_list_id_unlink_key&#39;</span><span class="p">,</span> <span class="n">UnlinkAttributesLog</span><span class="o">.</span><span class="n">list_id</span><span class="p">,</span> <span class="n">UnlinkAttributesLog</span><span class="o">.</span><span class="n">unlink_key</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+
+<span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">autocommit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

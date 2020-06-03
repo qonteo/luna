@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>HTTP Routing Table &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+ 
+
+    <script type="text/javascript">
+      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
+    </script>
+
+
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>HTTP Routing Table</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+
+   <h1>HTTP Routing Table</h1>
+
+   <div class="modindex-jumpbox">
+   <a href="#cap-/accounts"><strong>/accounts</strong></a> | 
+   <a href="#cap-/config"><strong>/config</strong></a> | 
+   <a href="#cap-/gc"><strong>/gc</strong></a> | 
+   <a href="#cap-/grafana"><strong>/grafana</strong></a> | 
+   <a href="#cap-/lists"><strong>/lists</strong></a> | 
+   <a href="#cap-/persons"><strong>/persons</strong></a> | 
+   <a href="#cap-/realtime_statistics"><strong>/realtime_statistics</strong></a> | 
+   <a href="#cap-/reextract"><strong>/reextract</strong></a> | 
+   <a href="#cap-/search"><strong>/search</strong></a> | 
+   <a href="#cap-/task"><strong>/task</strong></a> | 
+   <a href="#cap-/tasks"><strong>/tasks</strong></a> | 
+   <a href="#cap-/version"><strong>/version</strong></a>
+   </div>
+
+   <table class="indextable modindextable">
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/accounts"><td></td><td>
+       <strong>/accounts</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="accounts_handlers.html#get--accounts"><code class="xref">GET /accounts</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tokens_handler.html#get--accounts-account_id"><code class="xref">GET /accounts/{account_id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="account_handler.html#patch--accounts-account_id"><code class="xref">PATCH /accounts/{account_id}</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/config"><td></td><td>
+       <strong>/config</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="config_handler.html#get--config"><code class="xref">GET /config</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/gc"><td></td><td>
+       <strong>/gc</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tasks_handlers.html#post--gc"><code class="xref">POST /gc</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/grafana"><td></td><td>
+       <strong>/grafana</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="grafana_handler.html#get--grafana"><code class="xref">GET /grafana</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/lists"><td></td><td>
+       <strong>/lists</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists_handler.html#get--lists"><code class="xref">GET /lists</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="lists_handler.html#get--lists-listId"><code class="xref">GET /lists/{listId}</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/persons"><td></td><td>
+       <strong>/persons</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="persons_handler.html#get--persons"><code class="xref">GET /persons</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="persons_handler.html#get--persons-personId"><code class="xref">GET /persons/{personId}</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/realtime_statistics"><td></td><td>
+       <strong>/realtime_statistics</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="stats_handler.html#get--realtime_statistics-series"><code class="xref">GET /realtime_statistics/{series}</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/reextract"><td></td><td>
+       <strong>/reextract</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="reextract.html#post--reextract"><code class="xref">POST /reextract</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/search"><td></td><td>
+       <strong>/search</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="search_handler.html#get--search"><code class="xref">GET /search</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/task"><td></td><td>
+       <strong>/task</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="internal_task_handler.html#get--task"><code class="xref">GET /task</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/tasks"><td></td><td>
+       <strong>/tasks</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tasks_handlers.html#get--tasks"><code class="xref">GET /tasks</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tasks_handlers.html#get--tasks-taskId"><code class="xref">GET /tasks/{taskId}</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tasks_handlers.html#get--tasks-taskId-errors"><code class="xref">GET /tasks/{taskId}/errors</code></a></td><td>
+       <em></em></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="tasks_handlers.html#delete--tasks-taskId"><code class="xref">DELETE /tasks/{taskId}</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
+     <tr class="cap" id="cap-/version"><td></td><td>
+       <strong>/version</strong></td><td></td></tr>
+     <tr>
+       <td></td>
+       <td>
+       <a href="version_handler.html#get--version"><code class="xref">GET /version</code></a></td><td>
+       <em></em></td></tr>
+   </table>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+Introduction
+============
+
+
+Service for work with faces and lists.
+
+      Face is a object  with  folowings fields:
+        1. create time - face create time;
+        2. last update time - time of last action with face (change user data, attach or detach face from list,
+           update event id);
+        3. event id - reference to event id  which created the face;
+        4. account id - id of account to which the face belongs;
+        5. user data - user data of face;
+        6. attributes id - reference to face attributes;
+        7. face id - face id.
+        8. external id - external id of the face, if it has its own mapping in external system
+
+      List is a set of faces. Every list must consist of faces from one account. There are the following fields in list:
+        1. list id - list id;
+        2. user data - user data of list;
+        3. account id - id of to account which the list belongs;
+        4. create time - list create time;
+        5. last update time - time of last action with list (attach or detach face from list);
+
+      Service provides RESTFul api interface for creating, removing faces and lists, attaching and detaching faces to
+      lists. Also you can get faces, lists and list attributes by filters

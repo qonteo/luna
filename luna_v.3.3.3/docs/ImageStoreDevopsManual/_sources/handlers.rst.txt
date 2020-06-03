@@ -1,0 +1,47 @@
+Documentation of tornado-handlers
+=================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   base_handler
+   image_handler
+   images_handler
+   bucket_handler
+   buckets_handler
+   object_handler
+   objects_handler
+   error_handler
+   version_handler
+
+
+Common jsons
+============
+
+.. json:object:: create_object_response
+    :showexample:
+
+    :property uuid4 object_id: object id
+    :property uri url: object path (/1/buckets/{bucketName}/objects/{objectId})
+
+
+
+.. json:object:: delete_objects_response
+    :showexample:
+
+    :property _list_(uuid4) objects: objects ids
+
+
+.. json:object:: create_image_response
+    :showexample:
+
+    :property uuid4 image_id: object id
+    :property url url: object path (/1/buckets/{bucketName}/images/{objectId})
+
+
+.. json:object:: delete_images_response
+    :showexample:
+
+    :property _list_(uuid4) images: images ids
+

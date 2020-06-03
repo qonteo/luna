@@ -1,0 +1,43 @@
+============
+Introduction
+============
+
+Facestreammanager2 is a face recognition and attribute retrieval service based on the VisionLabs Luna API. The service consists of two modules: the real time recognition module and the analytics module.
+
+---------
+Evens API
+---------
+
+The input of the service is fed with images of people. Each such image is an **event**. You can perform one of two actions with each event: extracting a descriptor from it or searching in the Luna API lists. After executing one of the actions, you can do the following with the received descriptor: put the descriptor in lists, attach the descriptor to the person, attach the created person to the lists. The logic of these actions is customizable.
+
+The functional of uniting events in **groups** is implemented. This functionality is primarily intended for situations where we send several images of the same person from the camera in a row in order to improve the quality of recognition or because of the rupture of the face track. Now the three logics of joining the Evens into groups are implemented:
+
+1. Based on the external id of the track. All events with the same id of the track will be combined in same group.
+
+2. Based on similarity. The new event will be compared to the events from the same source. If the event is similar to any of the previous events more than a given threshold, they are combined into same group.
+
+3. Mixed. Both principles of grouping are used, in this case every two events similar to each other will be combined in the same group even if they are in different sources.
+
+To process incoming events, you need to create **handlers**. Each handler defines the policy for processing all incoming events. There are two types of handlers: extract and search. There are two principal differences: in the second one you can not send photos with several faces and you need to specify lists in the Luna API incoming event will be searched by. Both handlers allow you to perform additional actions with extracted descriptors: create persons from them in the Luna API, attach persons and descriptors to the lists in the Luna API. Also for the handler, you can specify the duration of time to storage event in the database (not yet implemented).
+
+In this module, it is possible to search for events and groups by various filters and obtain a so-called portraits - images associated with the events. And also get the distribution of events and groups in time (including days of the week, time of day, etc.).
+
+-------------
+Analitics API
+-------------
+
+The analytics module allows you to perform different operations with lists in the Luna API as well as analysis of incoming events.
+
+* Calculation of the probability of falling into the top of the result of matching by **persons** in the Luna API.
+
+* Clustering data on unique people.
+
+* Cross-matching between two lists in the Luna API.
+
+* Attach all events or groups to lists. You can also attach objects from an already existing list to the list in the Luna API.
+
+* Events markup.
+
+* Creation of reports on some types of tasks: cross-matching and clustering.
+
+.. !!!WARNING!!! Do not forget to update the data in this file when you add or remove features !!!WARNING!!!

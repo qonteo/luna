@@ -1,0 +1,99 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Garbage collectors &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documentation of tornado-handlers" href="handlers.html" />
+    <link rel="prev" title="Database" href="database.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>Garbage collectors</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="database.html">Database</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="handlers.html">Documentation of tornado-handlers</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="garbage-collectors">
+<h1>Garbage collectors<a class="headerlink" href="#garbage-collectors" title="Permalink to this headline">¶</a></h1>
+<p>In common, garbage collectors are designed to:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>delete descriptors and reference portraits in accordance with the storage policy.</li>
+</ol>
+</div></blockquote>
+<div class="section" id="starting-garbage-collectors">
+<h2>Starting garbage collectors<a class="headerlink" href="#starting-garbage-collectors" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>You can either launch:</dt>
+<dd><ol class="first arabic simple">
+<li>garbage collectors for all objects (descriptors, accounts);</li>
+<li>obsolete descriptors garbage collectors in a web-interface;</li>
+<li>accounts’ lists garbage collectors in a web-interface;</li>
+<li>scheduled periodic tasks to clear the entire system. To schedule a periodic task, set the start time (START_GC_DESCRIPTORS_TIME = “HH:MM” in the config.conf file) and the periodicity
+in days (TIMEOUT_GC_DESCRIPTORS = 7 in the config.conf file) for each garbage collector separately.</li>
+</ol>
+<p class="last">If the parameter TIMEOUT_GC_DESCRIPTORS has zero or negative value, tasks are not performed at all.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="obsolete-descriptors-garbage-collectors">
+<h2>Obsolete descriptors garbage collectors<a class="headerlink" href="#obsolete-descriptors-garbage-collectors" title="Permalink to this headline">¶</a></h2>
+<p>This type of garbage collectors deletes all free descriptors (i.e., those, which are not attached to a person or a list) in accordance with the storage policy.</p>
+<p>Steps, that are performed by a garbage collector:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>All links to the non-existing objects (descriptors and persons) in the table <em>AccountObjectListObject</em> are deleted;</li>
+<li>All free descriptors are found;</li>
+<li>All free descriptors are consistently deleted from LUNA Core;</li>
+<li>All reference portraits are deleted (in case, the SEND_TO_LUNA_IMAGE_STORE flag was enabled);</li>
+<li>All free descriptors are removed from <em>postgresql</em>.</li>
+</ol>
+</div></blockquote>
+<p>If a step is executed with an error, all subsequent steps for this account are not performed.</p>
+<p>Note: Steps are carried out for each account independently.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="database.html">Database</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="handlers.html">Documentation of tornado-handlers</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

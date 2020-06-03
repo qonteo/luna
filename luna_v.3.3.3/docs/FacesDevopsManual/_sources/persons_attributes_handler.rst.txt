@@ -1,0 +1,5 @@
+Persons attributes handler
+==========================
+
+.. automodule:: luna_faces.app.handlers.persons_attributes_handler
+	:members:

@@ -1,0 +1,289 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Database &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Application" href="application.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>Database</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="application.html">Application</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="database">
+<h1>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h1>
+<p>We support Oracle and Postgres databases.</p>
+<div class="section" id="db-scheme">
+<h2>DB scheme.<a class="headerlink" href="#db-scheme" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/faces_db.png" src="_images/faces_db.png" />
+<span class="target" id="module-luna_faces.db.models"></span><dl class="class">
+<dt id="luna_faces.db.models.Face">
+<em class="property">class </em><code class="descclassname">luna_faces.db.models.</code><code class="descname">Face</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/models.html#Face"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.models.Face" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database table model for faces.</p>
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.account_id">
+<code class="descname">account_id</code><a class="headerlink" href="#luna_faces.db.models.Face.account_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – descriptor id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.attributes_id">
+<code class="descname">attributes_id</code><a class="headerlink" href="#luna_faces.db.models.Face.attributes_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – attributes id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.create_time">
+<code class="descname">create_time</code><a class="headerlink" href="#luna_faces.db.models.Face.create_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>DateTime</em> – date and time of creating face</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.external_id">
+<code class="descname">external_id</code><a class="headerlink" href="#luna_faces.db.models.Face.external_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – external id of the face, if it has its own mapping in external system</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.face_id">
+<code class="descname">face_id</code><a class="headerlink" href="#luna_faces.db.models.Face.face_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – face id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.last_update_time">
+<code class="descname">last_update_time</code><a class="headerlink" href="#luna_faces.db.models.Face.last_update_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>DateTime</em> – date and time of last changed of the face</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.person_id">
+<code class="descname">person_id</code><a class="headerlink" href="#luna_faces.db.models.Face.person_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – person id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Face.user_data">
+<code class="descname">user_data</code><a class="headerlink" href="#luna_faces.db.models.Face.user_data" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – client info about the face</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_faces.db.models.List">
+<em class="property">class </em><code class="descclassname">luna_faces.db.models.</code><code class="descname">List</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/models.html#List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.models.List" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database table model for lists.</p>
+<dl class="attribute">
+<dt id="luna_faces.db.models.List.account_id">
+<code class="descname">account_id</code><a class="headerlink" href="#luna_faces.db.models.List.account_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – descriptor id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.List.create_time">
+<code class="descname">create_time</code><a class="headerlink" href="#luna_faces.db.models.List.create_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>DateTime</em> – date and time of creating list</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.List.last_update_time">
+<code class="descname">last_update_time</code><a class="headerlink" href="#luna_faces.db.models.List.last_update_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>DateTime</em> – date and time of last changed of the list</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.List.list_id">
+<code class="descname">list_id</code><a class="headerlink" href="#luna_faces.db.models.List.list_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – list id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.List.type">
+<code class="descname">type</code><a class="headerlink" href="#luna_faces.db.models.List.type" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>integer</em> – type of list (persons - 1, faces - 0)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.List.user_data">
+<code class="descname">user_data</code><a class="headerlink" href="#luna_faces.db.models.List.user_data" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – client info about the list</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_faces.db.models.ListFace">
+<em class="property">class </em><code class="descclassname">luna_faces.db.models.</code><code class="descname">ListFace</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/models.html#ListFace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.models.ListFace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database table model for links between faces and lists.</p>
+<dl class="attribute">
+<dt id="luna_faces.db.models.ListFace.face_id">
+<code class="descname">face_id</code><a class="headerlink" href="#luna_faces.db.models.ListFace.face_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – face id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.ListFace.last_update_time">
+<code class="descname">last_update_time</code><a class="headerlink" href="#luna_faces.db.models.ListFace.last_update_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>DateTime</em> – date and time of last attach/detach face to list</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.ListFace.link_key">
+<code class="descname">link_key</code><a class="headerlink" href="#luna_faces.db.models.ListFace.link_key" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – number of link face to list</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.ListFace.list_id">
+<code class="descname">list_id</code><a class="headerlink" href="#luna_faces.db.models.ListFace.list_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – list id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.ListFace.person_id">
+<code class="descname">person_id</code><a class="headerlink" href="#luna_faces.db.models.ListFace.person_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – reference to person id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_faces.db.models.ListPerson">
+<em class="property">class </em><code class="descclassname">luna_faces.db.models.</code><code class="descname">ListPerson</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/models.html#ListPerson"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.models.ListPerson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database table model for links between persons and lists.</p>
+<dl class="attribute">
+<dt id="luna_faces.db.models.ListPerson.list_id">
+<code class="descname">list_id</code><a class="headerlink" href="#luna_faces.db.models.ListPerson.list_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – list id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.ListPerson.person_id">
+<code class="descname">person_id</code><a class="headerlink" href="#luna_faces.db.models.ListPerson.person_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – person id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_faces.db.models.Person">
+<em class="property">class </em><code class="descclassname">luna_faces.db.models.</code><code class="descname">Person</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/models.html#Person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.models.Person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database table model for persons.</p>
+<dl class="attribute">
+<dt id="luna_faces.db.models.Person.account_id">
+<code class="descname">account_id</code><a class="headerlink" href="#luna_faces.db.models.Person.account_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – descriptor id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Person.create_time">
+<code class="descname">create_time</code><a class="headerlink" href="#luna_faces.db.models.Person.create_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>DateTime</em> – date and time of creating face</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Person.external_id">
+<code class="descname">external_id</code><a class="headerlink" href="#luna_faces.db.models.Person.external_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – external id of the person, if it has its own mapping in external system</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Person.person_id">
+<code class="descname">person_id</code><a class="headerlink" href="#luna_faces.db.models.Person.person_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – person id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.Person.user_data">
+<code class="descname">user_data</code><a class="headerlink" href="#luna_faces.db.models.Person.user_data" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – client info about the face</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_faces.db.models.UnlinkAttributesLog">
+<em class="property">class </em><code class="descclassname">luna_faces.db.models.</code><code class="descname">UnlinkAttributesLog</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/db/models.html#UnlinkAttributesLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.db.models.UnlinkAttributesLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database table model for history attach and detach attributes to lists.</p>
+<dl class="attribute">
+<dt id="luna_faces.db.models.UnlinkAttributesLog.attributes_id">
+<code class="descname">attributes_id</code><a class="headerlink" href="#luna_faces.db.models.UnlinkAttributesLog.attributes_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – attributes id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.UnlinkAttributesLog.link_key">
+<code class="descname">link_key</code><a class="headerlink" href="#luna_faces.db.models.UnlinkAttributesLog.link_key" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – number of link face to list</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.UnlinkAttributesLog.list_id">
+<code class="descname">list_id</code><a class="headerlink" href="#luna_faces.db.models.UnlinkAttributesLog.list_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – list id, uuid4 in format “xxxxxxxx-xxxx-4xxx-{8-9}xx-xxxxxxxxxxxx”</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.UnlinkAttributesLog.unlink_key">
+<code class="descname">unlink_key</code><a class="headerlink" href="#luna_faces.db.models.UnlinkAttributesLog.unlink_key" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – number of unlink face to list</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_faces.db.models.UnlinkAttributesLog.update_time">
+<code class="descname">update_time</code><a class="headerlink" href="#luna_faces.db.models.UnlinkAttributesLog.update_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>DateTime</em> – date and time of detach attributes from list</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="application.html">Application</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

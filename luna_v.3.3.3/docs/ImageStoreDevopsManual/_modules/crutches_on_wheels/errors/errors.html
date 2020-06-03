@@ -1,0 +1,406 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>crutches_on_wheels.errors.errors &#8212; luna-image-store v.1.2.8 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>luna-image-store v.1.2.8 documentation</span></a></h1>
+        <h2 class="heading"><span>crutches_on_wheels.errors.errors</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for crutches_on_wheels.errors.errors</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module realize a list of errors</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+
+<div class="viewcode-block" id="ErrorInfo"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.ErrorInfo">[docs]</a><span class="k">class</span> <span class="nc">ErrorInfo</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    VL error.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        errorCode: error code</span>
+<span class="sd">        description: short error description</span>
+<span class="sd">        detail: full error description</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;errorCode&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;detail&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errorCode</span> <span class="o">=</span> <span class="n">code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">detail</span> <span class="o">=</span> <span class="n">detail</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">errorCode</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">errorCode</span></div>
+
+
+<div class="viewcode-block" id="LunaCoreError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.LunaCoreError">[docs]</a><span class="k">class</span> <span class="nc">LunaCoreError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Structure to save errors in LUNA Core.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">BadConfig</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete configuration&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">BadQuery</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">101</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete query&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">BadBody</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">102</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete body&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">OutOfMemoryError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">104</span><span class="p">,</span> <span class="s1">&#39;Out of memory&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">GenericError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;Generic error&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># data base</span>
+    <span class="n">PutRecord</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;Failed to put DB record&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">GetRecord</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1001</span><span class="p">,</span> <span class="s1">&#39;Failed to get DB record&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">TouchRecord</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1002</span><span class="p">,</span> <span class="s1">&#39;Failed to touch DB record&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">DelRecord</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1003</span><span class="p">,</span> <span class="s1">&#39;Failed to delete DB record&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">AppendRecord</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1004</span><span class="p">,</span> <span class="s1">&#39;Failed to append to DB record&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">SerializeObject</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1008</span><span class="p">,</span> <span class="s1">&#39;Failed to serialize object&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">DeserializeObject</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1009</span><span class="p">,</span> <span class="s1">&#39;Failed to deserialize object&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">OutOfMemory</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1010</span><span class="p">,</span> <span class="s1">&#39;Out of memory&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># message subsystem</span>
+    <span class="n">BadMessage</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete message package&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">CoreBadContentType</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="s1">&#39;Bad/unsupported message content type&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">WorkerCallFailed</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="s1">&#39;Failed to call a remote worker&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># image processing</span>
+    <span class="n">CreateImage</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="s1">&#39;Failed to create image&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">DecodeImage</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">3001</span><span class="p">,</span> <span class="s1">&#39;Failed to decode image data&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ImageSize</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">3002</span><span class="p">,</span> <span class="s1">&#39;Incorrect image size&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># extractor</span>
+    <span class="n">CreateObject</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="s1">&#39;Failed to create FSDK object&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">DetectFeatureSet</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4001</span><span class="p">,</span> <span class="s1">&#39;Failed to detect a feature set&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">DetectFace</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4002</span><span class="p">,</span> <span class="s1">&#39;Failed to detect a face&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">NoFaces</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4003</span><span class="p">,</span> <span class="s1">&#39;No faces found&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">MultipleFaces</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4004</span><span class="p">,</span> <span class="s1">&#39;Multiple faces found&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">BadInput</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4005</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ConvertImage</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4007</span><span class="p">,</span> <span class="s1">&#39;Failed to convert image format&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">EstimateAttributes</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4009</span><span class="p">,</span> <span class="s1">&#39;Failed to estimate face image attributes&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">DescriptorQuality</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4010</span><span class="p">,</span> <span class="s1">&#39;Descriptor quality is too low&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ExtractDescriptor</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">4011</span><span class="p">,</span> <span class="s1">&#39;Failed to extract a descriptor&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># descriptor match</span>
+    <span class="n">MatchCreateObject</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">5001</span><span class="p">,</span> <span class="s1">&#39;Failed to create FSDK object&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">MatchAppendToBatch</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">5002</span><span class="p">,</span> <span class="s1">&#39;Failed to add descriptor to batch&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">MatchDescriptors</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">5003</span><span class="p">,</span> <span class="s1">&#39;Failed to match descriptors&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">MatchBadInput</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">5004</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># descriptors&#39; lists</span>
+    <span class="n">ListBadInput</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ListBadMode</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">6001</span><span class="p">,</span> <span class="s1">&#39;Unknown operation mode&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">LunaServerError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">7004</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">LunaCoreConnectionTimeout</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">9001</span><span class="p">,</span> <span class="s1">&#39;Network error&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection timeout to LUNA Core&#39;</span><span class="p">)</span>
+    <span class="n">LunaCoreRequestTimeout</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">9002</span><span class="p">,</span> <span class="s1">&#39;Network error&#39;</span><span class="p">,</span> <span class="s1">&#39;Request timeout to Luna Core&#39;</span><span class="p">)</span>
+    <span class="n">LunaCoreRequestError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">9003</span><span class="p">,</span> <span class="s1">&#39;Unknown error&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> request failed.  error_code: </span><span class="si">{}</span><span class="s1">, detail: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataBaseError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.DataBaseError">[docs]</a><span class="k">class</span> <span class="nc">DataBaseError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Database errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">GetConnectionToDBError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">10001</span><span class="p">,</span> <span class="s1">&#39;Database error&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection to database is refused&#39;</span><span class="p">)</span>
+    <span class="n">CreateQueryError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">10002</span><span class="p">,</span> <span class="s1">&#39;Database error&#39;</span><span class="p">,</span> <span class="s1">&#39;Creating sql request failed&#39;</span><span class="p">)</span>
+    <span class="n">ConnectionClosed</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">10013</span><span class="p">,</span> <span class="s1">&#39;Database error&#39;</span><span class="p">,</span> <span class="s1">&#39;Connection to database is closed&#39;</span><span class="p">)</span>
+    <span class="n">ExecuteError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">10015</span><span class="p">,</span> <span class="s1">&#39;SQL error&#39;</span><span class="p">,</span> <span class="s1">&#39;Execute sql request failed&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LunaApiError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.LunaApiError">[docs]</a><span class="k">class</span> <span class="nc">LunaApiError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luna Api errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AccountNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11002</span><span class="p">,</span> <span class="s1">&#39;Authorization failed&#39;</span><span class="p">,</span> <span class="s1">&#39;Account corresponding login/password not found&#39;</span><span class="p">)</span>
+    <span class="n">AccountIsNotActive</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11004</span><span class="p">,</span> <span class="s1">&#39;Account is suspended&#39;</span><span class="p">,</span> <span class="s1">&#39;Account is suspended&#39;</span><span class="p">)</span>
+    <span class="n">MatchingResultEmpty</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11007</span><span class="p">,</span> <span class="s1">&#39;Matching errors&#39;</span><span class="p">,</span> <span class="s1">&#39;Empty matching result&#39;</span><span class="p">)</span>
+    <span class="n">NoPhotoToMatching</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11008</span><span class="p">,</span> <span class="s1">&#39;Matching errors&#39;</span><span class="p">,</span> <span class="s1">&#39;No descriptors for matching&#39;</span><span class="p">)</span>
+    <span class="n">RequestInternalServerError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11009</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">)</span>
+    <span class="n">EmailExist</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11011</span><span class="p">,</span> <span class="s1">&#39;Unique constraint error&#39;</span><span class="p">,</span> <span class="s1">&#39;An account with given email already exists&#39;</span><span class="p">)</span>
+    <span class="n">ManyFaces</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11012</span><span class="p">,</span> <span class="s1">&#39;Extract policy error&#39;</span><span class="p">,</span> <span class="s2">&quot;Too many faces found&quot;</span><span class="p">)</span>
+    <span class="n">IncorrectEmail</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11013</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s1">&#39;Invalid email address&#39;</span><span class="p">)</span>
+    <span class="n">PasswordBadLength</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11014</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;Length password  must be between 8 and 32 symbols&#39;</span><span class="p">)</span>
+    <span class="n">BigUserData</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11015</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Max length user data is 128 symbols&quot;</span><span class="p">)</span>
+    <span class="n">LinkDescriptorAlreadyExist</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11016</span><span class="p">,</span> <span class="s1">&#39;Unique constraint error&#39;</span><span class="p">,</span>
+                                           <span class="s2">&quot;This descriptor is already attached to the person or list&quot;</span><span class="p">)</span>
+    <span class="n">DescriptorNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11018</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Descriptor not found&#39;</span><span class="p">)</span>
+    <span class="n">AccountListNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11019</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Account list not found&#39;</span><span class="p">)</span>
+    <span class="n">ObjectNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11020</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s2">&quot;One or more </span><span class="si">{}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+    <span class="n">TokenNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11022</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Token not found&#39;</span><span class="p">)</span>
+    <span class="n">PortraitNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11024</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Portrait not found&#39;</span><span class="p">)</span>
+    <span class="n">UnknownErrorFromLunaFaces</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">11025</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown error from luna faces&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RESTAPIError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.RESTAPIError">[docs]</a><span class="k">class</span> <span class="nc">RESTAPIError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rest api common errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">BadFormatUUID</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12001</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;Object in  query is not UUID4, format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&#39;</span><span class="p">)</span>
+    <span class="n">RequestNotContainsJson</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12002</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s1">&#39;Request does not contain json&#39;</span><span class="p">)</span>
+    <span class="n">FieldNotInJSON</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12003</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Field &#39;</span><span class="si">{}</span><span class="s2">&#39; not found in json&quot;</span><span class="p">)</span>
+    <span class="n">BadTypeOfFieldInJSON</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12004</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Field &#39;</span><span class="si">{}</span><span class="s2">&#39; must be </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">EmptyJson</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12005</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s1">&#39;Request contain empty json&#39;</span><span class="p">)</span>
+    <span class="n">EmptyField</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12009</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Empty field &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">BadHeaderAuth</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12010</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;This resource need &quot;Authorization&quot; authorization headers&#39;</span><span class="p">)</span>
+    <span class="n">BadQueryParams</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12012</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Bad query parameters &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">PageNotFoundError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12013</span><span class="p">,</span> <span class="s2">&quot;Resource not found&quot;</span><span class="p">,</span> <span class="s2">&quot;Page not found&quot;</span><span class="p">)</span>
+    <span class="n">QueryParameterNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12014</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Required parameters &#39;</span><span class="si">{}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
+    <span class="n">RequiredQueryParameterNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12016</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;No one  parameters &#39;</span><span class="si">{}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
+    <span class="n">BadContentType</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12017</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Bad content type&quot;</span><span class="p">)</span>
+    <span class="n">UnsupportedQueryParm</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12018</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Unsupported param &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">BadAuthParam</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12019</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Bad format of authorization header&quot;</span><span class="p">)</span>
+    <span class="n">AuthFailedError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12020</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Unknown error authorization&quot;</span><span class="p">)</span>
+    <span class="n">MethodNotAllowed</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12021</span><span class="p">,</span> <span class="s2">&quot;Method not allowed&quot;</span><span class="p">,</span> <span class="s2">&quot;Method not allowed&quot;</span><span class="p">)</span>
+    <span class="n">BadInputJson</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12022</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span>
+                             <span class="s2">&quot;Failed to validate input json. Path: &#39;</span><span class="si">{}</span><span class="s2">&#39;,  message: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">NotAcceptable</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12023</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Not Acceptable&quot;</span><span class="p">)</span>
+    <span class="n">UnsupportedMediaType</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12024</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Unsopported media type&quot;</span><span class="p">)</span>
+    <span class="n">SpecifiedTypeNotMatchDataType</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12025</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span>
+                                              <span class="s2">&quot;Specified content type does not match data type&quot;</span><span class="p">)</span>
+    <span class="n">BadInputXPK</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">12026</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Failed to parse XPK&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LunaImageStoreError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.LunaImageStoreError">[docs]</a><span class="k">class</span> <span class="nc">LunaImageStoreError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luna-image-store errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">RequestLunaImageStoreError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13002</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Request to luna-image-store failed&#39;</span><span class="p">)</span>
+    <span class="n">ImageNotFoundError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13003</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Image not found&#39;</span><span class="p">)</span>
+    <span class="n">ImageCountExceededLimit</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13004</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s1">&#39;Image count exceeded limit 1000&#39;</span><span class="p">)</span>
+    <span class="n">BucketNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13005</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Bucket not found&#39;</span><span class="p">)</span>
+    <span class="n">BucketAlreadyExist</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13006</span><span class="p">,</span> <span class="s1">&#39;Unique constraint error&#39;</span><span class="p">,</span> <span class="s1">&#39;Bucket already exist&#39;</span><span class="p">)</span>
+    <span class="n">ObjectInBucketNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13007</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Object not found&#39;</span><span class="p">)</span>
+    <span class="n">ObjectInBucketAlreadyExist</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13008</span><span class="p">,</span> <span class="s1">&#39;Unique constraint error&#39;</span><span class="p">,</span> <span class="s1">&#39;Object already exist&#39;</span><span class="p">)</span>
+    <span class="n">ObjectInBucketCountExceededLimit</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">13009</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s1">&#39;Object count exceeded limit 1000&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PluginsError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.PluginsError">[docs]</a><span class="k">class</span> <span class="nc">PluginsError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plug-ins errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ErrorGetPortraitPlugin</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">14001</span><span class="p">,</span> <span class="s2">&quot;Plugin error&quot;</span><span class="p">,</span> <span class="s1">&#39;Failed get portrait from plugin&#39;</span><span class="p">)</span>
+    <span class="n">ErrorSavePortraitPlugin</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">14002</span><span class="p">,</span> <span class="s2">&quot;Plugin error&quot;</span><span class="p">,</span> <span class="s1">&#39;Failed save portrait to plugin&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LunaAdmin"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.LunaAdmin">[docs]</a><span class="k">class</span> <span class="nc">LunaAdmin</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luna-admin errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ReExtractExceedMaximumIteration</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">16008</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;Exceed maximum iteration count&quot;</span><span class="p">)</span>
+    <span class="n">TaskNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">16009</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s2">&quot;Task not found&quot;</span><span class="p">)</span>
+    <span class="n">RequestToTaskServerTornadoError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">16010</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;Request to task server failed&quot;</span><span class="p">)</span>
+    <span class="n">CheckConnectionToReExtractBroker</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">16011</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span>
+                                                 <span class="s2">&quot;Connection  check to re-extract broker is failed&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">InfluxError</span><span class="p">:</span>
+    <span class="n">InfluxConnectionTimeout</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">17001</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;Connection timeout to influxdb&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ImageProcessingError</span><span class="p">:</span>
+    <span class="n">ConvertBase64Error</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">18001</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Failed convert data from base64 to bytes&quot;</span><span class="p">)</span>
+    <span class="n">ConvertImageToJPGError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">18002</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s2">&quot;Failed convert bytes to jpg&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">LocalStoreError</span><span class="p">:</span>
+    <span class="n">SavingImageErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19001</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to save image in store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteImageErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19002</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove image from store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteImagesErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19003</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove image from store&#39;</span><span class="p">)</span>
+    <span class="n">CreateBucketErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19004</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to create bucket&#39;</span><span class="p">)</span>
+    <span class="n">GettingBucketsErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19005</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;Failed to get  bucket list&quot;</span><span class="p">)</span>
+    <span class="n">GettingImageErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19006</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to get image from store&#39;</span><span class="p">)</span>
+    <span class="n">SavingObjectErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19007</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to save object in store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteObjectErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19008</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove object from store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteObjectsErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19009</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove objects from store&#39;</span><span class="p">)</span>
+    <span class="n">GettingObjectErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19010</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to get object from store&#39;</span><span class="p">)</span>
+    <span class="n">GettingObjectsErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19011</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to get objects from store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteBucketErrorLocal</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">19012</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to delete bucket&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="S3StorageError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.S3StorageError">[docs]</a><span class="k">class</span> <span class="nc">S3StorageError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    S3 errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SavingImageErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20001</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to save image in store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteImageErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20002</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove image from store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteImagesErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20003</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove image from store&#39;</span><span class="p">)</span>
+    <span class="n">CreateBucketErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20004</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to create bucket&#39;</span><span class="p">)</span>
+    <span class="n">RequestS3Error</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20005</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Request to S3 Failed&#39;</span><span class="p">)</span>
+    <span class="n">RequestS3Forbidden</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20006</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Request to S3 Forbidden&#39;</span><span class="p">)</span>
+    <span class="n">RequestTimeoutToS3Error</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20007</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;Request time to S3 is longer than the established time&#39;</span><span class="p">)</span>
+    <span class="n">S3ConnectionRefusedError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20008</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;S3 Connection Refused&#39;</span><span class="p">)</span>
+    <span class="n">ConnectTimeoutToS3Error</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20009</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;Connect time to S3 is longer than the established time&#39;</span><span class="p">)</span>
+
+    <span class="n">S3UnknownError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20010</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown s3 error&#39;</span><span class="p">)</span>
+    <span class="n">GettingBucketsErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20011</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;Failed to get bucket list&quot;</span><span class="p">)</span>
+    <span class="n">GettingImageErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20012</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to get image from store&#39;</span><span class="p">)</span>
+
+    <span class="n">SavingObjectErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20013</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to save object in store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteObjectErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20014</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove object from store&#39;</span><span class="p">)</span>
+    <span class="n">DeleteObjectsErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20015</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to remove object list from store&#39;</span><span class="p">)</span>
+    <span class="n">GettingObjectErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20016</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to get object from store&#39;</span><span class="p">)</span>
+    <span class="n">GettingObjectsErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20017</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to get object list from store&#39;</span><span class="p">)</span>
+
+    <span class="n">DeleteBucketsErrorS3</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">20018</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;Failed to delete bucket&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LunaFaces"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.LunaFaces">[docs]</a><span class="k">class</span> <span class="nc">LunaFaces</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luna-faces error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">FaceWithAttributeOrIdAlreadyExist</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22001</span><span class="p">,</span> <span class="s1">&#39;Unique constraint error&#39;</span><span class="p">,</span>
+                                                  <span class="s1">&#39;Face with the same attribute_id or face id already exist&#39;</span><span class="p">)</span>
+    <span class="n">FaceNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22002</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Face not found&#39;</span><span class="p">)</span>
+    <span class="n">ListNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22003</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;List not found&#39;</span><span class="p">)</span>
+    <span class="n">FacesNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22004</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;One or more faces not found&#39;</span><span class="p">)</span>
+    <span class="n">ListsNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22005</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;One or more lists not found&#39;</span><span class="p">)</span>
+    <span class="n">PersonsNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22006</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;One or more persons not found&#39;</span><span class="p">)</span>
+    <span class="n">PersonNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22007</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Person not found&#39;</span><span class="p">)</span>
+    <span class="n">FaceAlreadyAttach</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">22008</span><span class="p">,</span> <span class="s1">&#39;Unique constraint error&#39;</span><span class="p">,</span> <span class="s1">&#39;This face is already attached to the person&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LunaEvents"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.LunaEvents">[docs]</a><span class="k">class</span> <span class="nc">LunaEvents</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luna-events error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">EventNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">23001</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Event not found&#39;</span><span class="p">)</span>
+    <span class="n">EventsNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">23002</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;One or more events not found&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AerospikeError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.AerospikeError">[docs]</a><span class="k">class</span> <span class="nc">AerospikeError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Aerospike errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AerospikeClientError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">24001</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Mis-configuration or misuse of the API methods&#39;</span><span class="p">)</span>
+    <span class="n">AerospikeServerError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">24002</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Error returned from the cluster&#39;</span><span class="p">)</span>
+    <span class="n">AerospikeUnknownError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">24003</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown aerospike error&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LunaAttributes"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.LunaAttributes">[docs]</a><span class="k">class</span> <span class="nc">LunaAttributes</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luna-attributes errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">AttributesForUpdateNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">25001</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Attributes for update not found&#39;</span><span class="p">)</span>
+    <span class="n">AttributesNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">25002</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Attributes not found&#39;</span><span class="p">)</span>
+    <span class="n">FailDecodeDescriptor</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">25003</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to decode descriptor from base64&#39;</span><span class="p">)</span>
+    <span class="n">FailEncodeDescriptor</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">25004</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed to encode descriptor to base64&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IndexManagerError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.IndexManagerError">[docs]</a><span class="k">class</span> <span class="nc">IndexManagerError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Index manager errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">IndexTaskNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26001</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Index task not found&#39;</span><span class="p">)</span>
+    <span class="n">GenerationNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26002</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Generation not found in indexer&#39;</span><span class="p">)</span>
+    <span class="n">UnknownStatusOfIndexer</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26003</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s2">&quot;Not expected status of indexer&quot;</span><span class="p">)</span>
+    <span class="n">FailedUploadIndex</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26004</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Failed start upload generation </span><span class="si">{}</span><span class="s2"> on daemon </span><span class="si">{}</span><span class="s2">, reason: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">FailedReloadIndex</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26005</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span>
+                                  <span class="s2">&quot;Failed start reload generation </span><span class="si">{}</span><span class="s2"> on daemon </span><span class="si">{}</span><span class="s2">, reason: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">BadStatusOfUploadTask</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26007</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span>
+                                      <span class="s2">&quot;Not expected status of upload task. Status: </span><span class="si">{}</span><span class="s2">, daemon: </span><span class="si">{}</span><span class="s2">, generation: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">BadStatusOfRestartTask</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26008</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span>
+                                       <span class="s2">&quot;Not expected status of restart task. Status: </span><span class="si">{}</span><span class="s2">, daemon: </span><span class="si">{}</span><span class="s2">, generation: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ListNotSatisfyIndexationCondition</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">26009</span><span class="p">,</span> <span class="s1">&#39;Bad/incomplete input data&#39;</span><span class="p">,</span>
+                                                  <span class="s2">&quot;List does not satisfy to the indexation condition&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfiguratorError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.ConfiguratorError">[docs]</a><span class="k">class</span> <span class="nc">ConfiguratorError</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Luna-configurator errors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SettingNotFound</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">27001</span><span class="p">,</span> <span class="s2">&quot;Object not found&quot;</span><span class="p">,</span> <span class="s1">&#39;Setting not found&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Error"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.Error">[docs]</a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="n">LunaCoreError</span><span class="p">,</span> <span class="n">DataBaseError</span><span class="p">,</span> <span class="n">LunaApiError</span><span class="p">,</span> <span class="n">RESTAPIError</span><span class="p">,</span> <span class="n">LunaImageStoreError</span><span class="p">,</span> <span class="n">PluginsError</span><span class="p">,</span> <span class="n">InfluxError</span><span class="p">,</span>
+            <span class="n">S3StorageError</span><span class="p">,</span> <span class="n">LocalStoreError</span><span class="p">,</span> <span class="n">ImageProcessingError</span><span class="p">,</span> <span class="n">LunaAdmin</span><span class="p">,</span> <span class="n">LunaFaces</span><span class="p">,</span> <span class="n">LunaEvents</span><span class="p">,</span> <span class="n">AerospikeError</span><span class="p">,</span>
+            <span class="n">LunaAttributes</span><span class="p">,</span> <span class="n">IndexManagerError</span><span class="p">,</span> <span class="n">ConfiguratorError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Common errors class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Success</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span> <span class="s1">&#39;Success&#39;</span><span class="p">)</span>
+    <span class="n">UnknownError</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Internal server error&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown error&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Error.getErrorByErrorCode"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.Error.getErrorByErrorCode">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">getErrorByErrorCode</span><span class="p">(</span><span class="n">errorCode</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ErrorInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find error by error code</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            errorCode: error code</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             Error.UnknownError if error not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">members</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">Error</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">member</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;ErrorInfo&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">member</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">errorCode</span> <span class="o">==</span> <span class="n">errorCode</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Error</span><span class="p">,</span> <span class="n">member</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Error</span><span class="o">.</span><span class="n">UnknownError</span></div>
+
+<div class="viewcode-block" id="Error.generateError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.Error.generateError">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generateError</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="n">ErrorInfo</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ErrorInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate error with custom details</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            error: error</span>
+<span class="sd">            msg: new details</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ErrorInfo(error.errorCode, error.description, msg)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Error.formatError"><a class="viewcode-back" href="../../../errors.html#crutches_on_wheels.errors.errors.Error.formatError">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">formatError</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="n">ErrorInfo</span><span class="p">,</span> <span class="o">*</span><span class="n">formatArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ErrorInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Format error detail</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            error: errors</span>
+<span class="sd">            *formatArgs:  args for formatting</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            formatted error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">errorCode</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">formatArgs</span><span class="p">))</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

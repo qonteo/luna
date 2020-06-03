@@ -1,0 +1,258 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_faces.app.handlers.list_handler &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_faces.app.handlers.list_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_faces.app.handlers.list_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">app.handlers.base_handler</span> <span class="k">import</span> <span class="n">BaseRequestHandler</span>
+<span class="kn">from</span> <span class="nn">app.handlers.query_validators</span> <span class="k">import</span> <span class="n">uuid4Getter</span>
+<span class="kn">from</span> <span class="nn">app.handlers.shemas</span> <span class="k">import</span> <span class="n">PATCH_LIST_USER_SCHEMA</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+
+
+<div class="viewcode-block" id="ListHandler"><a class="viewcode-back" href="../../../../list_handler.html#luna_faces.app.handlers.list_handler.ListHandler">[docs]</a><span class="k">class</span> <span class="nc">ListHandler</span><span class="p">(</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler for work with list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ListHandler.prepare"><a class="viewcode-back" href="../../../../list_handler.html#luna_faces.app.handlers.list_handler.ListHandler.prepare">[docs]</a>    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checking exist list or not.</span>
+
+<span class="sd">        If face is not exist, will call self.error with error Error.FaceNotFound</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;GET&quot;</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">uri</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">accountId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s2">&quot;account_id&quot;</span><span class="p">,</span> <span class="n">uuid4Getter</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">isListExist</span><span class="p">(</span><span class="n">listId</span><span class="p">,</span> <span class="n">accountId</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">Error</span><span class="o">.</span><span class="n">ListNotFound</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListHandler.head"><a class="viewcode-back" href="../../../../list_handler.html#luna_faces.app.handlers.list_handler.ListHandler.head">[docs]</a>    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check list existence by id.</span>
+
+<span class="sd">        Resource is reached by address &#39;/lists/{listId}&#39;</span>
+
+<span class="sd">        .. http:get:: /lists/{listId}</span>
+
+<span class="sd">            :param listId: list id</span>
+
+<span class="sd">            :query account_id: account id, this parameter determinate, that action must be done with only with objects</span>
+<span class="sd">                               of this account.</span>
+<span class="sd">            :query page: page count, default 1</span>
+<span class="sd">            :query page_size: page size, default 10</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HEAD /lists/{listId} HTTP/1.1</span>
+<span class="sd">                Accept: application/json</span>
+
+
+<span class="sd">            **Example response**:</span>
+
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 200</span>
+<span class="sd">                Begin-Request-Time: 1526039272.9173293</span>
+<span class="sd">                End-Request-Time: 1526039272.9505265</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f</span>
+<span class="sd">                Content-Type: application/json</span>
+
+<span class="sd">            :statuscode 200: Ok</span>
+<span class="sd">            :statuscode 404: list not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListHandler.get"><a class="viewcode-back" href="../../../../list_handler.html#luna_faces.app.handlers.list_handler.ListHandler.get">[docs]</a>    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get list by id.</span>
+
+<span class="sd">        Resource is reached by address &#39;/lists/{listId}&#39;</span>
+
+<span class="sd">        .. http:get:: /lists/{listId}</span>
+
+<span class="sd">            :param listId: list id</span>
+
+<span class="sd">            :query account_id: account id, this parameter determinate, that action must be done with only with objects</span>
+<span class="sd">                               of this account.</span>
+<span class="sd">            :query page: page count, default 1</span>
+<span class="sd">            :query page_size: page size, default 10</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                GET /lists/{listId} HTTP/1.1</span>
+<span class="sd">                Accept: application/json</span>
+
+
+<span class="sd">            **Example response**:</span>
+
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 200</span>
+<span class="sd">                Begin-Request-Time: 1526039272.9173293</span>
+<span class="sd">                End-Request-Time: 1526039272.9505265</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f</span>
+<span class="sd">                Content-Type: application/json</span>
+
+
+<span class="sd">            Output faces will be represent in  :json:object:`luna_list`.</span>
+
+<span class="sd">            :statuscode 200: Ok</span>
+<span class="sd">            :statuscode 404: list not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPagination</span><span class="p">(</span><span class="n">minPageSize</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">accountId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s2">&quot;account_id&quot;</span><span class="p">,</span> <span class="n">uuid4Getter</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">listCount</span><span class="p">,</span> <span class="n">lists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">getLists</span><span class="p">(</span><span class="n">listIds</span><span class="o">=</span><span class="p">[</span><span class="n">listId</span><span class="p">],</span> <span class="n">accountId</span><span class="o">=</span><span class="n">accountId</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">listCount</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">Error</span><span class="o">.</span><span class="n">ListNotFound</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">lists</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">getFaces</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span><span class="o">=</span><span class="n">pageSize</span><span class="p">,</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span> <span class="n">calculateFaceCount</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;faces&quot;</span><span class="p">:</span> <span class="n">faces</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">persons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">getPersons</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span><span class="o">=</span><span class="n">pageSize</span><span class="p">,</span> <span class="n">listId</span><span class="o">=</span><span class="n">listId</span><span class="p">,</span> <span class="n">calculateFaceCount</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;persons&quot;</span><span class="p">:</span> <span class="n">persons</span><span class="p">}</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">lists</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">res</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListHandler.patch"><a class="viewcode-back" href="../../../../list_handler.html#luna_faces.app.handlers.list_handler.ListHandler.patch">[docs]</a>    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update user date for list</span>
+<span class="sd">        :param listId: list id</span>
+
+<span class="sd">        Resource is reached by address &#39;/lists/{listId}&#39;</span>
+
+<span class="sd">        .. http:patch:: /lists/{listId}</span>
+
+<span class="sd">            :param listId: list id</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+<span class="sd">            :reqheader Content-Type: application/json</span>
+
+<span class="sd">            :optparam account_id: account id, this parameter determinate, that action must be done with only with objects</span>
+<span class="sd">                                  of this account.</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                PATCH /lists/{listId} HTTP/1.1</span>
+<span class="sd">                Content-Type: application/json</span>
+
+<span class="sd">            .. json:object:: luna_patch_lists</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property user_data: list information</span>
+<span class="sd">                :proptype user_data: user_name</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 204</span>
+<span class="sd">                Begin-Request-Time: 1526039272.9173293</span>
+<span class="sd">                End-Request-Time: 1526039272.9505265</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f</span>
+
+<span class="sd">            :statuscode 204: Ok</span>
+<span class="sd">            :statuscode 404: list not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getInputJson</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validateJson</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">PATCH_LIST_USER_SCHEMA</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">updateListUserData</span><span class="p">(</span><span class="n">listId</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;user_data&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListHandler.delete"><a class="viewcode-back" href="../../../../list_handler.html#luna_faces.app.handlers.list_handler.ListHandler.delete">[docs]</a>    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete list</span>
+
+<span class="sd">        Request to remove the list.</span>
+
+<span class="sd">        :param listId: list id</span>
+
+<span class="sd">        Resource is reached by address &#39;/lists/{listId}&#39;</span>
+
+<span class="sd">        .. http:delete:: /lists/{listId}</span>
+
+<span class="sd">            :param listId: list id</span>
+
+<span class="sd">            :optparam account_id: account id, this parameter determinate, that action must be done with only with objects</span>
+<span class="sd">                                  of this account.</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                DELETE /lists/{listId} HTTP/1.1</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 204</span>
+<span class="sd">                Begin-Request-Time: 1526039272.9173293</span>
+<span class="sd">                End-Request-Time: 1526039272.9505265</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f</span>
+
+<span class="sd">            :statuscode 204: Ok</span>
+<span class="sd">            :statuscode 404: list not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">deleteLists</span><span class="p">([</span><span class="n">listId</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

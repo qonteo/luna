@@ -1,0 +1,367 @@
+==================
+Database structure
+==================
+
+
+Elasticsearch is a search engine based on Lucene.
+It provides a distributed, multitenant-capable full-text search engine with an HTTP web interface and schema-free JSON documents.
+
+The entire database is divided into indexes, each of which has one mapping.
+
+Six indices with one mapping "/doc" in each are used in the current version of the project.
+Indexes are listed below:
+
+---------
+/handlers
+---------
+
+/handlers structure is used to store 'handlers' objects - event processing policies, read RAML for more information.
+
+You can see index structure and example here :ref:`handlers-label`.
+
+-------
+/events
+-------
+
+/events  structure is used to store 'events' objects - <description>.
+
+You can see structure and example here :ref:`events-label`.
+
+-------
+/groups
+-------
+
+/groups  structure is used to store 'groups' objects - <description>.
+
+You can see structure and example here :ref:`groups-label`.
+
+--------------
+/tasks_counter
+--------------
+
+/tasks_counter  structure is used to store the only 'tasks_counter' object ("/tasks_counter/doc/0") - incremental counter of the last created task id.
+
+You can see structure and example here :ref:`tasks_counter-label`.
+
+------
+/tasks
+------
+
+/tasks  structure is used to store 'tasks' objects - abstract long-time instructions, that Facestreammanager2 receive and perform.
+
+You can see structure and example here :ref:`tasks-label`.
+
+-----------
+/tasks_done
+-----------
+
+/tasks_done  structure is used to store 'tasks_done' objects - ended tasks (succeed, failed or canceled) with corresponding result.
+
+You can see structure and example here :ref:`tasks_done-label`.
+
+===========================
+Database objects' structure
+===========================
+
+.. _handlers-label:
+
+----------------------------
+/handlers objects' structure
+----------------------------
+
+.. json:object:: handler
+   :showexample:
+
+   :property multi_face_policy: Process or not several faces in an input event. Available only for extract-type handlers. Allowed values are `1` or `0`.
+   :proptype multi_face_policy: integer
+   :property type: The handler type. Allowed values are `extract` or `search`.
+   :proptype type: user_name
+   :property grouping_policy: The events grouping, persons creation from the groups and attach created persons to Luna API lists rules.
+   :proptype grouping_policy: :json:object:`grouping_policy`
+   :property descriptor_policy: The attach extracted descriptor to Luna API lists rules.
+   :proptype descriptor_policy: :json:object:`descriptor_policy`
+   :property search_policy: The similar descriptors search rules. Required for search-type handlers.
+   :proptype search_policy: :json:object:`search_policy`
+   :property handler_id: The handler id.
+   :proptype handler_id: uuid4
+   :property extract_policy: The descriptor extract rules.
+   :proptype extract_policy: :json:object:`extract_policy`
+   :property person_policy: The person creation from extracted descriptor and attach the descriptor to Luna API lists rules.
+   :proptype person_policy: :json:object:`person_policy`
+   :property name: The handler name.
+   :proptype name: user_name
+
+.. _events-label:
+
+--------------------------
+/events objects' structure
+--------------------------
+
+.. json:object:: event
+   :showexample:
+
+   :property id: The event id. The event id equals the extracted descriptor id if event was created successfully, otherwise the event id is generated randomly.
+   :proptype id: uuid4
+   :property handler_id: The handler id that received the event.
+   :proptype handler_id: uuid4
+   :property persons_lists: A Luna API persons lists list a person generated from the descriptor was attached.
+   :proptype persons_lists: _list_uuid4
+   :property error: An error if occurred.
+   :proptype error: :json:object:`error_response`
+   :property search_by_group: The result of search extracted descriptor by recent events in group.
+   :proptype search_by_group: :json:object:`group_search_result`
+   :property group_id: A event group id it belongs.
+   :proptype group_id: uuid4
+   :property external_id: A event external id from request.
+   :proptype external_id: user_name
+   :property search: A search result according to the handler search policy.
+   :proptype search: :json:object:`_list_search_result`
+   :property source: A event source from request.
+   :proptype source: user_name
+   :property extract: The descriptor extract result.
+   :proptype extract: :json:object:`face`
+   :property tags: Event tags list from request.
+   :proptype tags: _list_string
+   :property person_id: A person id the extracted descriptor was attached to.
+   :proptype person_id: uuid4
+   :property descriptors_lists: A Luna API descriptor lists list the extracted descriptor was attached.
+   :proptype descriptors_lists: _list_uuid4
+   :property descriptor_id: The extracted descriptor id.
+   :proptype descriptor_id: uuid4
+   :property create_time: The event create time.
+   :proptype create_time: iso8601
+   :property user_data: A user_data the person generated from the descriptor.
+   :proptype user_data: user_name
+
+
+.. _groups-label:
+
+--------------------------
+/groups objects' structure
+--------------------------
+
+.. json:object:: group
+   :showexample:
+
+   :property descriptors: The list of events (=descriptors) in the group.
+   :proptype descriptors: _list_uuid4
+   :property error: A error if occurred.
+   :proptype error: :json:object:`error_response`
+   :property source: The events' source in group.
+   :proptype source: user_name
+   :property id: The group id.
+   :proptype id: uuid4
+   :property attributes: The aggregated events' attributes.
+   :proptype attributes: :json:object:`group_attributes`
+   :property external_tracks_id: The events' external track id list.
+   :proptype external_tracks_id: _list_string
+   :property tags: The events' tags list.
+   :proptype tags: _list_string
+   :property person_id: The group person id if created when group is closed.
+   :proptype person_id: uuid4
+   :property last_update: The group last update time. It equals group close time if group is closed.
+   :proptype last_update: iso8601
+   :property handler_id: The group handler id.
+   :proptype handler_id: uuid4
+   :property ttl: A group time to live common for all groups in the handler. Group closes if no events added during this period. Period in seconds.
+   :proptype ttl: integer
+   :property create_time: The group create time.
+   :proptype create_time: iso8601
+   :property search: The result of search extracted descriptor by recent events in group. The search rules are set in handler.
+   :proptype search: :json:object:`_list_search_result_for_group`
+   :property persons_lists: A Luna API persons lists list a person generated from the group was attached.
+   :proptype persons_lists: _list_uuid4
+
+
+.. _tasks_counter-label:
+
+-------------------------------
+/tasks_counter object structure
+-------------------------------
+
+.. json:object:: tasks_counter
+   :showexample:
+
+   :property count: The current number (=id) of the last created task.
+   :proptype count: integer
+
+
+.. _tasks-label:
+
+-------------------------
+/tasks objects' structure
+-------------------------
+
+
+.. json:object:: task
+   :showexample:
+
+   :property progress: The task completion percentage.
+   :proptype progress: float
+   :property Location: The done task location.
+   :proptype Location: uri
+   :property id: The task id.
+   :proptype id: integer
+   :property result: An empty object while task is not done.
+   :proptype result: null
+   :property last_update: The last update time, the task finish time also if the task is finished.
+   :proptype last_update: iso8601
+   :property create_time: The task create time.
+   :proptype create_time: iso8601
+   :property task: The received task, see :ref:`task-properties-label`.
+   :proptype task: :json:object:`clusterization_param` | :json:object:`hit_top_n_params` | :json:object:`cross_matching_params` | :json:object:`linker_params` | :json:object:`report_params`
+   :property type: The task type.
+   :proptype type: user_name
+   :property status: The task status. Allowed values are `started`, `progress`.
+   :proptype status: user_name
+
+
+.. _tasks_done-label:
+
+------------------------------
+/tasks_done objects' structure
+------------------------------
+
+.. json:object:: ended_task
+   :showexample:
+
+   :property result: The task completion result.
+   :proptype result: :json:object:`clusterizationResult` | :json:object:`hitTopResult` | :json:object:`crossMatchingResult` | :json:object:`linkingResult` | :json:object:`reportResult`
+   :property progress: The task completion percentage.
+   :proptype progress: float
+   :property task: The received task, see :ref:`task-properties-label`
+   :proptype task: :json:object:`clusterization_param` | :json:object:`hit_top_n_params` | :json:object:`cross_matching_params` | :json:object:`linker_params` | :json:object:`report_params`
+   :property type: The task type. Allowed values are: `clusterization`, `hit_top_n`, `reports`, `cross_matching`, `linking`.
+   :proptype type: user_name
+   :property id: The task id.
+   :proptype id: integer
+   :property last_update: The last update time, the task finish time also if the task is finished.
+   :proptype last_update: iso8601
+   :property create_time: The task create time.
+   :proptype create_time: iso8601
+   :property status: The task status. Allowed values are `cancelled`, `failed` or `done`
+   :proptype status: user_name
+
+
+.. _task-properties-label:
+
+----------------------------
+'task_properties' structures
+----------------------------
+
+.. json:object:: clusterization_param
+   :showexample:
+
+   :property filters: Set of filters to define objects for clusterization.
+   :proptype filters: :json:object:`task_filters`
+   :property description: The user description in the task.
+   :proptype description: user_name
+   :property objects: The objects type to clusterize. One of `events`, `groups` or `luna_list`.
+   :proptype objects: user_name
+
+
+.. json:object:: hit_top_n_params
+   :showexample:
+
+   :property list_id: The Luna API persons list id.
+   :proptype list_id: uuid4
+   :property description: The user description in the task.
+   :proptype description: user_name
+   :property top_n: The *n* number of positions in the result. Allowed values are `1` to `5`.
+   :proptype top_n: integer
+
+
+.. json:object:: cross_matching_params
+   :showexample:
+
+   :property references: The match references objects.
+   :proptype references: :json:object:`cross_matching_reference`
+   :property threshold: The matching results lower similarity threshold.
+   :proptype threshold: float
+   :property description: The user description in the task.
+   :proptype description: user_name
+   :property candidates: The match candidates objects.
+   :proptype candidates: :json:object:`cross_matching_candidate`
+   :property limit: The match limit.
+   :proptype limit: float
+
+
+.. json:object:: linker_params
+   :showexample:
+
+   :property filters: The filters for selecting events and groups for attaching to the Luna API list.
+   :proptype filters: :json:object:`task_filters`
+   :property list_type: The type of the list to which objects will be attached. For groups, only the type 'persons' should be set.
+   :proptype list_type: user_name
+   :property description: The user description in the task.
+   :proptype description: user_name
+   :property object: The objects type to attach. One of `events`, `groups` or `luna_list`.
+   :proptype object: user_name
+   :property list_data: The *list_data* field for the list that will be created if no *list_id* provided.
+   :proptype list_data: user_name
+   :property list_id: The Luna API list id to attach objects to. If the parameter is not set, the list will be created automatically.
+   :proptype list_id: uuid4
+
+
+.. json:object:: report_params
+   :showexample:
+
+   :property description: The user description in the task.
+   :proptype description: user_name
+   :property task_id: The task id.
+   :proptype task_id: integer
+   :property format: The report format. One of `csv` or `pdf`.
+   :proptype format: user_name
+   :property parameters: The reporter parameters: the images' color bounds in pdf-report and save-portraits flag in csv-report.
+   :proptype parameters: :json:object:`parameters`
+
+
+.. _task_result-label:
+
+------------------------
+'task_result' structures
+------------------------
+
+.. json:object:: clusterizationResult
+   :showexample:
+
+   :property success: The result clusters.
+   :proptype success: :json:object:`success`
+   :property errors: Errors if occurred.
+   :proptype errors: :json:object:`taskErrors`
+
+
+.. json:object:: hitTopResult
+   :showexample:
+
+   :property success: The result hit top n result.
+   :proptype success: :json:object:`hitTopSuccess`
+   :property errors: Errors if occurred.
+   :proptype errors: :json:object:`taskErrors`
+
+
+.. json:object:: crossMatchingResult
+   :showexample:
+
+   :property matches: The result matches list.
+   :proptype matches: :json:object:`_list_crossMatchReference`
+
+
+.. json:object:: linkingResult
+   :showexample:
+
+   :property success: Success and failed numbers of objects.
+   :proptype success: :json:object:`abstractSuccess`
+   :property errors: Errors if occurred.
+   :proptype errors: :json:object:`taskErrors`
+
+.. json:object:: reportResult
+   :showexample:
+
+   :property success: Location of completed report.
+   :proptype success: :json:object:`reportSuccess`
+   :property errors: Errors if occurred.
+   :proptype errors: :json:object:`taskErrors`
+
+
+

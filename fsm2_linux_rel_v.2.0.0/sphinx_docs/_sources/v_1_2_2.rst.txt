@@ -1,0 +1,17 @@
+=======
+v.1.2.2
+=======
+
+-----------
+Bugs fixed:
+-----------
+
+    #) Fix check connection Luna API version bug.
+
+    #) Add error for report-from-failed-task case.
+
+------------------------------------
+How to update from previous version:
+------------------------------------
+
+Copy project to directory with current project. Update dependencies from requirements.txt.

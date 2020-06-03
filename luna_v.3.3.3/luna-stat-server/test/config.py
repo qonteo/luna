@@ -1,0 +1,9 @@
+LUNA_API_URL = "http://localhost:5000/4/"
+SS_BASE_URL = "localhost:5008"
+LPSE_URL = "http://localhost:5009/internal/lps_event/"
+
+IGNORE_AGE_TAG = 0
+IGNORE_FACE_SCORE_TAG = 0
+IGNORE_GENDER_TAG = 0
+IGNORE_GLASSES_TAG = 0
+IGNORE_SIMILARITY_TAG = 0

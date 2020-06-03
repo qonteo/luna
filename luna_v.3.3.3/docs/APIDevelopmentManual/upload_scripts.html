@@ -1,0 +1,170 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Upload scripts &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Connect to external hosts" href="connect_to_internet.html" />
+    <link rel="prev" title="Request functions" href="request_functions.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Upload scripts</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="request_functions.html">Request functions</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="connect_to_internet.html">Connect to external hosts</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="upload-scripts">
+<span id="id1"></span><h1>Upload scripts<a class="headerlink" href="#upload-scripts" title="Permalink to this headline">¶</a></h1>
+<p>We realized  several scripts uploading images to LUNA API. All these scripts you can found in folder <em>uploads_scripts</em>.</p>
+<p>Use cases:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>We have folder with images. We want send these images to LUNA API  to extract descriptors and attach
+the resulting descriptors to list of descriptors.</li>
+<li>We have folder with images. We want send these images to LUNA API  to extract descriptors, create person
+for each the resulting  descriptor and attach persons to list of persons.</li>
+<li>We have several folders with images in one folder. We want create persons for each folders, extract descriptors
+from images from folders and attach descriptors to corresponding persons. Optionally  we should be can attach
+persons to a list of persons.</li>
+</ol>
+</div></blockquote>
+<p>For first two case you can use <em>upload_folder_to_list_objects.py</em>.</p>
+<p>Command-line arguments of script:</p>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>print help for using command-line arguments</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--src</span></kbd></td>
+<td>folder with images</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--dst</span></kbd></td>
+<td>destination, address of lina python service, default <em>“http://127.0.0.1:5000”</em></td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--lg</span></kbd></td>
+<td>login from LUNA API account</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--psw</span></kbd></td>
+<td>password from LUNA API account</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--list</span></kbd></td>
+<td>account list, if it does not set list will be created</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--obj</span></kbd></td>
+<td>type of creating object, ‘person’ or ‘descriptor’</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--smf</span></kbd></td>
+<td>skip images with several faces, default False</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--c</span></kbd></td>
+<td>concurrency, count simultaneously processing images, default 1, type int</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--warped</span></kbd></td>
+<td>all images is warped</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--sud</span></kbd></td>
+<td>use file name as user_data. only when obj is person, default False</td></tr>
+</tbody>
+</table>
+<p>Example of run.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python upload_folder_to_list_objects.py --src<span class="o">=</span><span class="s2">&quot;/test/imgs&quot;</span> --c<span class="o">=</span><span class="m">10</span> --dst<span class="o">=</span><span class="s2">&quot;http://127.0.0.1:5001&quot;</span><span class="se">\</span>
+ --lg<span class="o">=</span>hornsandhooves@ya.ru --psw<span class="o">=</span>secretpassword --list<span class="o">=</span>418592e3-fc69-4901-9fc0-3f9865462814 --smf --sud --obj<span class="o">=</span>person
+</pre></div>
+</div>
+<p>For third case you can use <em>upload_folders_with_person.py</em>.</p>
+<p>Command-line arguments of script:</p>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--help</span></kbd></td>
+<td>print help for using command-line arguments</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--src</span></kbd></td>
+<td>folder with person folders</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--dst</span></kbd></td>
+<td>destination, address of lina python service, default <em>“http://127.0.0.1:5000”</em></td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--lg</span></kbd></td>
+<td>login from LUNA API account</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--psw</span></kbd></td>
+<td>password from LUNA API account</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--wList</span></kbd></td>
+<td>does not attach persons to list, default False</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--list</span></kbd></td>
+<td>persons list of account, if  it does not set and wList does not set, list will be created</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--mdp</span></kbd></td>
+<td>max descriptors on 1 person, -1 - all, default -1</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--c</span></kbd></td>
+<td>concurrency, count simultaneously processing images, default 1, type int</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--warped</span></kbd></td>
+<td>all images is warped</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--sud</span></kbd></td>
+<td>use file name as user_data. only when obj is person, default False</td></tr>
+</tbody>
+</table>
+<p>If several faces was detected image would be skiped.</p>
+<p>Example of run.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python upload_folders_with_person.py --src<span class="o">=</span><span class="s2">&quot;/test/persons&quot;</span> --c<span class="o">=</span><span class="m">10</span> --dst<span class="o">=</span><span class="s2">&quot;http://127.0.0.1:5001&quot;</span><span class="se">\</span>
+ --lg<span class="o">=</span>hornsandhooves@ya.ru --psw<span class="o">=</span>secretpassword --list<span class="o">=</span>418592e3-fc69-4901-9fc0-3f9865462814 --warped --sud
+</pre></div>
+</div>
+<p>Both scripts create  2 logs files. First file contains with errors that occurred during the program, second
+file contains info about creating object in LUNA API.</p>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="request_functions.html">Request functions</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="connect_to_internet.html">Connect to external hosts</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

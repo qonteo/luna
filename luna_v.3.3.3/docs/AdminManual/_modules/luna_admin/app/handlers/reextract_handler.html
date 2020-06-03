@@ -1,0 +1,151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_admin.app.handlers.reextract_handler &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_admin.app.handlers.reextract_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_admin.app.handlers.reextract_handler</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Reextract module.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Generator</span>
+
+<span class="kn">from</span> <span class="nn">app.handlers.schemas</span> <span class="k">import</span> <span class="n">REEXTRACT_DESCRIPTORS_LIST_SCHEMA</span>
+<span class="kn">from</span> <span class="nn">app.long_tasks.tasks</span> <span class="k">import</span> <span class="n">ReExtractTask</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.utils.timer</span> <span class="k">import</span> <span class="n">timer</span>
+<span class="kn">from</span> <span class="nn">app.handlers.base_handler</span> <span class="k">import</span> <span class="n">BaseHandlerWithAuth</span>
+<span class="kn">from</span> <span class="nn">configs.config</span> <span class="k">import</span> <span class="n">LUNA_CORE_REEXTRACT_ORIGIN</span><span class="p">,</span> <span class="n">LUNA_CORE_ORIGIN</span>
+
+
+<div class="viewcode-block" id="ReExtractHandler"><a class="viewcode-back" href="../../../../reextract.html#luna_admin.app.handlers.reextract_handler.ReExtractHandler">[docs]</a><span class="k">class</span> <span class="nc">ReExtractHandler</span><span class="p">(</span><span class="n">BaseHandlerWithAuth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reextract handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReExtractHandler.post"><a class="viewcode-back" href="../../../../reextract.html#luna_admin.app.handlers.reextract_handler.ReExtractHandler.post">[docs]</a>    <span class="nd">@timer</span>
+    <span class="nd">@BaseHandlerWithAuth</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create new reextract task</span>
+
+<span class="sd">        .. http:post:: /reextract</span>
+
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">                :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    POST /reextract HTTP/1.1</span>
+<span class="sd">                    Accept: application/json</span>
+
+<span class="sd">                .. json:object:: task</span>
+<span class="sd">                    :showexample:</span>
+
+<span class="sd">                    :property descriptors: task</span>
+<span class="sd">                    :proptype descriptors: _list_(uuid4)</span>
+
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 201 Created</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+<span class="sd">                    LUNA-Request-Id: 1516179740,d3abc2f6-70f1-4ae0-9d10-475103e0891d</span>
+<span class="sd">                    Location: /tasks/12</span>
+
+<span class="sd">                .. json:object:: task</span>
+<span class="sd">                    :showexample:</span>
+
+<span class="sd">                    :property task_id: task</span>
+<span class="sd">                    :proptype task_id: integer</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 201: task is created.</span>
+<span class="sd">            :statuscode 400: Bad json</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">LUNA_CORE_REEXTRACT_ORIGIN</span> <span class="o">==</span> <span class="n">LUNA_CORE_ORIGIN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="mi">403</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s2">&quot;error_code&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;LUNA Core service is the same with LUNA Core for re-extracting &quot;</span>
+                                                    <span class="s2">&quot;descriptors&quot;</span><span class="p">})</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+
+        <span class="n">strJson</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">body</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strJson</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">ReExtractTask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="p">,</span> <span class="n">requestId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">requestId</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">inputJson</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getInputJson</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">validateJson</span><span class="p">(</span><span class="n">inputJson</span><span class="p">,</span> <span class="n">REEXTRACT_DESCRIPTORS_LIST_SCHEMA</span><span class="p">)</span>
+                <span class="n">descriptors</span> <span class="o">=</span> <span class="n">inputJson</span><span class="p">[</span><span class="s2">&quot;descriptors&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="n">ReExtractTask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbAdminContext</span><span class="p">,</span> <span class="n">descriptors</span><span class="p">,</span> <span class="s2">&quot;list descriptors&quot;</span><span class="p">,</span>
+                                          <span class="n">requestId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">requestId</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">Error</span><span class="o">.</span><span class="n">RequestNotContainsJson</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s2">&quot;Location&quot;</span><span class="p">,</span> <span class="s2">&quot;/tasks/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">taskId</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;task_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">taskId</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="ReExtractHandler.on_finish"><a class="viewcode-back" href="../../../../reextract.html#luna_admin.app.handlers.reextract_handler.ReExtractHandler.on_finish">[docs]</a>    <span class="nd">@timer</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start execute task</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;task&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">descriptors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">reExtractAllDescriptorAttribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">taskId</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">reExtractDescriptorsList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">taskId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">descriptors</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

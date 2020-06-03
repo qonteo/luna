@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="eng">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Installation &#8212; Stat Service 0.2.12 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing" href="testing.html" />
+    <link rel="prev" title="Statistic module" href="statistic_module.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          Stat Service</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.2.12</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="lps_event_module.html">LPS Event module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statistic_module.html">Statistic module</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#packages-and-requirements-installation-example-for-centos">Packages and requirements installation example for CentOS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#setup-and-startup">Setup and Startup</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_9.html">v.0.2.9</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_8.html">v.0.2.8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_7.html">v.0.2.7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_6.html">v.0.2.6</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_5.html">v.0.2.5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_4.html">v.0.2.4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_3.html">v.0.2.3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="v_0_2_2.html">v.0.2.2</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Installation</a></li>
+<li><a class="reference internal" href="#packages-and-requirements-installation-example-for-centos">Packages and requirements installation example for CentOS</a></li>
+<li><a class="reference internal" href="#setup-and-startup">Setup and Startup</a><ul>
+<li><a class="reference internal" href="#tests">Tests</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/manage.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="packages-and-requirements-installation-example-for-centos">
+<h1>Packages and requirements installation example for CentOS<a class="headerlink" href="#packages-and-requirements-installation-example-for-centos" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>For the Service operation, one needs to install the following dependencies:</dt>
+<dd><ul class="first last simple">
+<li>Python 3.6;</li>
+<li>Redis v. 3.2.3 or higher;</li>
+<li>InfluxDB v. 1.3.2 or higher;</li>
+<li>Additional library dependencies, listed in requirements.txt.</li>
+</ul>
+</dd>
+</dl>
+<p>To install packages and requirements, one should:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Install python 3.6</li>
+<li>Install InfluxDB. For this subsequently perform the following commands:</li>
+</ul>
+<ol class="arabic simple">
+<li>Load InfluxDB by the command <cite>wget https://repos.influxdata.com/centos/7Server/amd64/stable/influxdb-1.3.4.x86_64.rpm</cite>;</li>
+<li>Install InfluxDB by the command <a href="#id1"><span class="problematic" id="id2">`</span></a>yum install influxdb-1.3.4.x86_64.rpm;</li>
+<li>Enable auto-start by the command <cite>systemctl enable influxdb.service</cite>;</li>
+<li>Start InfluxDB service by the command <cite>service influxdb start</cite>.</li>
+</ol>
+<ul class="simple">
+<li>Install Redis</li>
+</ul>
+<ol class="arabic simple">
+<li>Install Redis by the command <cite>yum install redis</cite>;</li>
+<li>Enable Redis auto-start by the command <cite>systemctl enable redis.service</cite>;</li>
+<li>Start Redis service by the command <cite>service redis start</cite>.</li>
+</ol>
+<ul class="simple">
+<li>Install Python libraries:</li>
+</ul>
+<p>Note: Virtual environment is strongly recommended for installation.</p>
+<ul class="simple">
+<li>Create a virtual environment by the command <cite>python3.6 -m venv venv</cite>;</li>
+<li>Activate the virtual environment by the command <cite>source ./venv/bin/activate</cite> (for deactivation enter <cite>deactivate</cite>)</li>
+<li>Go to the folder with the project <cite>cd stat-server</cite></li>
+<li>Install dependencies from the file <cite>pip3.6 install -r requirements.txt</cite></li>
+</ul>
+</div></blockquote>
+<p>Now the installation is complete and Events &amp; Statitics service can be started.</p>
+</div>
+<div class="section" id="setup-and-startup">
+<h1>Setup and Startup<a class="headerlink" href="#setup-and-startup" title="Permalink to this headline">¶</a></h1>
+<p>To start Events &amp; Statistics service, one should:</p>
+<ol class="arabic">
+<li><p class="first">Check and change the service settings in the configuration file <cite>./config.conf</cite> (if necessary):</p>
+<blockquote>
+<div><ul class="simple">
+<li>INFLUX_LOGIN=&quot;&lt;influx login&gt;&quot;</li>
+<li>INFLUX_PASSWORD=&quot;&lt;influx password&gt;&quot;</li>
+<li>INFLUX_DATABASE=&quot;&lt;influx database&gt;&quot;</li>
+<li>INFLUX_URL=&quot;&lt;influx url&gt;:&lt;influx port&gt;&quot;</li>
+<li>REDIS_LOGIN=&quot;&lt;redis login&gt;&quot;</li>
+<li>REDIS_PASSWORD=&quot;&lt;redis password&gt;&quot;</li>
+<li>REDIS_DATABASE=&quot;&lt;redis database&gt;&quot;</li>
+<li>REDIS_URL=&quot;&lt;redis url&gt;:&lt;redis port&gt;&quot;</li>
+<li>LPS_URL=&quot;&lt;Luna API url&gt;:&lt;Luna API port&gt;&quot;</li>
+<li>LPS_VERSION=&lt;Luna API version&gt;</li>
+<li>COOKIE_SECRET=&quot;&lt;some random value to encrypt users' cookies&gt;&quot;</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Create Influx database by the <cite>python db_create.py</cite> script;</p>
+</li>
+<li><p class="first">Start the service:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Launch the LUNA API Python Server Events service by the command <cite>python run.py lpse --port 5009</cite>. The service receives events from LUNA API on the 5009 port. Instead of 5009, you can assign any free port.</li>
+<li>Start the Statistic Manager service by the command <cite>python run.py sm --port 5008</cite>. The Service provides subscription and statistics. Instead of <cite>5008</cite>, you can also assign any free port.</li>
+</ul>
+</div></blockquote>
+<p>Note: It is possible to start several services of both types.</p>
+</li>
+</ol>
+<div class="section" id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Ensure that both services and LUNA API are running.</p>
+</li>
+<li><p class="first">Check and, if necessary, change the service settings in the <cite>./test/config.py</cite> configuration file:</p>
+<blockquote>
+<div><ul class="simple">
+<li>LUNA_API_URL=&quot;&lt;Luna API url&gt;/&lt;Luna API version&gt;/&quot;</li>
+<li>SS_BASE_URL=&quot;&lt;Statistic Manager service IP&gt;:&lt;Statistic Manager service port&gt;&quot;</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Run tests by the command <cite>python -m unittest test.test</cite></p>
+</li>
+</ol>
+<p>For further usage see ./demo/raml.html</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, VisionLabs.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

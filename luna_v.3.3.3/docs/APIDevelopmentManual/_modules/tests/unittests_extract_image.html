@@ -1,0 +1,348 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tests.unittests_extract_image &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>tests.unittests_extract_image</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for tests.unittests_extract_image</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">tests.classes</span> <span class="k">import</span> <span class="n">TestBase</span><span class="p">,</span> <span class="n">authStr</span>
+<span class="kn">from</span> <span class="nn">tests.config</span> <span class="k">import</span> <span class="n">LUNA_IMAGE_STORE_OFF</span>
+
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">tests.resources</span> <span class="k">import</span> <span class="n">onePersonList</span><span class="p">,</span> <span class="n">severalFaces</span><span class="p">,</span> <span class="n">noFaces</span><span class="p">,</span> <span class="n">lowImageSize</span><span class="p">,</span> <span class="n">largeImageSize</span><span class="p">,</span> <span class="n">moreThan64Faces</span>
+<span class="kn">from</span> <span class="nn">tests.resources</span> <span class="k">import</span> <span class="n">rawDescriptor</span><span class="p">,</span> <span class="n">xpkFile</span><span class="p">,</span> <span class="n">warpedImage</span><span class="p">,</span> <span class="n">standardImage</span><span class="p">,</span> <span class="n">differentFormatList</span><span class="p">,</span> <span class="n">base64Files</span>
+<span class="kn">from</span> <span class="nn">tests</span> <span class="k">import</span> <span class="n">luna_api_functions</span>
+
+
+<div class="viewcode-block" id="TestImage"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage">[docs]</a><span class="k">class</span> <span class="nc">TestImage</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test extract descriptor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TestImage.setUp"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createAccountAndToken</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractPhotoTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">standardImage</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">onePersonList</span><span class="p">:</span>
+                <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">image</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractPhotoTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_several_descriptors_from_file"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_several_descriptors_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_several_descriptors_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_several_descriptors_from_file</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract all descriptors from one file (9 faces)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractSeveralFaces</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">severalFaces</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;faces&#39;</span><span class="p">]),</span> <span class="mi">9</span><span class="p">)</span>
+
+        <span class="n">extractSeveralFaces</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_maximum_descriptors_from_file"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_maximum_descriptors_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_maximum_descriptors_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_maximum_descriptors_from_file</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract 64 descriptors from one file (64+ faces on image)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractMaximumFacesCount</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">moreThan64Faces</span><span class="p">,</span> <span class="n">requestTimeOut</span> <span class="o">=</span> <span class="mi">60</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;faces&#39;</span><span class="p">]),</span> <span class="mi">64</span><span class="p">)</span>
+
+        <span class="n">extractMaximumFacesCount</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_no_descriptors"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_no_descriptors">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_no_descriptors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_no_descriptors</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: failed extract descriptor while no descriptors in image (0 faces)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractNoFaces</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">noFaces</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span> <span class="mi">4003</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">],</span> <span class="s2">&quot;No faces found. Detail: No faces found.&quot;</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">extractNoFaces</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_low_image_size"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_low_image_size">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_low_image_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_low_image_size</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: failed extract descriptor while image has low size (less than 96x96)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractLowImageSize</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">lowImageSize</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span> <span class="mi">3002</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;Incorrect image size. Detail: Image size (95x95) is lower than minimum allowed (96x96).&quot;</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">extractLowImageSize</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_large_image_size"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_large_image_size">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_large_image_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_large_image_size</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: failed extract descriptor while image has large size (more than 4096x4096)</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractLargeImageSize</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">largeImageSize</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span> <span class="mi">3002</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;Incorrect image size. Detail: Image size (4100x2306) is greater than maximum allowed (4096x4096).&quot;</span><span class="p">,</span>
+                <span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">extractLargeImageSize</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor_from_warped_image"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor_from_warped_image">[docs]</a>    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skipIf</span><span class="p">(</span><span class="n">LUNA_IMAGE_STORE_OFF</span><span class="p">,</span> <span class="s2">&quot;S3 in LUNA API OFF&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor_from_warped_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor_from_warped_image</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract descriptor from warp image, check saving portrait is equal to source img</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: Yes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractWarpImage</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">warpedImage</span><span class="p">,</span> <span class="n">warpedImage</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="n">photoId</span> <span class="o">=</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;faces&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getPortrait</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">photoId</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">warpedImage</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">imgBytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">imgBytes</span><span class="p">,</span> <span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractWarpImage</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor_from_descriptor"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor_from_descriptor">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor_from_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor_from_descriptor</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract descriptor from raw descriptor</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractSendDescriptor</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rawDescriptor</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">],</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">descriptor</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">descriptor</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractSendDescriptor</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor_from_xpk"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor_from_xpk">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor_from_xpk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor_from_xpk</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract descriptor from xpk file</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractSendXpk</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">xpkFile</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">],</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">descriptor</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">descriptor</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractSendXpk</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor_from_base64"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor_from_base64">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor_from_base64</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor_from_base64</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract descriptors  from data in base64 encoding</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractSendBase64</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">base64File</span> <span class="ow">in</span> <span class="n">base64Files</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">base64File</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">descriptor</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">descriptor</span><span class="p">,</span>
+                                                                  <span class="n">contentType</span><span class="o">=</span><span class="n">base64File</span><span class="p">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractSendBase64</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor_with_corrupted_image"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor_with_corrupted_image">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor_with_corrupted_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor_with_corrupted_image</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: trying extract descriptors  from data in base64 encoding and content-type  &quot;image/bmp&quot;</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractSendBase64WithWrongContentTypeHeader</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">base64Files</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;filename&quot;</span><span class="p">],</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">descriptor</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">descriptor</span><span class="p">,</span> <span class="n">contentType</span><span class="o">=</span><span class="s1">&#39;image/bmp&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">ConvertImageToJPGError</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractSendBase64WithWrongContentTypeHeader</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor_from_base64_bad_base64"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor_from_base64_bad_base64">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor_from_base64_bad_base64</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor_from_base64_bad_base64</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: trying extract descriptors  from data in non base64</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractSendBase64</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;123&#39;</span><span class="p">,</span>
+                                                              <span class="n">contentType</span><span class="o">=</span><span class="s2">&quot;image/x-jpeg-base64&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">ConvertBase64Error</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractSendBase64</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_get_portrait"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_get_portrait">[docs]</a>    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skipIf</span><span class="p">(</span><span class="n">LUNA_IMAGE_STORE_OFF</span><span class="p">,</span> <span class="s2">&quot;S3 in LUNA API OFF&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_descriptor_get_portrait</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_get_portrait</span>
+
+<span class="sd">            :resources: &quot;/storage/portraits/\{descriptor_id\}&quot;</span>
+<span class="sd">            :description: success getting portrait</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: Yes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">getPortraitsTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">standardImage</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="n">photoId</span> <span class="o">=</span> <span class="n">replyInfo</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s1">&#39;faces&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">getPortrait</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">photoId</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">getPortraitsTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_descriptor_from_non_jpeg_files"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_descriptor_from_non_jpeg_files">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_descriptor_from_non_jpeg_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_descriptor_from_non_jpeg_files</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: success extract descriptor from non jpg-files</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractPhotoTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">differentFormatList</span><span class="p">:</span>
+                <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertSuccessExtractPhoto</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractPhotoTest</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestImage.test_descriptor_extract_with_bad_content_type"><a class="viewcode-back" href="../../testing.html#tests.unittests_extract_image.TestImage.test_descriptor_extract_with_bad_content_type">[docs]</a>    <span class="k">def</span> <span class="nf">test_descriptor_extract_with_bad_content_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_descriptor_extract_with_bad_content_type</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors&quot;</span>
+<span class="sd">            :description: try extracting descriptor with  unsupported Content-Type (&quot;image/jpg&quot;)</span>
+<span class="sd">            :tag: Descriptor</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">extractPhotoBadContentTypeTest</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="n">replyInfo</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">standardImage</span><span class="p">,</span> <span class="n">contentType</span><span class="o">=</span><span class="s2">&quot;image/jpg&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">replyInfo</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertErrorRestAnswer</span><span class="p">(</span><span class="n">replyInfo</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadContentType</span><span class="p">,</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">authStr</span><span class="p">(</span><span class="n">auth</span><span class="p">))</span>
+
+        <span class="n">extractPhotoBadContentTypeTest</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

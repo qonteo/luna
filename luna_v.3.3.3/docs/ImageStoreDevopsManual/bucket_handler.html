@@ -1,0 +1,126 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Bucket handler &#8212; luna-image-store v.1.2.8 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Buckets handler" href="buckets_handler.html" />
+    <link rel="prev" title="Images handler" href="images_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-image-store v.1.2.8 documentation</span></a></h1>
+        <h2 class="heading"><span>Bucket handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="images_handler.html">Images handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="buckets_handler.html">Buckets handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_image_store.app.handlers.bucket_handler">
+<span id="bucket-handler"></span><h1>Bucket handler<a class="headerlink" href="#module-luna_image_store.app.handlers.bucket_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_image_store.app.handlers.bucket_handler.BucketHandler">
+<em class="property">class </em><code class="descclassname">luna_image_store.app.handlers.bucket_handler.</code><code class="descname">BucketHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/bucket_handler.html#BucketHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.bucket_handler.BucketHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for work with single bucket</p>
+<dl class="method">
+<dt id="luna_image_store.app.handlers.bucket_handler.BucketHandler.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>bucketName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/bucket_handler.html#BucketHandler.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.bucket_handler.BucketHandler.delete" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="delete">
+<dt id="delete--buckets-bucketName">
+<code class="descname">DELETE </code><code class="descname">/buckets/{bucketName}</code><a class="headerlink" href="#delete--buckets-bucketName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete bucket from storage</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param bucketName:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">bucket name</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">reqheader LUNA-Request-Id:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">request id</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/buckets/991544fa-c093-40a9-8dd2-b3855f72f507</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 202
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">statuscode 202:</th><td class="field-body">Accepted</td>
+</tr>
+<tr class="field-even field"><th class="field-name">statuscode 500:</th><td class="field-body">internal server error</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_image_store.app.handlers.bucket_handler.BucketHandler.on_finish">
+<code class="descname">on_finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/bucket_handler.html#BucketHandler.on_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.bucket_handler.BucketHandler.on_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>On DELETE method - delete bucket after send response in background.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[+T_co, -T_contra, +V_co]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="images_handler.html">Images handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="buckets_handler.html">Buckets handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

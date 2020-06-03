@@ -1,0 +1,171 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tokens handler &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Persons handler" href="persons_handler.html" />
+    <link rel="prev" title="Lists handler" href="lists_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>Tokens handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="lists_handler.html">Lists handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="persons_handler.html">Persons handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_admin.app.handlers.account_tokens_handler">
+<span id="tokens-handler"></span><h1>Tokens handler<a class="headerlink" href="#module-luna_admin.app.handlers.account_tokens_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_admin.app.handlers.account_tokens_handler.AccountTokensHandler">
+<em class="property">class </em><code class="descclassname">luna_admin.app.handlers.account_tokens_handler.</code><code class="descname">AccountTokensHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/handlers/account_tokens_handler.html#AccountTokensHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.handlers.account_tokens_handler.AccountTokensHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler of account tokens</p>
+<dl class="method">
+<dt id="luna_admin.app.handlers.account_tokens_handler.AccountTokensHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>account_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/handlers/account_tokens_handler.html#AccountTokensHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.handlers.account_tokens_handler.AccountTokensHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get tokens of account with pagination.</p>
+<dl class="get">
+<dt id="get--accounts-account_id">
+<code class="descname">GET </code><code class="descname">/accounts/{account_id}</code><a class="headerlink" href="#get--accounts-account_id" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>account_id</strong> – account id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>page</strong> – page count, default 1</li>
+<li><strong>page_size</strong> – page size, default 10</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<blockquote>
+<div><div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,d3abc2f6-70f1-4ae0-9d10-475103e0891d</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="list-of-account-tokens">
+<!--[list-of-account-tokens]--><code class="descname">list of account tokens</code><a class="headerlink" href="#list-of-account-tokens" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>tokens</strong> (_list_(<a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a>)) – tokens</li>
+<li><strong>token_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – token count</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;tokens&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2c26657b-c9ca-4e7d-b1f2-9fe6940a12ed&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;96600 Thomas Islands&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4bdbe610-083d-4ad2-a7a9-77d223366ddf&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;509 Diane Mountain Suite 660&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;638c8dd8-452a-456f-9fd6-1cb3eb9a35c5&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;585 Emily Stravenue&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;token_count&quot;</span><span class="p">:</span> <span class="mi">9208</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div></blockquote>
+<p>Message error is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – success</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – Bad query parameters</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="lists_handler.html">Lists handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="persons_handler.html">Persons handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,349 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Postgres work functions &#8212; luna-index-manager v.0.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DB model" href="db_models.html" />
+    <link rel="prev" title="Documentation for Database usage" href="database.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-index-manager v.0.0.3 documentation</span></a></h1>
+        <h2 class="heading"><span>Postgres work functions</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="database.html">Documentation for Database usage</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="db_models.html">DB model</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_index_manager.db.context">
+<span id="postgres-work-functions"></span><h1>Postgres work functions<a class="headerlink" href="#module-luna_index_manager.db.context" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_index_manager.db.context.DBContext">
+<em class="property">class </em><code class="descclassname">luna_index_manager.db.context.</code><code class="descname">DBContext</code><span class="sig-paren">(</span><em>logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>DB context</p>
+<dl class="attribute">
+<dt id="luna_index_manager.db.context.DBContext.logger">
+<code class="descname">logger</code><a class="headerlink" href="#luna_index_manager.db.context.DBContext.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>request logger</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.createNewTask">
+<code class="descname">createNewTask</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.createNewTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.createNewTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new task in db</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>listId</strong> – indexed list id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">task id</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.getCurrentGenerations">
+<code class="descname">getCurrentGenerations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.getCurrentGenerations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.getCurrentGenerations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list ids and last successful generations for them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict, key - list id, value - generations</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.getStartAndUploadIndexTime">
+<code class="descname">getStartAndUploadIndexTime</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.getStartAndUploadIndexTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.getStartAndUploadIndexTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get start index time and upload index time for list with listId</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>listId</strong> – list id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple with start index time and upload index time</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.getSuccessStartIndexTimeOfList">
+<code class="descname">getSuccessStartIndexTimeOfList</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.getSuccessStartIndexTimeOfList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.getSuccessStartIndexTimeOfList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get start index time of last success upload to matchers index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>listId</strong> – list id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">start index time</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.getTask">
+<code class="descname">getTask</code><span class="sig-paren">(</span><em>taskId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.getTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.getTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get task by id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>taskId</strong> – task id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict, keys are IndexTaskLog column name + error, values are value of corresponding column  from IndexTaskLog +
+dict with error</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><em>VLException(Error.IndexTaskNotFouns, 404, isCriticalError=False)</em> – if task not found</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.getTaskError">
+<code class="descname">getTaskError</code><span class="sig-paren">(</span><em>taskId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.getTaskError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.getTaskError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get task error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>taskId</strong> – task id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict, keys are Error column name, values are value of corresponding column if error exist otherwise None.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.isIndexesUploadToMatcher">
+<code class="descname">isIndexesUploadToMatcher</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.isIndexesUploadToMatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.isIndexesUploadToMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determinate if there are matchers with indexes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">true if last time success reloaded indexes is greater than last failed reload indexes time otherwise false</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.isTaskForListInProgress">
+<code class="descname">isTaskForListInProgress</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.isTaskForListInProgress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.isTaskForListInProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that current task works with listId
+:returns: true if current task works with list else false</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.putError">
+<code class="descname">putError</code><span class="sig-paren">(</span><em>taskId</em>, <em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.putError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.putError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put task error</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>taskId</strong> – task id</li>
+<li><strong>msg</strong> – error message</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">error id</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.searchTasks">
+<code class="descname">searchTasks</code><span class="sig-paren">(</span><em>page=1</em>, <em>pageSize=100</em>, <em>generations=None</em>, <em>listIds=None</em>, <em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.searchTasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.searchTasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search tasks</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>page</strong> – page number</li>
+<li><strong>pageSize</strong> – page size</li>
+<li><strong>generations</strong> – list of generations</li>
+<li><strong>listIds</strong> – list ids</li>
+<li><strong>status</strong> – status of rask</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of dict (keys are IndexTaskLog column name + error, values are value of corresponding column  from IndexTaskLog +
+dict with error) and task count</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.updateTaskData">
+<code class="descname">updateTaskData</code><span class="sig-paren">(</span><em>taskId</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.updateTaskData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.updateTaskData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update task data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>taskId</strong> – task id</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>generation</strong> (<em>str</em>) – generation name from indexer</li>
+<li><strong>status</strong> (<em>int</em>) – status of task 0 - success done, 1 - failed, 2 - cancelled</li>
+<li><strong>start_index_time</strong> (<em>datetime</em>) – start time of the index step</li>
+<li><strong>end_index_time</strong> (<em>datetime</em>) – end time of the index step</li>
+<li><strong>start_upload_index_time</strong> (<em>datetime</em>) – start time of the index upload step</li>
+<li><strong>end_upload_index_time</strong> (<em>datetime</em>) – end time of the index upload  step</li>
+<li><strong>start_reload_index_time</strong> (<em>datetime</em>) – end time of the index reload step</li>
+<li><strong>end_reload_index_time</strong> (<em>datetime</em>) – end time of the index reload step</li>
+<li><strong>end_time</strong> (<em>datetime</em>) – task end time</li>
+<li><strong>last_update_time</strong> (<em>datetime</em>) – task last update time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.db.context.DBContext.updateTasksNullStatus">
+<code class="descname">updateTasksNullStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#DBContext.updateTasksNullStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.DBContext.updateTasksNullStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set ‘failed’ status to tasks with ‘null’ status after statring service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_index_manager.db.context.exceptionWrap">
+<code class="descclassname">luna_index_manager.db.context.</code><code class="descname">exceptionWrap</code><span class="sig-paren">(</span><em>wrapFunc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#exceptionWrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.exceptionWrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for catching exceptions when composing queries to the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wrapFunc</strong> – function</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">If exception is not caught, function result is returned, else Result        with value of exception is returned</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">&lt;built-in function callable&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_index_manager.db.context.getTaskInfoAsDict">
+<code class="descclassname">luna_index_manager.db.context.</code><code class="descname">getTaskInfoAsDict</code><span class="sig-paren">(</span><em>taskRow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/db/context.html#getTaskInfoAsDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.db.context.getTaskInfoAsDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert task tuple from db to dict
+:param taskRow: task row (with error_time, message and error_id)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict, keys are IndexTaskLog column name + error, values are value of corresponding column  from IndexTaskLog +
+dict with error</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="database.html">Documentation for Database usage</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="db_models.html">DB model</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,256 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Postgres work functions &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PostgreSQL DB model" href="db_models.html" />
+    <link rel="prev" title="Documentation for Postgres usage" href="postgres.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Postgres work functions</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="postgres.html">Documentation for Postgres usage</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="db_models.html">PostgreSQL DB model</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_api.db.db_function">
+<span id="postgres-work-functions"></span><h1>Postgres work functions<a class="headerlink" href="#module-luna_api.db.db_function" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_api.db.db_function.DBContext">
+<em class="property">class </em><code class="descclassname">luna_api.db.db_function.</code><code class="descname">DBContext</code><span class="sig-paren">(</span><em>logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for requests to postgres.</p>
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.checkAccountIsActive">
+<code class="descname">checkAccountIsActive</code><span class="sig-paren">(</span><em>accountId: uuidStr</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.checkAccountIsActive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.checkAccountIsActive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if account is active or not.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>accountId: id of account on check.</dd>
+<dt>Returns:</dt>
+<dd>true if account is active, else false</dd>
+<dt>Raises:</dt>
+<dd>VLException(Error.AccountNotFound)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.checkTokenExist">
+<code class="descname">checkTokenExist</code><span class="sig-paren">(</span><em>tokenId: uuidStr</em>, <em>accountId: uuidStr</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.checkTokenExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.checkTokenExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if token with id is linked to account.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>tokenId:  token id.
+accountId: account id.</dd>
+<dt>Returns:</dt>
+<dd>True if token is exist else False</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.checkoutLoginPassword">
+<code class="descname">checkoutLoginPassword</code><span class="sig-paren">(</span><em>login: str</em>, <em>password: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.checkoutLoginPassword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.checkoutLoginPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check of login/password pair existence.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>login:  login for authentication
+password: password for authentication</dd>
+<dt>Returns:</dt>
+<dd>account id</dd>
+<dt>Raises:</dt>
+<dd>VLException(Error.AccountNotFound, 401, isCriticalError = False),
+VLException(Error.AccountNotFound, 401, isCriticalError = False)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.createAccountToken">
+<code class="descname">createAccountToken</code><span class="sig-paren">(</span><em>accountId: uuidStr</em>, <em>info=''</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.createAccountToken"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.createAccountToken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creation of token for the account.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>info: user info for token
+accountId: account id, the token is created to.</dd>
+<dt>Returns:</dt>
+<dd>token_id</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.getAccountByAccountId">
+<code class="descname">getAccountByAccountId</code><span class="sig-paren">(</span><em>accountId: uuidStr</em><span class="sig-paren">)</span> &#x2192; db.models.Account<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.getAccountByAccountId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.getAccountByAccountId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive account by id.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>accountId: account id</dd>
+<dt>Returns:</dt>
+<dd>account (tuple with account_id, status, email, password, organization_name)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.getAccountIdByToken">
+<code class="descname">getAccountIdByToken</code><span class="sig-paren">(</span><em>tokenId: uuidStr</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.getAccountIdByToken"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.getAccountIdByToken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive account id by token.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>tokenId: token id</dd>
+<dt>Returns:</dt>
+<dd>account id</dd>
+<dt>Raises:</dt>
+<dd>VLException(Error.AccountNotFound, isCriticalError = False)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.getAccountTokenCount">
+<code class="descname">getAccountTokenCount</code><span class="sig-paren">(</span><em>accountId: uuidStr</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.getAccountTokenCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.getAccountTokenCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get account tokens count</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>accountId: account id</dd>
+<dt>Returns:</dt>
+<dd>count of account tokens</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.getAccountTokens">
+<code class="descname">getAccountTokens</code><span class="sig-paren">(</span><em>accountId: uuidStr</em>, <em>page=1</em>, <em>pageSize=100</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.getAccountTokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.getAccountTokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive account token list</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>accountId: account id
+page: page
+pageSize: page size</dd>
+<dt>Returns:</dt>
+<dd>list of token</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.getTokenById">
+<code class="descname">getTokenById</code><span class="sig-paren">(</span><em>tokenId: uuidStr</em>, <em>accountId: uuidStr</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.getTokenById"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.getTokenById" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get token_info by  id token and account token_info.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>tokenId: id  token
+accountId: account id, token is linked to.</dd>
+<dt>Returns:</dt>
+<dd>token data</dd>
+<dt>Raises:</dt>
+<dd>VLException(Error.TokenNotFound, 404)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.registerAccount">
+<code class="descname">registerAccount</code><span class="sig-paren">(</span><em>name: str</em>, <em>email: str</em>, <em>password: str</em><span class="sig-paren">)</span> &#x2192; tuple<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.registerAccount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.registerAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Account creation. Account and first token are created simultaneously.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name: organization name
+email: e-mail
+password: password</dd>
+<dt>Returns:</dt>
+<dd>tuple with account id and token id</dd>
+<dt>Raises:</dt>
+<dd>VLException(Error.EmailExist, 409, isCriticalError = False)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.removeTokens">
+<code class="descname">removeTokens</code><span class="sig-paren">(</span><em>tokens: List[uuidStr], accountId: uuidStr</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.removeTokens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.removeTokens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete list of account.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>tokens:  list of tokens
+accountId: account id. tokens are linked to</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.db.db_function.DBContext.updateTokenInfo">
+<code class="descname">updateTokenInfo</code><span class="sig-paren">(</span><em>tokenId: uuidStr</em>, <em>accountId: uuidStr</em>, <em>data: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/luna_api/db/db_function.html#DBContext.updateTokenInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.DBContext.updateTokenInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update of token information.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>tokenId: token id, which is updated
+accountId: account id, token is linked to.
+data: new token data</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.db.db_function.exceptionWrap">
+<code class="descclassname">luna_api.db.db_function.</code><code class="descname">exceptionWrap</code><span class="sig-paren">(</span><em>wrapFunc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/db/db_function.html#exceptionWrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.db.db_function.exceptionWrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for catching exceptions when composing queries to the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">If exception is not caught, will be raise VLException(Error.CreateQueryError), reraise VLException</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.db.db_function.pool">
+<code class="descclassname">luna_api.db.db_function.</code><code class="descname">pool</code><em class="property"> = None</em><a class="headerlink" href="#luna_api.db.db_function.pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>poll of connections to postgres, created by every worker at the moment of first connection</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="luna_api.db.db_function.uuidStr">
+<code class="descclassname">luna_api.db.db_function.</code><code class="descname">uuidStr</code><em class="property"> = ~uuidStr</em><a class="headerlink" href="#luna_api.db.db_function.uuidStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>uuid4 or uuid4 converted into string</p>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="postgres.html">Documentation for Postgres usage</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="db_models.html">PostgreSQL DB model</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

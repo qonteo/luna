@@ -1,0 +1,26 @@
+v.1.0.3
+=======
+
+Improvements:
+-------------
+
+
+    1) Add submodule to projects, some features, such as baseHandler, errors, utils, regexps and log moved there
+
+    2) Up luna3.
+
+    3) Changed max size of external id from 128 to 36 symbols.
+
+
+Bugs fixed:
+-----------
+
+    1) Add indexes by *link_key* and *person_id*.
+
+    #) Fix link_key duplication on face update.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests* and update dependencies from
+requirements.txt.

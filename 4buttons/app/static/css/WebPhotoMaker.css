@@ -1,0 +1,45 @@
+#video-container {
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+#best-shot {
+    position: absolute;
+    top: 0px;
+    left: 650px;
+    width: 180;
+    height: 240;
+    display: none;
+}
+
+#controls {
+    position: absolute;
+    top: 450px;
+    left: 650px;
+}
+
+/* current movement */
+#exp-mov {
+    position: absolute;
+    top: 470px;
+    left: 650px;
+}
+
+#webcam, #overlay {
+    width: 100%;
+    margin-top: -10%;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    /*-o-transform: scaleX(-1);*/
+    /*-webkit-transform: scaleX(-1);*/
+    /*transform: scaleX(-1);*/
+}
+
+
+#video-container, .col-md-6, .row, .browser-page__block, .main-content  {
+    height: 100%;
+}

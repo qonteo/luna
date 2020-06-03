@@ -1,0 +1,634 @@
+{
+"dashboard" :
+  {
+	  "annotations": {
+		"list": []
+	  },
+	  "editable": true,
+	  "gnetId": null,
+	  "graphTooltip": 0,
+	  "hideControls": false,
+	  "id": null,
+	  "links": [],
+	  "refresh": "5s",
+	  "rows": [
+		{
+		  "collapse": false,
+		  "height": "250px",
+		  "panels": [
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 1,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "Old descriptors count",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"1m"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "hide": false,
+				  "measurement": "gc_descriptors",
+				  "policy": "default",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "luna_descriptor_count"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "sum"
+					  }
+					]
+				  ],
+				  "tags": []
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "Remove old descriptors",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			},
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 5,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "request time, max",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "gc_descriptors",
+				  "policy": "default",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "request_time"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "max"
+					  }
+					]
+				  ],
+				  "tags": []
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "Descriptors GC, request time",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			}
+		  ],
+		  "repeat": null,
+		  "repeatIteration": null,
+		  "repeatRowId": null,
+		  "showTitle": false,
+		  "title": "Dashboard Row",
+		  "titleSize": "h6"
+		},
+		{
+		  "collapse": false,
+		  "height": 250,
+		  "panels": [
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 2,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 12,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "Error count",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"null"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "gc_errors",
+				  "policy": "autogen",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "text"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "count"
+					  }
+					]
+				  ],
+				  "tags": []
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "GC errors",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			}
+		  ],
+		  "repeat": null,
+		  "repeatIteration": null,
+		  "repeatRowId": null,
+		  "showTitle": false,
+		  "title": "Dashboard Row",
+		  "titleSize": "h6"
+		},
+		{
+		  "collapse": false,
+		  "height": 250,
+		  "panels": [
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 3,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "Duplicate errors, count",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "gc_lists",
+				  "policy": "autogen",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "duplicate_error_count"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "sum"
+					  }
+					]
+				  ],
+				  "tags": []
+				},
+				{
+				  "alias": "Non attach errors count",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "gc_lists",
+				  "policy": "autogen",
+				  "refId": "B",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "non_attach_error_count"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "sum"
+					  }
+					]
+				  ],
+				  "tags": []
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "GC List errors",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			},
+			{
+			  "aliasColors": {},
+			  "bars": false,
+			  "datasource": "$datasource",
+			  "fill": 1,
+			  "id": 4,
+			  "legend": {
+				"avg": false,
+				"current": false,
+				"max": false,
+				"min": false,
+				"show": true,
+				"total": false,
+				"values": false
+			  },
+			  "lines": true,
+			  "linewidth": 1,
+			  "links": [],
+			  "nullPointMode": "null",
+			  "percentage": false,
+			  "pointradius": 5,
+			  "points": false,
+			  "renderer": "flot",
+			  "seriesOverrides": [],
+			  "span": 6,
+			  "stack": false,
+			  "steppedLine": false,
+			  "targets": [
+				{
+				  "alias": "time of GC one list, mean",
+				  "dsType": "influxdb",
+				  "groupBy": [
+					{
+					  "params": [
+						"$$__interval"
+					  ],
+					  "type": "time"
+					},
+					{
+					  "params": [
+						"0"
+					  ],
+					  "type": "fill"
+					}
+				  ],
+				  "measurement": "gc_lists",
+				  "policy": "default",
+				  "refId": "A",
+				  "resultFormat": "time_series",
+				  "select": [
+					[
+					  {
+						"params": [
+						  "request_time"
+						],
+						"type": "field"
+					  },
+					  {
+						"params": [],
+						"type": "mean"
+					  }
+					]
+				  ],
+				  "tags": []
+				}
+			  ],
+			  "thresholds": [],
+			  "timeFrom": null,
+			  "timeShift": null,
+			  "title": "List GC Request time",
+			  "tooltip": {
+				"shared": true,
+				"sort": 0,
+				"value_type": "individual"
+			  },
+			  "type": "graph",
+			  "xaxis": {
+				"mode": "time",
+				"name": null,
+				"show": true,
+				"values": []
+			  },
+			  "yaxes": [
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				},
+				{
+				  "format": "short",
+				  "label": null,
+				  "logBase": 1,
+				  "max": null,
+				  "min": null,
+				  "show": true
+				}
+			  ]
+			}
+		  ],
+		  "repeat": null,
+		  "repeatIteration": null,
+		  "repeatRowId": null,
+		  "showTitle": false,
+		  "title": "Dashboard Row",
+		  "titleSize": "h6"
+		}
+	  ],
+	  "schemaVersion": 14,
+	  "style": "dark",
+	  "tags": [],
+	  "templating": {
+		"list": []
+	  },
+	  "time": {
+		"from": "now-7d",
+		"to": "now"
+	  },
+	  "timepicker": {
+		"refresh_intervals": [
+		  "5s",
+		  "10s",
+		  "30s",
+		  "1m",
+		  "5m",
+		  "15m",
+		  "30m",
+		  "1h",
+		  "2h",
+		  "1d"
+		],
+		"time_options": [
+		  "5m",
+		  "15m",
+		  "1h",
+		  "6h",
+		  "12h",
+		  "24h",
+		  "2d",
+		  "7d",
+		  "30d"
+		]
+	  },
+	  "timezone": "browser",
+	  "title": "$dashboard_name",
+	  "version": 12
+	}
+}

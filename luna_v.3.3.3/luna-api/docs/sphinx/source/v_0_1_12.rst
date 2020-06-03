@@ -1,0 +1,38 @@
+v.0.1.12
+========
+
+Improvements:
+-------------
+
+	1) Add ability search by dynamic list of descriptors, see raml, query-argument *descriptor_ids*.
+
+	#) Add to CI, run all tests in CI.
+
+	#) Set default handlers of errors 404 and 405.
+
+	#) Refactoring sending of stats. Dispatch of token with token_data.
+
+	#) For method 'PATCH' of resources "/storage/persons/{person_id}", "/storage/tokens/{token_id}",
+	   "/storage/lists/{list_id}" json and fields `user_data`, `token_data`, `list_data`  are required. Add examples in raml.
+
+
+Bugs fixed:
+-----------
+
+	1) Fix raml documentation for method  'GET' of resource '/storage/lists', correct  example and description.
+
+	#) Fix incorrect inheritance of StorageHandler. Childes  had methods of LoginHandler.
+
+	#) Fix sorting of persons and descriptors by create and update time.
+
+	#) Fix conversation to number  query param for resources "/descriptors", "/search".
+
+	#) Fix required param "list_id" in raml in match resources.
+
+	#) Update raml, add text about necessary field in query params for matching.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

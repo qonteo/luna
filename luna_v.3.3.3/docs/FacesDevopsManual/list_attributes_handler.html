@@ -1,0 +1,251 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>List attributes handler &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="List handler" href="list_handler.html" />
+    <link rel="prev" title="List handler" href="linker_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>List attributes handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="linker_handler.html">List handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="list_handler.html">List handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_faces.app.handlers.list_attributes_handler">
+<span id="list-attributes-handler"></span><h1>List attributes handler<a class="headerlink" href="#module-luna_faces.app.handlers.list_attributes_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_faces.app.handlers.list_attributes_handler.ListDeletionsHandler">
+<em class="property">class </em><code class="descclassname">luna_faces.app.handlers.list_attributes_handler.</code><code class="descname">ListDeletionsHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/list_attributes_handler.html#ListDeletionsHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.list_attributes_handler.ListDeletionsHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for work with deletions history of list</p>
+<dl class="method">
+<dt id="luna_faces.app.handlers.list_attributes_handler.ListDeletionsHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/list_attributes_handler.html#ListDeletionsHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.list_attributes_handler.ListDeletionsHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get deletions history.</p>
+<p>Resource is reached by address ‘/lists/{listId}/deletions’</p>
+<dl class="get">
+<dt id="get--lists-listId-deletions">
+<code class="descname">GET </code><code class="descname">/lists/{listId}/deletions</code><a class="headerlink" href="#get--lists-listId-deletions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> – list id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>unlink_key__lt</strong> – upper bound of attributes create time</li>
+<li><strong>unlink_key__gte</strong> – lower bound of face create time</li>
+<li><strong>list_id</strong> – list id</li>
+<li><strong>limit</strong> – limit</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/lists/{listId}/deletions</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Begin-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9173293</span>
+<span class="na">End-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9505265</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="minus_delta">
+<!--[minus_delta]--><code class="descname">minus_delta</code><a class="headerlink" href="#minus_delta" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>attributes_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – attributes id</li>
+<li><strong>link_key</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – link key</li>
+<li><strong>unlink_key</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – unlink_key</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;attributes_id&quot;</span><span class="p">:</span> <span class="s2">&quot;faf18355-c4fb-4a11-96aa-646bc6a965f0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;link_key&quot;</span><span class="p">:</span> <span class="mi">4003</span><span class="p">,</span>
+    <span class="nt">&quot;unlink_key&quot;</span><span class="p">:</span> <span class="mi">6963</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Returns list of <a class="reference internal" href="#minus_delta"><code class="xref json json-object docutils literal notranslate"><span class="pre">minus_delta</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – list not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_faces.app.handlers.list_attributes_handler.ListDescriptorsHandler">
+<em class="property">class </em><code class="descclassname">luna_faces.app.handlers.list_attributes_handler.</code><code class="descname">ListDescriptorsHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/list_attributes_handler.html#ListDescriptorsHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.list_attributes_handler.ListDescriptorsHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for work with attributes of list</p>
+<dl class="method">
+<dt id="luna_faces.app.handlers.list_attributes_handler.ListDescriptorsHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/list_attributes_handler.html#ListDescriptorsHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.list_attributes_handler.ListDescriptorsHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource is reached by address ‘/lists/{listId}/attributes’</p>
+<dl class="get">
+<dt id="get--lists-listId-attributes">
+<code class="descname">GET </code><code class="descname">/lists/{listId}/attributes</code><a class="headerlink" href="#get--lists-listId-attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> – list id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>link_key__lt</strong> – upper bound of a link key</li>
+<li><strong>link_key__gte</strong> – lower bound of a link key</li>
+<li><strong>list_id</strong> – list id</li>
+<li><strong>limit</strong> – limit</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span>  <span class="nn">/lists/{listId}/attributes</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Begin-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9173293</span>
+<span class="na">End-Request-Time</span><span class="o">:</span> <span class="l">1526039272.9505265</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="plus_delta">
+<!--[plus_delta]--><code class="descname">plus_delta</code><a class="headerlink" href="#plus_delta" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>attributes_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – attributes id</li>
+<li><strong>link_key</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – link key</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;attributes_id&quot;</span><span class="p">:</span> <span class="s2">&quot;186809be-7fe3-4bf4-a472-8b7e9a5cc6c9&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;link_key&quot;</span><span class="p">:</span> <span class="mi">5261</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Returns list of <a class="reference internal" href="#plus_delta"><code class="xref json json-object docutils literal notranslate"><span class="pre">plus_delta</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – list not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="linker_handler.html">List handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="list_handler.html">List handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

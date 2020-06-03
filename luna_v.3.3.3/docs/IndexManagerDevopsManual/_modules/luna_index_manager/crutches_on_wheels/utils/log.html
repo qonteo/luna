@@ -1,0 +1,133 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_index_manager.crutches_on_wheels.utils.log &#8212; luna-index-manager v.0.0.3 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>luna-index-manager v.0.0.3 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_index_manager.crutches_on_wheels.utils.log</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_index_manager.crutches_on_wheels.utils.log</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Loggers</span>
+
+<span class="sd">Loggers module.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logbook</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">logbook</span> <span class="k">import</span> <span class="n">StreamHandler</span>
+<span class="kn">from</span> <span class="nn">logbook</span> <span class="k">import</span> <span class="n">Logger</span> <span class="k">as</span> <span class="n">BaseLogger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
+
+<span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span><span class="o">.</span><span class="n">push_application</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">Logger</span><span class="p">(</span><span class="n">BaseLogger</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Application logger</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">logbook</span><span class="o">.</span><span class="n">DEBUG</span>
+    <span class="n">LOG_TIME</span> <span class="o">=</span> <span class="s2">&quot;LOCAL&quot;</span>
+
+    <span class="n">APP_NAME</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">LOGS_FILE_HANDLERS</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">getLogLevel</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get log level from config for logger.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: if LOG_LEVEL not set or incorrect will return logbook.NOTSET</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">logbook</span><span class="o">.</span><span class="n">DEBUG</span>
+        <span class="k">if</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">logbook</span><span class="o">.</span><span class="n">ERROR</span>
+        <span class="k">if</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;INFO&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">logbook</span><span class="o">.</span><span class="n">INFO</span>
+        <span class="k">if</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">logbook</span><span class="o">.</span><span class="n">WARNING</span>
+        <span class="k">return</span> <span class="n">logbook</span><span class="o">.</span><span class="n">NOTSET</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">initiate</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">appName</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">logLevel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="n">logTime</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;LOCAL&quot;</span><span class="p">,</span>
+                 <span class="n">folderForLog</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;./&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiate class settings.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            appName: application name</span>
+<span class="sd">            logLevel: log level</span>
+<span class="sd">            logTime: time of logs</span>
+<span class="sd">            folderForLog: folder with log-files</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">getLogLevel</span><span class="p">(</span><span class="n">logLevel</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">LOG_TIME</span> <span class="o">=</span> <span class="n">logTime</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">APP_NAME</span> <span class="o">=</span> <span class="n">appName</span>
+        <span class="n">DEBUG_FILE_HANDLER</span> <span class="o">=</span> <span class="n">logbook</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folderForLog</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_DEBUG.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">appName</span><span class="p">)),</span>
+                                                 <span class="n">level</span><span class="o">=</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="n">bubble</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">ERROR_FILE_HANDLER</span> <span class="o">=</span> <span class="n">logbook</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folderForLog</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_ERROR.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">appName</span><span class="p">)),</span>
+                                                 <span class="n">level</span><span class="o">=</span><span class="s1">&#39;ERROR&#39;</span><span class="p">,</span> <span class="n">bubble</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">LOGS_FILE_HANDLERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">DEBUG_FILE_HANDLER</span><span class="p">,</span> <span class="n">ERROR_FILE_HANDLER</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">LOG_TIME</span> <span class="o">==</span> <span class="s2">&quot;LOCAL&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">LOGS_FILE_HANDLERS</span><span class="p">:</span>
+                <span class="n">handler</span><span class="o">.</span><span class="n">formatter</span><span class="o">.</span><span class="n">converter</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span>
+            <span class="n">logbook</span><span class="o">.</span><span class="n">set_datetime_format</span><span class="p">(</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Init logger.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            template: string for marking logs. Typical usage - request id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">templateString</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Logger</span><span class="o">.</span><span class="n">APP_NAME</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span> <span class="k">if</span> <span class="n">template</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Logger</span><span class="o">.</span><span class="n">APP_NAME</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">templateString</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="n">LOG_LEVEL</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">Logger</span><span class="o">.</span><span class="n">LOGS_FILE_HANDLERS</span><span class="p">)</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

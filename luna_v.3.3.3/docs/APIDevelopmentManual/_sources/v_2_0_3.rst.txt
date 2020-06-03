@@ -1,0 +1,18 @@
+v.2.0.3
+=======
+
+Improvements:
+-------------
+
+    1) Up luna3 version.
+
+Bugs fixed:
+-----------
+
+    1) Fixed a bug which removed *user_data* of person in patching external id.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_api, tests, uploads_scripts*
+and update dependencies from requirements.txt.

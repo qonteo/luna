@@ -1,0 +1,566 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Storage API &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documentation for Postgres usage" href="postgres.html" />
+    <link rel="prev" title="Registration" href="registration.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Storage API</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="registration.html">Registration</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="postgres.html">Documentation for Postgres usage</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_api.app.rest_handlers.storage_handlers">
+<span id="storage-api"></span><h1>Storage API<a class="headerlink" href="#module-luna_api.app.rest_handlers.storage_handlers" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.storage_handlers.LoginHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.storage_handlers.</code><code class="descname">LoginHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#LoginHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.LoginHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for installation of cookies and for account id receipt.</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.LoginHandler.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#LoginHandler.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.LoginHandler.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete cookies</p>
+<dl class="delete">
+<dt id="delete--login">
+<code class="descname">DELETE </code><code class="descname">/login</code><a class="headerlink" href="#delete--login" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Reqheader Authorization:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">basic authorization</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Statuscode 204:</th><td class="field-body">cookies are deleted successfully</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.LoginHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#LoginHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.LoginHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get account id.</p>
+<dl class="get">
+<dt id="get--login">
+<code class="descname">GET </code><code class="descname">/login</code><a class="headerlink" href="#get--login" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">text/html</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.LoginHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#LoginHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.LoginHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install cookies for authorization.</p>
+<dl class="post">
+<dt id="post--login">
+<code class="descname">POST </code><code class="descname">/login</code><a class="headerlink" href="#post--login" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – cookie is successfully installed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5">204 No Content</a> – cookies are already installed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.LoginHandler.prepare">
+<code class="descname">prepare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#LoginHandler.prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.LoginHandler.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Account authentication. This method is called before any client request, which refers to account data access, is
+executed. This method executes installation, in case of success system returns <em>self.accountId</em>.</p>
+<p>For authenication basic authorization is used. Field <em>Authorization</em> with value <em>‘Basic login:password’</em> 
+has to be put in header. String <em>‘login:password’</em> contains login/password for access to account,
+string has to be converted to base64.</p>
+<dl class="any">
+<dt id="any--">
+<code class="descname">ANY </code><code class="descname">/</code><a class="headerlink" href="#any--" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+<li><em>LUNA-Request-Id</em> – some id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Reject</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+<span class="na">&#39;WWW-Authenticate&#39;</span><span class="o">:</span> <span class="l">&#39;Basic realm=&quot;login:password&quot;&#39;</span>
+</pre></div>
+</div>
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – no header for authorization</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – header for authorization is not basic authorization</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – account not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.storage_handlers.</code><code class="descname">StorageHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authentication for accessing account data (such as lists, persons, descriptors) and matching.
+This method is called before any client request associated with account data.
+This method does installation in case of successful authentication <em>self.accountId</em>.</p>
+<p>For authentication you can use basic authorization or authentication by token.</p>
+<p>Basic authorization. In header you need to put field <em>Authorization</em>
+with value <em>‘Basic login:password’</em>. String <em>‘login:password’</em> contains login/password for access to account, whole
+string must be converted to base64.</p>
+<p>Authentication by token. In header you need to put field  <em>X-Auth-Token</em>
+with value of token from this account.</p>
+<dl class="any">
+<dt id="any--">
+<code class="descname">ANY </code><code class="descname">/</code><a class="headerlink" href="#any--" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Reject</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">&#39;WWW-Authenticate&#39;</span><span class="o">:</span> <span class="l">&#39;Basic realm=&quot;login:password&quot; or token&#39;</span>
+</pre></div>
+</div>
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – no authorization header</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – authorization header is not basic authorization</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – account not found for these login/password</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a> – account is currently inactive</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.fillQueryParams">
+<code class="descname">fillQueryParams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.fillQueryParams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.fillQueryParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the parameter structure to extract from query.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">structure with parameters</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAccountStats">
+<code class="descname">generateAccountStats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.generateAccountStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAccountStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate common json-dict to send client statistics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">in case of exception None is returned, in other cases:<dl class="object">
+<dt>
+<code class="descname">client_stats</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>result</strong> (<a class="reference internal" href="matching.html#identify_result"><code class="xref json json-object docutils literal notranslate"><span class="pre">identify_result</span></code></a>) – json with request results.</li>
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – id account</li>
+<li><strong>event_type</strong> (<em>&quot;match&quot;</em>) – type of event (“match”, “extract”)</li>
+<li><strong>authorization</strong> (<a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a>) – authorization, “basic” or <a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a></li>
+<li><strong>source</strong> (<em>'match'</em>) – request resource (“match”, “descriptors”)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4ece9a39-215e-432a-a784-e3315a60ed1a&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;whitedylan&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;eed1704b-5126-43ae-ba6d-09f37b0f4096&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;724faefc-b8ad-4700-9b5b-60ff7027b578&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.7593059999999952</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;latasha75&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;ddaee75a-7262-4e23-833d-206908de6ae4&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;29b46649-a4d5-4b59-a765-895813082980&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.6000000000000014</span><span class="p">,</span>
+                <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;williamjones&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;28e19db4-f092-4c05-8421-6e800b116d02&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;e431306b-4feb-4e4f-92cb-c350b95bc6f5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;event_type&quot;</span><span class="p">:</span> <span class="s2">&quot;{\&quot;match\&quot; object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;authorization&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;58a86021-1f52-4326-84f2-47daf9f71296&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;79032 Fleming Stream Suite 101&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;{&#39;match&#39; object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAdminStatisticsRequestBody">
+<code class="descname">generateAdminStatisticsRequestBody</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.generateAdminStatisticsRequestBody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.generateAdminStatisticsRequestBody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate body request to send admin statistics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ol class="arabic simple">
+<li>in case of success following string is generated <em>“extract_success,resource=/descriptors,         server=127.0.0.1,account_id=16fd2706-8baf-433b-82eb-8c7fada847da,count_faces=1 value_time=0.33”</em></li>
+<li>in case of failure following string is generated <em>“errors,resource=/descriptors,server=127.0.0.1,         account_id=16fd2706-8baf-433b-82eb-8c7fada847da,error=2 value=2”</em></li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.getAuthForStats">
+<code class="descname">getAuthForStats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.getAuthForStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.getAuthForStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get authorization for account stats.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">if success “basic” or <a class="reference internal" href="handlers.html#auth_token"><code class="xref json json-object docutils literal notranslate"><span class="pre">auth_token</span></code></a>, if failed None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.prepare">
+<code class="descname">prepare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Account authentication. This method is called before any client request, which refers to account data access, is
+executed. This method executes installation, in case of success system returns <em>self.accountId</em>.</p>
+<p>For authenication basic authorization is used. Field <em>Authorization</em> with value <em>‘Basic login:password’</em> 
+has to be put in header. String <em>‘login:password’</em> contains login/password for access to account,
+string has to be converted to base64.</p>
+<dl class="any">
+<dt id="any--">
+<code class="descname">ANY </code><code class="descname">/</code><a class="headerlink" href="#any--" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+<li><em>LUNA-Request-Id</em> – some id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Reject</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+<span class="na">&#39;WWW-Authenticate&#39;</span><span class="o">:</span> <span class="l">&#39;Basic realm=&quot;login:password&quot;&#39;</span>
+</pre></div>
+</div>
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – no header for authorization</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – header for authorization is not basic authorization</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – account not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.sendStats">
+<code class="descname">sendStats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.sendStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.sendStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to send statistics. Called, when account has already received answer in method <em>on_finish</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAccountStatistic">
+<code class="descname">setAdditionalDataToAccountStatistic</code><span class="sig-paren">(</span><em>accountStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.setAdditionalDataToAccountStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAccountStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>For childes of  <em>StorageHandler</em> method of set additional account stats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>accountStats</strong> – common stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAdminStatistic">
+<code class="descname">setAdditionalDataToAdminStatistic</code><span class="sig-paren">(</span><em>adminStats</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.setAdditionalDataToAdminStatistic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setAdditionalDataToAdminStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>For childes of  <em>StorageHandler</em> method of set additional admin stats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>adminStats</strong> – common stats</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new stats</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandler.setListDataToAccountStats">
+<code class="descname">setListDataToAccountStats</code><span class="sig-paren">(</span><em>stats: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandler.setListDataToAccountStats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandler.setListDataToAccountStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add list data to matching statistics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>stats</strong> – account statistics</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandlerBase">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.storage_handlers.</code><code class="descname">StorageHandlerBase</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandlerBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandlerBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases class for authorization by token an login/password.</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.storage_handlers.StorageHandlerBase.prepare">
+<code class="descname">prepare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/storage_handlers.html#StorageHandlerBase.prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.storage_handlers.StorageHandlerBase.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Account authentication. This method is called before any client request, which refers to account data access, is
+executed. This method executes installation, in case of success system returns <em>self.accountId</em>.</p>
+<p>For authenication basic authorization is used. Field <em>Authorization</em> with value <em>‘Basic login:password’</em> 
+has to be put in header. String <em>‘login:password’</em> contains login/password for access to account,
+string has to be converted to base64.</p>
+<dl class="any">
+<dt id="any--">
+<code class="descname">ANY </code><code class="descname">/</code><a class="headerlink" href="#any--" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – basic authorization</li>
+<li><em>LUNA-Request-Id</em> – some id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Reject</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+<span class="na">&#39;WWW-Authenticate&#39;</span><span class="o">:</span> <span class="l">&#39;Basic realm=&quot;login:password&quot;&#39;</span>
+</pre></div>
+</div>
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – no header for authorization</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – header for authorization is not basic authorization</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2">401 Unauthorized</a> – account not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="registration.html">Registration</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="postgres.html">Documentation for Postgres usage</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

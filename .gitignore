@@ -1,0 +1,11 @@
+luna_v.3.3.3/bin/libfolly.so.57.0.0 
+luna_v.3.3.3/luna-image-store/luna_image_store/luna-image-store_DEBUG.txt
+luna_v.3.3.3/bin/libcudnn.so.7
+luna_v.3.3.3/data/cnn52b_avx2.plan
+luna_v.3.3.3/data/cnn52b_cpu.plan
+luna_v.3.3.3/data/cnn52b_gpu.plan
+luna_v.3.3.3/data/cnn54b_avx2.plan
+luna_v.3.3.3/data/cnn54b_cpu.plan
+luna_v.3.3.3/data/cnn54b_gpu.plan
+luna_v.3.3.3/luna-index-manager/luna_index_manager/luna-index-mngr_DEBUG.txt
+luna_v.3.3.3/luna-index-manager/luna_index_manager/luna-index-mngr_ERROR.txt

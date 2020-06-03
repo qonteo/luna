@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+{% end %}
+
+{% block content %}
+<style>
+    legend { border-bottom: 10px; }
+    .custom-glyphicon { font-size: 28px; }
+    .page-item { cursor: pointer; }
+    [v-cloak] > * { display:none; }
+    [v-cloak]::before {
+      content: " ";
+      display: block;
+      width: 16px;
+      height: 16px;
+      background-image: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==');
+    }
+</style>
+<div id="tasks" v-cloak>
+    <div id="gc_descriptors_tabel">
+        <legend>Descriptors gc:
+            <button type="button" class="btn btn-default btn-sm pull-right" title="start descriptors gc" onclick="startDescriptorsGC()">
+                    <span class="glyphicon custom-glyphicon glyphicon-play" style="vertical-align:middle" ></span>
+            </button>
+        </legend>
+        <tasks-table task-type='descriptors'/>
+    </div>
+
+    <div id="gc_reextract_tabel">
+        <legend>Re-extract gc:
+            <button type="button" class="btn btn-default btn-sm pull-right" title="start re-extract descriptors"  onclick="startReExtractGC()">
+                    <span class="glyphicon custom-glyphicon glyphicon-play"></span>
+            </button>
+        </legend>
+        <tasks-table task-type='reextract'/>
+    </div>
+
+    <task-errors/>
+</div>
+
+<div class="modal fade" id="gc_error_modal_window" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" id="gc_error_modal_window_header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="gc_error_modal_window_body">
+                <p>GC errors.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-template" id="task-errors-template">
+    <div id="task_errors_modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    [[header]]
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li><strong>Task id</strong>: [[task.task_info.task_id]]</li>
+                        <li><strong>Start time</strong>: [[task.task_info.start_time]]</li>
+                        <li><strong>Time</strong>: [[task.task_info.duration]]</li>
+                        <li><strong>Errors</strong>: [[task.task_info.error_count]]</li>
+                    </ul>
+
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Error id</th>
+                                <th>Time of error</th>
+                                <th>Error code</th>
+                                <th>Message</th>
+                                <th>Task type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="error in errors">
+                                <td>[[error.id]]</td>
+                                <td>[[error.error_time]]</td>
+                                <td>[[error.code]]</td>
+                                <td>[[error.message]]</td>
+                                <td>[[error.task_type]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <pager v-bind:entityCount="errorCount" @paginate="onPaginate"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type='text/x-template' id='tasks-table-template'>
+    <div class="tasks-table">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Task id</th>
+                    <th>Time of start</th>
+                    <th>Status</th>
+                    <th v-if="taskType === 'reextract'">Progress</th>
+                    <th>Duration</th>
+                    <th v-if="taskType === 'descriptors'">Remove descriptors</th>
+                    <th v-if="taskType === 'reextract'">Re-extract descriptors count</th>
+                    <th>Errors</th>
+                    <th>Target</th>
+                    <th><i class="glyphicon glyphicon-cog"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(task, index) in tasks">
+                <td>[[task.task_info.task_id]]</td>
+                <td>[[task.task_info.start_time]]</td>
+                <td align="center">
+                    <i v-if="task.task_info.status === null" class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+                    <i v-if="task.task_info.status === true" class="glyphicon glyphicon-ok"></i>
+                    <i v-if="task.task_info.status === false" class="glyphicon glyphicon-remove"></i>
+                </td>
+                <td v-if="task.task_type !== 'removing old descriptors'">[[task.task_info.progress]]</td>
+                <td>[[task.task_info.duration]]</td>
+                <td v-if="task.task_type === 'removing old descriptors'">[[ task.task_detail['count_delete_descriptors'] ]]</td>
+                <td v-if="task.task_type === 're-extract descriptors'">[[ task.task_detail['re-extract descriptors'] ]]</td>
+                <td>[[task.task_info.error_count]]</td>
+                <td>[[task.task_info.target]]</td>
+                <td align="center">
+                    <button type="button" class="btn btn-default btn-sm" title="view details" @click="showErrors(task)">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </button>
+                    <button v-if="task.task_info.status === null" type="button" class="btn btn-default btn-sm" title="stop task" @click='stopTask(index)'>
+                        <span class="glyphicon glyphicon-stop"></span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <pager v-bind:entityCount="taskCount" @paginate="onPaginate"/>
+    </div>
+</script>
+
+<script type="text/x-template" id="pager-template">
+    <div class="card-footer p-0">
+        <nav aria-label="...">
+            <ul class="pagination justify-content-end mt-3 mr-3">
+                <li class="page-item">
+                    <a @click="getPrevPage()">Previous</a>
+                </li>
+                <li class="page-item"><a @click="getFirstPage()">1</a></li>
+                <li class="page-item active">
+                    <span class="page-link">
+                        [[currentPage]]
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                <li class="page-item">
+                    <a @click="getLastPage()">[[lastPage]]</a>
+                </li>
+                <li class="page-item">
+                    <a @click="getNextPage()">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</script>
+
+<script>
+    Vue.component('pager', {
+        template: '#pager-template',
+        delimiters: ['[[', ']]'],
+        props: ['entityCount'],
+        data: function () {
+            return {
+                pageSize: 10,
+                firstPage: 1,
+                currentPage: 1
+            }
+        },
+        computed: {
+            lastPage: function () {
+                return this.entityCount ? Math.ceil(this.entityCount / this.pageSize) : 1;
+            }
+        },
+        methods: {
+            getFirstPage: function () {
+                this.$emit('paginate', 1, this.pageSize);
+                this.currentPage = 1;
+            },
+            getLastPage: function () {
+                this.$emit('paginate', this.lastPage, this.pageSize);
+                this.currentPage = this.lastPage;
+            },
+            getNextPage: function () {
+                if (this.currentPage < this.lastPage) {
+                    this.$emit('paginate', ++this.currentPage, this.pageSize);
+                }
+            },
+            getPrevPage: function () {
+                if (this.currentPage > this.firstPage) {
+                    this.$emit('paginate', --this.currentPage, this.pageSize);
+                }
+            }
+        }
+    });
+
+    Vue.component('tasks-table', {
+        template: '#tasks-table-template',
+        props: ['taskType'],
+        data: function () {
+            return {
+                tasks: [],
+                taskCount: 0
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            onPaginate: function (page, pageSize) {
+                this.getTasks(page, pageSize);
+            },
+            getTasks: function (page, pageSize) {
+                var that = this;
+                axios.get('/2/tasks', {
+                        params: {
+                            task_type: this.taskType,
+                            page: page || 1,
+                            page_size: pageSize || this.pageSize
+                        }
+                    })
+                    .then(function (response) {
+                        that.tasks = response.data.tasks;
+                        that.taskCount = response.data.task_count;
+                    })
+                    .catch(function (error) {
+                        showModalWindowWithText(
+                            error.response.data,
+                            "Update descriptors task error " + error.response.status
+                        );
+                    });
+            },
+            showErrors: function (task) {
+                this.$root.$emit('show-errors', task);
+            },
+            stopTask: function (index) {
+                var task = this.tasks[index]
+                axios.delete('/2/tasks/' + task.task_info.task_id)
+                    .then(function (response) {
+                        showModalWindowWithText("Success", "Stop gc task");
+                        task.task_info.status = false;
+                        Vue.set(this.tasks, index, task);
+                    })
+                    .catch(function (error) {
+                        try {
+                            var errorJs = jQuery.parseJSON( error.response.data );
+                            showErrorModalWindowWithText("Error stop task " + taskId, errorJs,  "Stop gc task");
+                        } catch (e) {
+                            showModalWindowWithText(error.response.data, "Error " + error.response.status);
+                        }
+                    })
+            }
+        },
+        mounted: function () {
+            this.getTasks();
+        }
+    });
+
+    Vue.component('task-errors', {
+        template: '#task-errors-template',
+        delimiters: ['[[', ']]'],
+        data: function () {
+            return {
+                header: 'Tasks Errors',
+                errors: [],
+                errorCount: 0,
+                task: {
+                    task_info: {}
+                }
+            }
+        },
+        mounted: function () {
+            this.$root.$on('show-errors', this.getErrors)
+        },
+        methods: {
+            onPaginate: function (page, pageSize) {
+                this.getErrors(this.task, page, pageSize);
+            },
+            getErrors: function(task, page, page_size) {
+                var that = this;
+                this.task = task;
+                axios.get('/2/tasks/'+task.task_info.task_id+'/errors', {
+                        params: {
+                            page: page || 1,
+                            page_size: page_size || 10
+                        }
+                    })
+                    .then(function (response) {
+                        that.errors = response.data.errors;
+                        that.errorCount = response.data.error_count;
+                        $(that.$el).modal('show');
+                    })
+                    .catch(function (error) {
+                        showModalWindowWithText(
+                            error.data,
+                            "Update descriptors task error " + error.response.status
+                        );
+                    });
+            }
+        }
+    });
+
+    new Vue({ el: '#tasks' });
+
+    function startDescriptorsGC() {
+        jQuery.ajax({
+            url: '/2/gc?task_type=descriptors&target=all',
+            type: 'POST',
+            timeout: 60000,
+            success: function (response) {
+                // redirect must be defined and must be true
+                showModalWindowWithText("Success", "Start descriptors gc");
+            },
+            error: function (response) {
+                try {
+                    var errorJs = jQuery.parseJSON( response.responseText );
+                    showErrorModalWindowWithText("Error start descriptors gc", errorJs,  "Start descriptors gc");
+                } catch (e) {
+                    showModalWindowWithText(response.responseText, "Error " + response.status);
+                }
+            }
+        })
+    }
+
+    function startReExtractGC() {
+        jQuery.ajax({
+            url: '/2/reextract',
+            type: 'POST',
+            timeout: 60000,
+            success: function (response) {
+                // redirect must be defined and must be true
+                showModalWindowWithText("Success", "Start reextract");
+            },
+            error: function (response) {
+                try {
+                    var errorJs = jQuery.parseJSON( response.responseText );
+                    showErrorModalWindowWithText("Error start reextract", errorJs,  "Start reextract");
+                } catch (e) {
+                    showModalWindowWithText(response.responseText, "Error " + response.status);
+                }
+            }
+        })
+    }
+
+    function stopTask(taskId) {
+        jQuery.ajax({
+            url: '/2/tasks/' + taskId,
+            type: 'DELETE',
+            timeout: 60000,
+            success: function (response) {
+                // redirect must be defined and must be true
+                showModalWindowWithText("Success", "Stop gc task");
+            },
+            error: function (response) {
+                try {
+                    var errorJs = jQuery.parseJSON( response.responseText );
+                    showErrorModalWindowWithText("Error stop task " + taskId, errorJs,  "Stop gc task");
+                } catch (e) {
+                    showModalWindowWithText(response.responseText, "Error " + response.status);
+                }
+            }
+        })
+    }
+</script>
+
+
+{% end %}

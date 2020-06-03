@@ -1,0 +1,99 @@
+============
+Installation
+============
+
+--------------------------------------
+Packages and requirements installation
+--------------------------------------
+
+For the Facestreammanager2 operation, one needs to install packages and requirements:
+
+1) Install python 3.5 or higher;
+
+2) Install Elasticsearch 6 (read `here <https://www.elastic.co/guide/en/elasticsearch/reference/6.x/_installation.html>`_);
+
+3) Install latex
+
+.. code-block:: bash
+
+    sudo yum -y install texlive texlive-*.noarch
+
+3)	Install Python libraries:
+
+Note: Virtual environment is strongly recommended for installation.
+
+* Create a virtual environment
+
+.. code-block:: bash
+
+    python3.x -m venv venv
+
+* Activate the virtual environment by the command
+
+.. code-block:: bash
+
+    source ./venv/bin/activate
+
+for deactivation enter
+
+.. code-block:: bash
+
+    deactivate
+
+* Go to the folder with the project
+
+.. code-block:: bash
+
+    cd facestreammanager2
+
+* Install dependencies by the command
+
+.. code-block:: bash
+
+    pip install -r requirements.txt
+
+-----------------
+Setup and Startup
+-----------------
+
+To start the Facestreammanager2, one should:
+
+0) Start Elasticsearch by the command `./elasticsearch-6.x.x/bin/elasticsearch`;
+
+1) Check and change the service settings in the configuration file `./configs/config.conf` (if necessary):
+
+.. literalinclude:: ../configs/config.conf
+
+2) Create Elasticsearch database by the `python make_index.py` script;
+
+3) Start the Facestreammanager2 by the command `python run.py`. The Facestreammanager2 provides application and analytics modules, that start at ports 5100 and 5101 respectively. You can assign different ports using parameters `events_port` and `analytics_port` if needed, also you can change default config file location through `config` parameter, for example `python run.py --config=./configs/new_config.conf --events_port=8080 --analytics_port=8081`.
+
+-----
+Tests
+-----
+
+1) Ensure that both modules and Luna API are running.
+
+2) Check and, if necessary, change the test settings in the `tests/system_tests/config.py` configuration file:
+
+ * ELASTICSEARCH_URL = "<Elasticsearch url>"
+
+ * LUNA_API_HOST = "<Luna API host>"
+
+ * LUNA_API_PORT = <Luna API port>
+
+ * LUNA_API_API = <Luna API api version>
+
+ * LUNA_AUTH_TOKEN = "<Luna API token>"
+
+ * FSM2_URL = "<Facestreammanager2 url>"
+
+ * FSM2_API_VERSION = <Facestreammanager2 api version>
+
+3) Run tests by the command
+
+.. code-block:: bash
+
+    python -m unittest tests.system_tests.unittests_main
+
+For api reference usage see ./raml/fsm2.html

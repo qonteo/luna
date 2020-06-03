@@ -1,0 +1,138 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>v.2.0.0 &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="v.2.0.1" href="v_2_0_1.html" />
+    <link rel="prev" title="v.1.2.5" href="v_1_2_5.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>v.2.0.0</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="v_1_2_5.html">v.1.2.5</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="v_2_0_1.html">v.2.0.1</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="v-2-0-0">
+<h1>v.2.0.0<a class="headerlink" href="#v-2-0-0" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="improvements">
+<h2>Improvements:<a class="headerlink" href="#improvements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Changed the error handling mechanism, now we are use <em>VLException</em> instead <em>Result</em> (exceptions instead
+options).</p>
+</li>
+<li><p class="first">Used luna-image store for portraits storing.</p>
+</li>
+<li><p class="first">Now you can get thumbnails of portraits. See resource <em>/storage/portraits/{descriptor_id}{thumbnail}</em> in
+raml documentation.</p>
+</li>
+<li><p class="first">Used luna-faces for storing faces, persons and lists. Now two tables exist in luna-api database (account and
+account tokens).</p>
+</li>
+<li><p class="first">Structure of project was refactored. Logic was moved to directory <em>luna_api</em>. File <em>run.py</em> you can find in
+this directory.</p>
+</li>
+<li><p class="first">Mechanism of blocking persons and faces was removed.</p>
+</li>
+<li><p class="first">Change several error codes affected not found objects, bad params and duplicate ids.</p>
+</li>
+<li><p class="first">Changed version of tornado, now we use version 5.0.1. For reinstall tornado you can execute following command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install --upgrade --force-reinstall <span class="nv">tornado</span><span class="o">==</span><span class="m">5</span>.0.1
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Added LunaVL library build.</p>
+</li>
+<li><p class="first">Test work through LunaVL library.</p>
+</li>
+<li><p class="first">Luna3 python library is used to work with luna-faces.</p>
+</li>
+<li><p class="first">Added pagination for resources <em>/account/tokens</em> and <em>/storage/lists</em></p>
+</li>
+<li><p class="first">Descriptors <em>last_update</em> and persons <em>create_time</em> includes time zone</p>
+</li>
+<li><p class="first">Parameter <em>STORAGE_TIME</em> removed from Luna API config, now it exists in luna-faces config</p>
+</li>
+<li><p class="first">Added oracle database support</p>
+</li>
+<li><p class="first">Now ORIGIN is used in configs. Origin consists of “&lt;schema&gt;://&lt;ip-address&gt;:&lt;port&gt;”</p>
+</li>
+<li><p class="first">Added ethnicities estimate, add query param “<em>estimate_ethnicities</em>” to request on resources
+“/matching/search” or “/storage/descriptors”  for getting ethnicity.</p>
+</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="bugs-fixed">
+<h2>Bugs fixed:<a class="headerlink" href="#bugs-fixed" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Fix objects miss when getting faces and persons from lists with pagination.</li>
+<li>Fixed rest-sphinx documentation</li>
+<li>Fixes boolean type in raml documentation for extract params (now 0 or 1)</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="how-to-update-from-previous-version">
+<h2>How to update from previous version:<a class="headerlink" href="#how-to-update-from-previous-version" title="Permalink to this headline">¶</a></h2>
+<p>To update from previous version simply replace folders <em>app, error, base_scripts, tests, raml</em> and file <em>version.py</em>. It is strongly recommended to backup DB postgres and server.</p>
+<p>To migrate data from DB, which used by Luna API v.2, to DB, which using by Luna-Faces, use script from
+<em>base_scripts/db_api_to_faces_migration</em>. There is config file named <em>config.conf</em> in <em>db_api_to_faces_migration</em>
+with parameters, that need to databases. Before run migration, create backup of DB and stop any activities with DB,
+including Luna API v.2. Also, it needs database, that using by Luna-Faces, to be already created. To run migration use:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python run.py
+</pre></div>
+</div>
+</div></blockquote>
+<p>To drop tables after migration from Luna API v.2 DB at once, use flag <em>–clean</em>. To drop tables from Luna API v.2 DB without
+migration, use flags <em>–skip-migration</em> with flag <em>–clean</em> together.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="v_1_2_5.html">v.1.2.5</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="v_2_0_1.html">v.2.0.1</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

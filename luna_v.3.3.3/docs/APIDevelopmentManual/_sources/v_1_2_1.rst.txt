@@ -1,0 +1,23 @@
+v.1.2.1
+=======
+
+Improvements:
+-------------
+
+    1) Added estimate attributes (see "/storage/descriptors" or "/storage/search").
+
+    #) Age and gender is integer. Gender is 0 or 1, age belongs to range (0,100).
+
+
+Bugs fixed:
+-----------
+
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.
+
+.. _pillow-simd: https://github.com/uploadcare/pillow-simd.

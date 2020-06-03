@@ -1,0 +1,188 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Database &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Garbage collectors" href="gc.html" />
+    <link rel="prev" title="Installation and setup" href="install.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>Database</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation and setup</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="gc.html">Garbage collectors</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="database">
+<h1>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h1>
+<p>We support Oracle and Postgres databases.</p>
+<div class="section" id="db-scheme">
+<h2>DB scheme.<a class="headerlink" href="#db-scheme" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/admin_faces_db.png" src="_images/admin_faces_db.png" />
+<span class="target" id="module-luna_admin.app.admin_db.models_admin"></span><p>Admin database models.</p>
+<dl class="class">
+<dt id="luna_admin.app.admin_db.models_admin.Admin">
+<em class="property">class </em><code class="descclassname">luna_admin.app.admin_db.models_admin.</code><code class="descname">Admin</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/admin_db/models_admin.html#Admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.Admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin table</p>
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.Admin.email">
+<code class="descname">email</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.Admin.email" title="Permalink to this definition">¶</a></dt>
+<dd><p>admin email</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.Admin.login">
+<code class="descname">login</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.Admin.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>admin login</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.Admin.password">
+<code class="descname">password</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.Admin.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>admin password</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask">
+<em class="property">class </em><code class="descclassname">luna_admin.app.admin_db.models_admin.</code><code class="descname">GCTask</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/admin_db/models_admin.html#GCTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin tasks.</p>
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.count_delete_descriptors">
+<code class="descname">count_delete_descriptors</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.count_delete_descriptors" title="Permalink to this definition">¶</a></dt>
+<dd><p>count delete faces for gc</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.count_done_parts">
+<code class="descname">count_done_parts</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.count_done_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>done parts count</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.count_parts">
+<code class="descname">count_parts</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.count_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>part of task count</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.count_s3_errors">
+<code class="descname">count_s3_errors</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.count_s3_errors" title="Permalink to this definition">¶</a></dt>
+<dd><p>count s3 errors for gc</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.end_gc_time">
+<code class="descname">end_gc_time</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.end_gc_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>end task time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.start_gc_time">
+<code class="descname">start_gc_time</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.start_gc_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>start task time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.task_id">
+<code class="descname">task_id</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.task_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>task id</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.task_type">
+<code class="descname">task_type</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.task_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>task type (2 - gc non-linked</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.GCTask.type_dst">
+<code class="descname">type_dst</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.GCTask.type_dst" title="Permalink to this definition">¶</a></dt>
+<dd><p>target of task (all or account + id)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_admin.app.admin_db.models_admin.TaskError">
+<em class="property">class </em><code class="descclassname">luna_admin.app.admin_db.models_admin.</code><code class="descname">TaskError</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_admin/app/admin_db/models_admin.html#TaskError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.TaskError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Task errors.</p>
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.TaskError.code">
+<code class="descname">code</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.TaskError.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>error code</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.TaskError.error_time">
+<code class="descname">error_time</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.TaskError.error_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>error time</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.TaskError.id">
+<code class="descname">id</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.TaskError.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>error id</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.TaskError.message">
+<code class="descname">message</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.TaskError.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>message</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_admin.app.admin_db.models_admin.TaskError.task_id">
+<code class="descname">task_id</code><a class="headerlink" href="#luna_admin.app.admin_db.models_admin.TaskError.task_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>task id</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="install.html">Installation and setup</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="gc.html">Garbage collectors</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

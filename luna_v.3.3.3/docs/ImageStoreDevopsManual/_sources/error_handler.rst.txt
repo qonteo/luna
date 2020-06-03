@@ -1,0 +1,5 @@
+Error handler
+=============
+
+.. automodule:: luna_image_store.app.handlers.error_handler
+	:members:

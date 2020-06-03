@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &#8212; Facestreammanager2 2.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="v.1.0.0" href="v_1_0_0.html" />
+    <link rel="prev" title="Installation" href="manage.html" /> 
+  </head>
+  <body role="document">
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Facestreammanager2 2.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Introduction</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="manage.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="v_1_0_0.html">v.1.0.0</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Facestreammanager2 is a face recognition and attribute retrieval service based on the VisionLabs Luna API. The service consists of two modules: the real time recognition module and the analytics module.</p>
+<div class="section" id="evens-api">
+<h2>Evens API<a class="headerlink" href="#evens-api" title="Permalink to this headline">¶</a></h2>
+<p>The input of the service is fed with images of people. Each such image is an <strong>event</strong>. You can perform one of two actions with each event: extracting a descriptor from it or searching in the Luna API lists. After executing one of the actions, you can do the following with the received descriptor: put the descriptor in lists, attach the descriptor to the person, attach the created person to the lists. The logic of these actions is customizable.</p>
+<p>The functional of uniting events in <strong>groups</strong> is implemented. This functionality is primarily intended for situations where we send several images of the same person from the camera in a row in order to improve the quality of recognition or because of the rupture of the face track. Now the three logics of joining the Evens into groups are implemented:</p>
+<ol class="arabic simple">
+<li>Based on the external id of the track. All events with the same id of the track will be combined in same group.</li>
+<li>Based on similarity. The new event will be compared to the events from the same source. If the event is similar to any of the previous events more than a given threshold, they are combined into same group.</li>
+<li>Mixed. Both principles of grouping are used, in this case every two events similar to each other will be combined in the same group even if they are in different sources.</li>
+</ol>
+<p>To process incoming events, you need to create <strong>handlers</strong>. Each handler defines the policy for processing all incoming events. There are two types of handlers: extract and search. There are two principal differences: in the second one you can not send photos with several faces and you need to specify lists in the Luna API incoming event will be searched by. Both handlers allow you to perform additional actions with extracted descriptors: create persons from them in the Luna API, attach persons and descriptors to the lists in the Luna API. Also for the handler, you can specify the duration of time to storage event in the database (not yet implemented).</p>
+<p>In this module, it is possible to search for events and groups by various filters and obtain a so-called portraits - images associated with the events. And also get the distribution of events and groups in time (including days of the week, time of day, etc.).</p>
+</div>
+<div class="section" id="analitics-api">
+<h2>Analitics API<a class="headerlink" href="#analitics-api" title="Permalink to this headline">¶</a></h2>
+<p>The analytics module allows you to perform different operations with lists in the Luna API as well as analysis of incoming events.</p>
+<ul class="simple">
+<li>Calculation of the probability of falling into the top of the result of matching by <strong>persons</strong> in the Luna API.</li>
+<li>Clustering data on unique people.</li>
+<li>Cross-matching between two lists in the Luna API.</li>
+<li>Attach all events or groups to lists. You can also attach objects from an already existing list to the list in the Luna API.</li>
+<li>Events markup.</li>
+<li>Creation of reports on some types of tasks: cross-matching and clustering.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="manage.html">Installation</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="v_1_0_0.html">v.1.0.0</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Visionlabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+    </div>
+  </body>
+</html>

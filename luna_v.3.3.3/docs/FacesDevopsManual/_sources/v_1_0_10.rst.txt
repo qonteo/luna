@@ -1,0 +1,15 @@
+v.1.0.10
+========
+
+Improvements:
+-------------
+
+    1) Speedup /gc by deleting count of non-deleted *face_ids* from response
+
+Bugs fixed:
+-----------
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests* and update dependencies from requirements.txt.

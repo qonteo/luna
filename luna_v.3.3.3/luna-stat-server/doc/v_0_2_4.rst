@@ -1,0 +1,17 @@
+=======
+v.0.2.4
+=======
+
+-------------
+Improvements:
+-------------
+
+None.
+
+-----------
+Bugs fixed:
+-----------
+
+1) request for attaching descriptors now returns the status code 204; 
+
+2) responses were updated.

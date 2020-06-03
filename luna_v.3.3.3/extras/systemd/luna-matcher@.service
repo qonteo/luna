@@ -1,0 +1,16 @@
+[Unit]
+Description=Luna Matcher-%i
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+Environment=VERBOSE=0
+Environment=THREADS=6
+SyslogIdentifier=luna-matcher-%i
+WorkingDirectory=/var/lib/luna/current/
+ExecStart=/var/lib/luna/current/bin/luna-matcher --config-path ./conf/matcher.conf --log-to-stderr --log-verbosity $VERBOSE --num-threads $THREADS
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Luna Image Store
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+SyslogIdentifier=luna-image-store
+WorkingDirectory=/var/lib/luna/current/luna-image-store/luna_image_store
+ExecStart=/var/lib/luna/current/luna-image-store/venv/bin/python3 /var/lib/luna/current/luna-image-store/luna_image_store/run.py --workers=2 --port=5020
+
+[Install]
+WantedBy=multi-user.target

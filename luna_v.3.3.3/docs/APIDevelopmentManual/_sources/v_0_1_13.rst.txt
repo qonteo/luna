@@ -1,0 +1,22 @@
+v.0.1.13
+========
+
+Improvements:
+-------------
+
+	1) Add param *config* to command line. There is ability set path to config from  command line.
+
+
+Bugs fixed:
+-----------
+
+	1) Fix default addresses in config.py and fix deafault port for stat-server in config.conf.
+
+    2) Fix description of paramer *limit* in raml (/match, /search).
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

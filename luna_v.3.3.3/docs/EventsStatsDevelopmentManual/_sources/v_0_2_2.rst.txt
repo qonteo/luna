@@ -1,0 +1,39 @@
+=======
+v.0.2.2
+=======
+
+-------------
+Improvements:
+-------------
+
+1) 'gender', 'age' and 'glasses' parameters were added to event_delivery service;
+
+2) 'auth_type' filter was removed from ws;
+
+3) 'similarity__lt' filter was added to statistics filter model;
+
+4) raml update;
+
+5) sphinx docs were changed from '.md' to '.rst' format;
+
+6) sphinx docs were translated to english;
+
+7) Tests were supplemented and are full now;
+
+8) 'numpy' was excluded from the benchmark. 
+
+-----------
+Bugs fixed:
+-----------
+
+1) enum was added to event_type, source, gender, aggregator parameters in raml;
+
+2) 'skin_color' and 'glasses' fields were added to InfluxDB
+
+3) updated incoming events parser: 'glasses' attribute;
+
+4) average aggregator was changed from 'avg' to 'mean'; 
+
+5) headers normalization was added in ws handshake process;
+
+6) 'COOKIE_SECRET' parameter description was updated in INSTALL.md.

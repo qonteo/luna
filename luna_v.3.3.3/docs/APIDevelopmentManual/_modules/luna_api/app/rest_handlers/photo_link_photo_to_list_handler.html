@@ -1,0 +1,170 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.app.rest_handlers.photo_link_photo_to_list_handler &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.app.rest_handlers.photo_link_photo_to_list_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.app.rest_handlers.photo_link_photo_to_list_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">luna3.common.exceptions</span> <span class="k">import</span> <span class="n">LunaApiException</span>
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.query_validators</span> <span class="k">import</span> <span class="n">actionGetter</span><span class="p">,</span> <span class="n">uuid4Getter</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.storage_handlers</span> <span class="k">import</span> <span class="n">StorageHandler</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span><span class="p">,</span> <span class="n">ErrorInfo</span>
+
+
+<div class="viewcode-block" id="PhotoLinkListHandler"><a class="viewcode-back" href="../../../../link_descriptor_to_list.html#luna_api.app.rest_handlers.photo_link_photo_to_list_handler.PhotoLinkListHandler">[docs]</a><span class="k">class</span> <span class="nc">PhotoLinkListHandler</span><span class="p">(</span><span class="n">StorageHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler to add or delete descriptors in lists. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PhotoLinkListHandler.patch"><a class="viewcode-back" href="../../../../link_descriptor_to_list.html#luna_api.app.rest_handlers.photo_link_photo_to_list_handler.PhotoLinkListHandler.patch">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">photo_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attach/detach descriptor to account list.</span>
+
+<span class="sd">        .. http:patch:: /storage/descriptors/{photo_id}/linked_lists?do=attach&amp;list_id=16fd2706-8baf-433b-82eb-8c7fada847da</span>
+
+<span class="sd">            :param photo_id: descriptor id</span>
+<span class="sd">            </span>
+<span class="sd">            :optparam do: &#39;attach&#39; or &#39;detach&#39;</span>
+<span class="sd">            :optparam list_id: list id</span>
+
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">               HTTP/1.1 204</span>
+<span class="sd">               LUNA-Request-Id: 1516179740,c06887a2</span>
+
+
+
+<span class="sd">            :statuscode 204: Descriptor is successfully attached/detached</span>
+
+
+<span class="sd">            Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 400: list not found</span>
+<span class="sd">            :statuscode 400: Bad query parameters `do`</span>
+<span class="sd">            :statuscode 400: Account list with corresponding type not found</span>
+<span class="sd">            :statuscode 400: Object in  query is not UUID4, format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&#39;</span>
+<span class="sd">            :statuscode 403: list or person is blocked</span>
+<span class="sd">            :statuscode 404: descriptor not found</span>
+<span class="sd">            :statuscode 409: descriptor is already in list</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="n">actionGetter</span><span class="p">,</span> <span class="n">require</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">listId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQueryParam</span><span class="p">(</span><span class="s1">&#39;list_id&#39;</span><span class="p">,</span> <span class="n">uuid4Getter</span><span class="p">,</span> <span class="n">require</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">listId</span><span class="p">,</span> <span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">faceIds</span><span class="o">=</span><span class="p">[</span><span class="n">photo_id</span><span class="p">],</span>
+                                                  <span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">LunaApiException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">ErrorInfo</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;error_code&quot;</span><span class="p">],</span> <span class="n">e</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">],</span> <span class="n">e</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">error</span> <span class="o">==</span> <span class="n">Error</span><span class="o">.</span><span class="n">FacesNotFound</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">DescriptorNotFound</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PhotoLinkListHandler.get"><a class="viewcode-back" href="../../../../link_descriptor_to_list.html#luna_api.app.rest_handlers.photo_link_photo_to_list_handler.PhotoLinkListHandler.get">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">photo_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all account lists, descriptor is linked to.</span>
+<span class="sd">        </span>
+<span class="sd">        .. http:get:: /storage/descriptors/{photo_id}/linked_lists</span>
+<span class="sd">        </span>
+<span class="sd">            :param photo_id: descriptor id</span>
+<span class="sd">            </span>
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">               HTTP/1.1 200 Ok</span>
+<span class="sd">               Vary: Accept</span>
+<span class="sd">               Content-Type: application/json</span>
+<span class="sd">               LUNA-Request-Id: 1516179740,c06887a2</span>
+<span class="sd">               </span>
+<span class="sd">            :statuscode 200: Lists received successfully</span>
+<span class="sd">            </span>
+<span class="sd">            .. json:object:: descriptor_lists</span>
+<span class="sd">               :showexample:</span>
+
+<span class="sd">               :property lists: all lists</span>
+<span class="sd">               :proptype lists: _list_(uuid4)</span>
+
+<span class="sd">            Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 404: descriptor not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getFace</span><span class="p">(</span><span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">faceId</span><span class="o">=</span><span class="n">photo_id</span><span class="p">,</span>
+                                                            <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;lists&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">]})</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

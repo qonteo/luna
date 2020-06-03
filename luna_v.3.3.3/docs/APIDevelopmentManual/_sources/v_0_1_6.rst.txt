@@ -1,0 +1,32 @@
+v.0.1.6
+=======
+
+Improvements:
+-------------
+
+	1) OPTION method for CORS_ from jQuery is added.
+
+	#) sphinx-documentation improved.
+
+	#) How-to install dependencies without versioning described in install. 
+
+	#) How-to update from previous version v.0.1.5. to v.0.1.6. added (see below).
+
+Bugs fixed:
+-----------
+
+	1) Regenerated sphinx documents with examples.
+
+	#) JSON templates position is changed for correct template generation.
+
+	#) Returned cros-headers are put in all requests by default.
+
+	#) Default cros-header "Access-Control-Allow-Headers" installed in "Content-Type, Authorization, X-Auth-Token".
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders app, error, base_scripts, tests, sphinx_docs, raml and \
+file version.py. It is strongly recommended to backup DB postgres and server.
+
+.. _CORS: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS

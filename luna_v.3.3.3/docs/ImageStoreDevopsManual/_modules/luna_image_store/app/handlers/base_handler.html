@@ -1,0 +1,86 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_image_store.app.handlers.base_handler &#8212; luna-image-store v.1.2.8 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>luna-image-store v.1.2.8 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_image_store.app.handlers.base_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_image_store.app.handlers.base_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">configs.config</span> <span class="k">import</span> <span class="n">STORAGE_TYPE</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.handlers.base_handler_class</span> <span class="k">import</span> <span class="n">VLBaseHandler</span>
+<span class="kn">from</span> <span class="nn">storage.aerospike_cache</span> <span class="k">import</span> <span class="n">AerospikeCache</span>
+<span class="kn">from</span> <span class="nn">storage.aws_s3.s3_driver</span> <span class="k">import</span> <span class="n">S3Driver</span>
+<span class="kn">from</span> <span class="nn">storage.local_storage.disk_driver</span> <span class="k">import</span> <span class="n">DiskDriver</span>
+<span class="kn">from</span> <span class="nn">storage.store_interface</span> <span class="k">import</span> <span class="n">StoreInterface</span>
+
+
+<div class="viewcode-block" id="BaseRequestHandler"><a class="viewcode-back" href="../../../../base_handler.html#luna_image_store.app.handlers.base_handler.BaseRequestHandler">[docs]</a><span class="k">class</span> <span class="nc">BaseRequestHandler</span><span class="p">(</span><span class="n">VLBaseHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base handler for other handlers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BaseRequestHandler.initialize"><a class="viewcode-back" href="../../../../base_handler.html#luna_image_store.app.handlers.base_handler.BaseRequestHandler.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize logger for request and create request id and contexts to storage and cache.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">storageCtx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createStorageContext</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storageCache</span> <span class="o">=</span> <span class="n">AerospikeCache</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseRequestHandler.createStorageContext"><a class="viewcode-back" href="../../../../base_handler.html#luna_image_store.app.handlers.base_handler.BaseRequestHandler.createStorageContext">[docs]</a>    <span class="k">def</span> <span class="nf">createStorageContext</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">StoreInterface</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create Context.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            DiskDriver if STORAGE_TYPE is equal to &quot;LOCAL&quot;, S3Driver is equal to S3</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError - if incorrect STORAGE_TYPE</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">STORAGE_TYPE</span> <span class="o">==</span> <span class="s2">&quot;LOCAL&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DiskDriver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">STORAGE_TYPE</span> <span class="o">==</span> <span class="s2">&quot;S3&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">S3Driver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+[Unit]
+Description=Luna Indexed Matcher
+After=network.target
+
+[Service]
+Type=forking
+Restart=always
+RestartSec=2
+Environment=VERBOSE=0
+Environment=THREADS=12
+PIDFile=/var/lib/luna/current/indexed_matcher.pid
+GuessMainPID=True
+
+ExecStart=/var/lib/luna/current/bin/luna-matcher --log-to-stderr --config-path /var/lib/luna/current/conf/indexed-matcher.conf --num-threads $THREADS --log-verbosity $VERBOSE --run-as-daemon -pid /var/lib/luna/current/indexed_matcher.pid
+
+ExecStop=/bin/kill -s STOP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

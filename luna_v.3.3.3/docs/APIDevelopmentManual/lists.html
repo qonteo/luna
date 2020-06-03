@@ -1,0 +1,714 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Lists API &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Descriptor extraction API" href="photo.html" />
+    <link rel="prev" title="Persons API" href="persons.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Lists API</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="persons.html">Persons API</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="photo.html">Descriptor extraction API</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_api.app.rest_handlers.lists_handler">
+<span id="lists-api"></span><h1>Lists API<a class="headerlink" href="#module-luna_api.app.rest_handlers.lists_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.lists_handler.</code><code class="descname">ListHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler to operate with account lists. Before start you need to authorize and account must be active.</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListHandler.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListHandler.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListHandler.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request for account lists deletion</p>
+<dl class="delete">
+<dt id="delete--storage-lists">
+<code class="descname">DELETE </code><code class="descname">/storage/lists</code><a class="headerlink" href="#delete--storage-lists" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Example request</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/accounts</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="json-for-lists-deletion">
+<!--[json-for-lists-deletion]--><code class="descname">json for lists deletion</code><a class="headerlink" href="#json-for-lists-deletion" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>lists</strong> (<em>_list_(uuid4)</em>) – list of tokens to delete</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;61a7f637-159a-422f-8de9-2294a5b095fb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;d4f88d9d-cccf-49bc-998b-d7f639205188&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;7d022f5e-6590-40ec-b174-3a5988d09218&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<p>Message error is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – no json in request</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – no field <em>lists</em> in json</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>lists</em> is not a list</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resource to get all account lists</p>
+<dl class="get">
+<dt id="get--storage-lists">
+<code class="descname">GET </code><code class="descname">/storage/lists</code><a class="headerlink" href="#get--storage-lists" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Optparam page:</th><td class="field-body"><p class="first">A number of page. Minimum 1, default 1.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Optparam page_size:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">Number of lists of the same type on page.  Minimum 1, maximum 100, default 10.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Object (person, descriptor) data is received successfully</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="info-lists">
+<!--[info-lists]--><code class="descname">info lists</code><a class="headerlink" href="#info-lists" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_lists</strong> (_list_(<a class="reference internal" href="handlers.html#account_list"><code class="xref json json-object docutils literal notranslate"><span class="pre">account_list</span></code></a>)) – person lists</li>
+<li><strong>descriptor_lists</strong> (_list_(<a class="reference internal" href="handlers.html#account_list"><code class="xref json json-object docutils literal notranslate"><span class="pre">account_list</span></code></a>)) – descriptor lists</li>
+<li><strong>persons_list_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>int</em></a>) – number of person lists</li>
+<li><strong>descriptors_list_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>int</em></a>) – number of descriptors lists</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;7c367741-9a6e-479f-b556-2ae1a46d82f7&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">3440</span><span class="p">,</span>
+            <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;Grahamview&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;c330a154-5019-47fc-9f42-140074f3c422&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">615</span><span class="p">,</span>
+            <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;Melissafort&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;d31cdb34-08ad-4ea9-b40a-cb3a9939917b&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">6159</span><span class="p">,</span>
+            <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;Matthewburgh&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;descriptor_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a074a784-016f-4157-974c-4c2523bc1d97&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">4313</span><span class="p">,</span>
+            <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;Mullinsfort&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;65796258-442b-4c40-b819-8c46f25bfc02&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">6747</span><span class="p">,</span>
+            <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;Suzannehaven&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;d6dafd49-cbf3-4eea-a8ed-cd97cd9166de&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">7353</span><span class="p">,</span>
+            <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;West Jennifer&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;persons_list_count&quot;</span><span class="p">:</span> <span class="mi">9971</span><span class="p">,</span>
+    <span class="nt">&quot;descriptors_list_count&quot;</span><span class="p">:</span> <span class="mi">4847</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request for creation of new list for the account</p>
+<dl class="post">
+<dt id="post--storage-lists?type=descriptors">
+<code class="descname">POST </code><code class="descname">/storage/lists?type=descriptors</code><a class="headerlink" href="#post--storage-lists?type=descriptors" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Optparam type:</th><td class="field-body"><p class="first">List type (“persons” or “descriptors”, “persons” by default)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/storage/lists</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<p>You can attach list data in format <a class="reference internal" href="handlers.html#list_data"><code class="xref json json-object docutils literal notranslate"><span class="pre">list_data</span></code></a>.</p>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.2">201 Created</a> – List created successfully</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">201</span> <span class="ne">Created</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<dl class="object">
+<dt id="list_id">
+<!--[list_id]--><code class="descname">list_id</code><a class="headerlink" href="#list_id" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – new list id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;4bb07e94-336e-4ecb-ba5d-b61f5aabaea7&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Error message is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – wrong format for ‘type’</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>list_data</em> is too large</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>list_data</em> has wrong type, <em>string</em> type is required</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler">
+<em class="property">class </em><code class="descclassname">luna_api.app.rest_handlers.lists_handler.</code><code class="descname">ListOfObjectHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListOfObjectHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler to work with account lists. Before start you need to authorize and account must be active.</p>
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListOfObjectHandler.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request for list deletion.</p>
+<dl class="delete">
+<dt id="delete--storage-lists-listId">
+<code class="descname">DELETE </code><code class="descname">/storage/lists/{listId}</code><a class="headerlink" href="#delete--storage-lists-listId" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> – list id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5">204 No Content</a> – list was deleted successfully.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<p>Message error is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – list not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListOfObjectHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request to get all objects in list.</p>
+<dl class="get">
+<dt id="get--storage-lists-listId">
+<code class="descname">GET </code><code class="descname">/storage/lists/{listId}</code><a class="headerlink" href="#get--storage-lists-listId" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> – list id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – objects list, number of objects and list_data are received successfully.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<p>Json example for persons list:</p>
+<dl class="object">
+<dt id="list_persons_json">
+<!--[list_persons_json]--><code class="descname">list_persons_json</code><a class="headerlink" href="#list_persons_json" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>persons</strong> (_list_(<a class="reference internal" href="handlers.html#person"><code class="xref json json-object docutils literal notranslate"><span class="pre">person</span></code></a>)) – persons list</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>int</em></a>) – number of objects in list</li>
+<li><strong>list_data</strong> (<em>city</em>) – list data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;persons&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;paulalex&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;e3d6e641-36dc-4bbf-8331-be349c2760f8&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;da255d13-303a-4cef-a17f-d885f390758c&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ff5af97c-ba02-4ad4-857c-70b6ac6fd9f8&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;598f7d08-0808-485b-9f3d-8a6a1eb7a67f&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2005-02-21T00:38:27&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;d159b5f3-da0f-4070-ad09-a68ef36536d4&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;427f1fb9-e0e5-4d17-8da9-66c118e322b2&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;1d7b2ada-5292-4aec-aed3-1a3ee3345e64&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;johnsonrachael&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;eea19704-a417-4d50-a05b-921ab3c81bb9&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;fd4a06eb-cd93-4297-b3ce-823b13375a49&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;23112da4-05b3-43c1-89e6-109880aeac58&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;3630f74f-c713-4884-9be7-ea38d50ffd0a&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2004-11-25T21:40:57&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;3603b1d3-77be-4d43-81ad-35232df3a152&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;c5ba2bf2-d40c-4a77-bee3-1dd226388133&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;71e79299-e33e-4df7-9744-e69bf7a01112&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;boydnatasha&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;8bd22f39-56c1-4dac-b935-5da686afb167&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;5013ab51-5212-49fd-a5e0-d01c3c69147a&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;d0a669d0-af56-4b5c-b9dc-3799b9cb4756&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;e978fdf1-4d5e-4b94-a6da-c35e7881da9d&quot;</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2008-12-30T09:24:21&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;d655d46e-dfbe-456a-a091-5cc3b4023bcd&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;be4c6c1d-0f7a-4162-a403-31351f8d8eff&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;9fe7c10d-f2f2-43dc-aee9-dde03a411b26&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">1108</span><span class="p">,</span>
+    <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;South Codyfort&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Json example for descriptors list:</p>
+<dl class="object">
+<dt id="list_descriptors_json">
+<!--[list_descriptors_json]--><code class="descname">list_descriptors_json</code><a class="headerlink" href="#list_descriptors_json" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>persons</strong> (_list_(<a class="reference internal" href="handlers.html#descriptor"><code class="xref json json-object docutils literal notranslate"><span class="pre">descriptor</span></code></a>)) – persons list</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>int</em></a>) – number of objects in list</li>
+<li><strong>list_data</strong> (<em>city</em>) – list data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;persons&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;9cf3ff9e-924f-4b17-a111-5227e374f0e3&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b3a252cf-9e6e-4a4d-893e-78f66582183c&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;1996-12-25T21:39:52&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;cf317d3e-84b3-4716-ae24-8bc055a02236&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;28ec5f8a-1504-4407-a29c-ef977629ae2a&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;1ccf7a8d-fb42-48a8-a8d7-f300594ed4dd&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;d023b2e6-fd44-440e-8405-af7d5b6ca1a0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;710acc77-0437-4190-be3d-dfae0d2029e7&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;1978-09-19T19:27:48&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;b333ced9-8b3f-4019-86b4-aa343b648b3a&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ba8f03c4-4788-47b0-bc1d-ec87ddcd5a78&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;15fc5938-0672-4110-a355-be970e831efc&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;52f9aff0-6f50-4995-bbda-941f49916fee&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;461d43a4-d91f-47e4-9f25-32261ba49df1&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;1992-01-19T17:21:53&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;18744a9b-07f4-426d-ad78-3cc63c209ef7&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;325105e8-8a42-41ad-8051-b4e80b8aa199&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;4ee31b96-f711-4946-83ea-b444bb138a9d&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">4504</span><span class="p">,</span>
+    <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;West Susanfort&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>Message error is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – list not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>page</em> or <em>page_size</em> has wrong type</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.patch">
+<code class="descname">patch</code><span class="sig-paren">(</span><em>listId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#ListOfObjectHandler.patch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>A request to change the data about the list.</p>
+<dl class="patch">
+<dt id="patch--storage-lists-listId">
+<code class="descname">PATCH </code><code class="descname">/storage/lists/{listId}</code><a class="headerlink" href="#patch--storage-lists-listId" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listId</strong> – list id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+<li><a class="reference external" href="https://tools.ietf.org/html/rfc7235#section-4.2">Authorization</a> – <p>basic authorization</p>
+<p><strong>or</strong></p>
+</li>
+<li><em>X-Auth-Token</em> – ‘16fd2706-8baf-433b-82eb-8c7fada847da’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/storage/lists/{id}</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+</pre></div>
+</div>
+<p>Data has to be attached in format <a class="reference internal" href="handlers.html#list_data"><code class="xref json json-object docutils literal notranslate"><span class="pre">list_data</span></code></a>.</p>
+<p><strong>Example response</strong>:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5">204 No Content</a> – list was modified successfully.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">204</span> <span class="ne">Ok</span>
+<span class="na">Vary</span><span class="o">:</span> <span class="l">Accept</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">LUNA-Request-Id</span><span class="o">:</span> <span class="l">1516179740,c06887a2</span>
+</pre></div>
+</div>
+<p>Message error is returned in format <a class="reference internal" href="handlers.html#server_error"><code class="xref json json-object docutils literal notranslate"><span class="pre">server_error</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>list_data</em> is too large</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – field <em>list_data</em> has wrong type, <em>string</em> type is required</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – list not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="luna_api.app.rest_handlers.lists_handler.deleteLists">
+<code class="descclassname">luna_api.app.rest_handlers.lists_handler.</code><code class="descname">deleteLists</code><span class="sig-paren">(</span><em>lists</em>, <em>accountId</em>, <em>dbContext</em>, <em>lunaContext</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/rest_handlers/lists_handler.html#deleteLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.rest_handlers.lists_handler.deleteLists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete account list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lunaContext</strong> – context to Luna Core</li>
+<li><strong>dbContext</strong> – context to postgres</li>
+<li><strong>lists</strong> – account lists</li>
+<li><strong>accountId</strong> – account id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">deletion result is returned from postgres</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="persons.html">Persons API</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="photo.html">Descriptor extraction API</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

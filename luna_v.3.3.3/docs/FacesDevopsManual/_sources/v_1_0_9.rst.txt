@@ -1,0 +1,17 @@
+v.1.0.9
+=======
+
+Improvements:
+-------------
+
+    1) Speedup /facelinker
+
+    #) add new error (22010, 'Bad/incomplete input data', 'Face was not linked to the person')
+
+Bugs fixed:
+-----------
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests* and update dependencies from requirements.txt.

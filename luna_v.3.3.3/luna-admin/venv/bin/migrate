@@ -1,0 +1,10 @@
+#!/var/lib/luna/luna_v.3.3.3/luna-admin/venv/bin/python3.6
+# PBR Generated from 'console_scripts'
+
+import sys
+
+from migrate.versioning.shell import main
+
+
+if __name__ == "__main__":
+    sys.exit(main())

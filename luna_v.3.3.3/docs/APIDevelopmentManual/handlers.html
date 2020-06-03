@@ -1,0 +1,619 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Documentation of tornado-handlers &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Account API" href="account_api.html" />
+    <link rel="prev" title="Check connections" href="check_connection.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Documentation of tornado-handlers</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="check_connection.html">Check connections</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="account_api.html">Account API</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="documentation-of-tornado-handlers">
+<h1>Documentation of tornado-handlers<a class="headerlink" href="#documentation-of-tornado-handlers" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="account_api.html">Account API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tokens.html">Tokens API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token.html">Token API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="persons.html">Persons API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lists.html">Lists API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="photo.html">Descriptor extraction API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">Matching API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="descriptor.html">Descriptor API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="link_descriptor_to_list.html">Descriptor linkage to list API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="person_api.html">Person API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="person_link_descriptor.html">Descriptor linkage to person API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="person_link_list.html">Person linkage to list API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version.html">Versioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="version.html#the-versioneer">The Versioneer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="registration.html">Registration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="storage_api.html">Storage API</a></li>
+</ul>
+</div>
+<div class="section" id="json-s">
+<h2>Json’s<a class="headerlink" href="#json-s" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="user_data">
+<!--[user_data]--><code class="descname">user_data</code><a class="headerlink" href="#user_data" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – person information</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;vball&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="token_data">
+<!--[token_data]--><code class="descname">token_data</code><a class="headerlink" href="#token_data" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>token_data</strong> (<em>street_address</em>) – token information</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;700 Sutton Canyon Apt. 478&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="list_data">
+<!--[list_data]--><code class="descname">list_data</code><a class="headerlink" href="#list_data" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_data</strong> (<em>city</em>) – list information</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;Emilymouth&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="server_error">
+<!--[server_error]--><code class="descname">server_error</code><a class="headerlink" href="#server_error" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>error_code</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – inner error code, for more info about errors go to <a class="reference internal" href="errors.html#errors-label"><span class="std std-ref">Service errors</span></a>.</li>
+<li><strong>detail</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>string</em></a>) – error description</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;error_code&quot;</span><span class="p">:</span> <span class="mi">996</span><span class="p">,</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;lDXHnrLxrnTyrsNzodDI&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="person">
+<!--[person]--><code class="descname">person</code><a class="headerlink" href="#person" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – person information</li>
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – person id</li>
+<li><strong>descriptors</strong> (<em>_list_(uuid4)</em>) – list of descriptors, linked to person.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – person creation time with timezone</li>
+<li><strong>lists</strong> (<em>_list_(uuid4)</em>) – list of accounts list ids, person is linked to.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;wvazquez&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a19c6f71-2970-4464-8073-d2691eb5c6af&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;19d6e337-26e9-45c6-8739-54791ad2d4f6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;9fc5de80-6fcd-4be8-8b64-1db7f69d5381&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;9bb2f6cf-9f58-4849-b6ad-213455bb067f&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1983-10-09T13:32:37&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;174bed53-0c4c-4bf5-8815-81c74ea8cf2d&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;37f8c8a9-bc55-41f9-b236-afed240d3f0f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e7e40440-b591-4e99-8dec-aa7558aad0a0&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="descriptor">
+<!--[descriptor]--><code class="descname">descriptor</code><a class="headerlink" href="#descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – descriptor id</li>
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – descriptor id, person is linked to (null, if descriptor is not linked to any person)</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – time of last descriptor attach/detach to lists, persons</li>
+<li><strong>lists</strong> (<em>_list_(uuid4)</em>) – list of account list ids descriptor is linked to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;7b10f282-54a7-483f-b99d-05334eee7244&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;d0488385-1c0e-4d7b-9a9e-f92a37360cf9&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;2014-07-22T05:52:11&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;70ad7ab8-822c-4b75-bc6a-78b5c9d25d89&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ffc30859-64e2-4e6f-b291-72d0d71149e9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;94d12599-239c-480e-a388-4dc4345aac2e&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="account_list">
+<!--[account_list]--><code class="descname">account_list</code><a class="headerlink" href="#account_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – list id</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – number of objects in the list</li>
+<li><strong>list_data</strong> (<em>city</em>) – list data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;9b322c29-e2db-481e-bd25-5a5865c86469&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">642</span><span class="p">,</span>
+    <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;Sarahside&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="rect">
+<!--[rect]--><code class="descname">rect</code><a class="headerlink" href="#rect" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – Rectangle height</li>
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – Rectangle width</li>
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – Top left corner x coordinate</li>
+<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – Top left corner y coordinate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">5726</span><span class="p">,</span>
+    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">2047</span><span class="p">,</span>
+    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">144</span><span class="p">,</span>
+    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">722</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="estimation_emotions">
+<!--[estimation_emotions]--><code class="descname">estimation_emotions</code><a class="headerlink" href="#estimation_emotions" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>anger</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Anger probability.</li>
+<li><strong>disgust</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Disgust probability.</li>
+<li><strong>fear</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Fear probability.</li>
+<li><strong>happiness</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Happiness probability.</li>
+<li><strong>neutral</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Neutral probability.</li>
+<li><strong>sadness</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Sadness probability.</li>
+<li><strong>surprise</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Surprise probability.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="object">
+<dt id="estimation_ethnicities">
+<!--[estimation_ethnicities]--><code class="descname">estimation_ethnicities</code><a class="headerlink" href="#estimation_ethnicities" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>asian</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – asian ethnicity probability</li>
+<li><strong>indian</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – indian ethnicity probability</li>
+<li><strong>caucasian</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – caucasian ethnicity probability</li>
+<li><strong>african</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – african american ethnicity probability.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="object">
+<dt id="head_pose">
+<!--[head_pose]--><code class="descname">head_pose</code><a class="headerlink" href="#head_pose" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>yaw</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – yaw rotation in degrees</li>
+<li><strong>pitch</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – pitch rotation in degrees</li>
+<li><strong>roll</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – roll rotation in degrees</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="object">
+<dt id="attributes">
+<!--[attributes]--><code class="descname">attributes</code><a class="headerlink" href="#attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>age</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – Age estimation (in years, number - minimum: 0 - maximum: 100)</li>
+<li><strong>gender</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – Gender estimation ( minimum: 0 - maximum: 1)</li>
+<li><strong>eyeGlasses</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Estimates whether the persons wears eye glasses ( minimum: 0 - maximum: 1)</li>
+<li><strong>emotions</strong> (<a class="reference internal" href="#estimation_emotions"><code class="xref json json-object docutils literal notranslate"><span class="pre">estimation_emotions</span></code></a>) – Face emotions estimation.</li>
+<li><strong>ethnicities</strong> (<a class="reference internal" href="#estimation_ethnicities"><code class="xref json json-object docutils literal notranslate"><span class="pre">estimation_ethnicities</span></code></a>) – Ethnicities estimation.</li>
+<li><strong>head_pose</strong> (<a class="reference internal" href="#head_pose"><code class="xref json json-object docutils literal notranslate"><span class="pre">head_pose</span></code></a>) – Head pose estimation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">9705</span><span class="p">,</span>
+    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">7857</span><span class="p">,</span>
+    <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">0.8500000000000227</span><span class="p">,</span>
+    <span class="nt">&quot;emotions&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;anger&quot;</span><span class="p">:</span> <span class="mf">0.8960000001825392</span><span class="p">,</span>
+        <span class="nt">&quot;disgust&quot;</span><span class="p">:</span> <span class="mf">0.7517499998211861</span><span class="p">,</span>
+        <span class="nt">&quot;fear&quot;</span><span class="p">:</span> <span class="mf">0.10535560001153499</span><span class="p">,</span>
+        <span class="nt">&quot;happiness&quot;</span><span class="p">:</span> <span class="mf">0.2850000262260437</span><span class="p">,</span>
+        <span class="nt">&quot;neutral&quot;</span><span class="p">:</span> <span class="mf">0.09999999997671694</span><span class="p">,</span>
+        <span class="nt">&quot;sadness&quot;</span><span class="p">:</span> <span class="mf">0.43530000001192093</span><span class="p">,</span>
+        <span class="nt">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.5400390625</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ethnicities&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;asian&quot;</span><span class="p">:</span> <span class="mf">0.8168359974988562</span><span class="p">,</span>
+        <span class="nt">&quot;indian&quot;</span><span class="p">:</span> <span class="mf">0.22817999124526978</span><span class="p">,</span>
+        <span class="nt">&quot;caucasian&quot;</span><span class="p">:</span> <span class="mf">0.19999999995343387</span><span class="p">,</span>
+        <span class="nt">&quot;african&quot;</span><span class="p">:</span> <span class="mf">0.6457977294921875</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;head_pose&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;yaw&quot;</span><span class="p">:</span> <span class="mi">9541</span><span class="p">,</span>
+        <span class="nt">&quot;pitch&quot;</span><span class="p">:</span> <span class="mi">7406</span><span class="p">,</span>
+        <span class="nt">&quot;roll&quot;</span><span class="p">:</span> <span class="mi">4584</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="qualityattributes">
+<!--[qualityattributes]--><code class="descname">qualityAttributes</code><a class="headerlink" href="#qualityattributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>light</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Low value means overlit face area (i.e. overbright lighting, sensor overexposure), minimum: 0 - maximum: 1.</li>
+<li><strong>dark</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Low value means underlit face area (i.e. due to backlight, poor lighting, sensor underexposure), minimum: 0 - maximum: 1.</li>
+<li><strong>saturation</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Low value means low saturation (e.g. grayscale images), minimum: 0 - maximum: 1.</li>
+<li><strong>blurriness</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Low value means blurred image (e.g. due to depth of field or motion blur). High value means sharp image, minimum: 0 - maximum: 1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;light&quot;</span><span class="p">:</span> <span class="mf">0.16024802999999999</span><span class="p">,</span>
+    <span class="nt">&quot;dark&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="nt">&quot;saturation&quot;</span><span class="p">:</span> <span class="mf">0.262939453125</span><span class="p">,</span>
+    <span class="nt">&quot;blurriness&quot;</span><span class="p">:</span> <span class="mf">0.910003662109375</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="exif">
+<!--[exif]--><code class="descname">exif</code><a class="headerlink" href="#exif" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>artist</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – Artist tag</li>
+<li><strong>dateTime</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – Date, time tag</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;artist&quot;</span><span class="p">:</span> <span class="s2">&quot;ijones&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;dateTime&quot;</span><span class="p">:</span> <span class="s2">&quot;1985-08-18T06:43:33&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="extract_one_descriptor">
+<!--[extract_one_descriptor]--><code class="descname">extract_one_descriptor</code><a class="headerlink" href="#extract_one_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – descriptor id</li>
+<li><strong>rect</strong> (<a class="reference internal" href="#rect"><code class="xref json json-object docutils literal notranslate"><span class="pre">rect</span></code></a>) – Bounding rectangle</li>
+<li><strong>rectISO</strong> (<a class="reference internal" href="#rect"><code class="xref json json-object docutils literal notranslate"><span class="pre">rect</span></code></a>) – Bounding rectangle</li>
+<li><strong>score</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – Face detection confidence (number - minimum: 0 - maximum: 1)</li>
+<li><strong>quality</strong> (<a class="reference internal" href="#qualityattributes"><code class="xref json json-object docutils literal notranslate"><span class="pre">qualityAttributes</span></code></a>) – Image quality estimation</li>
+<li><strong>attributes</strong> (<a class="reference internal" href="#attributes"><code class="xref json json-object docutils literal notranslate"><span class="pre">attributes</span></code></a>) – Face attributes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;677dcce0-df42-4457-a0a3-13e129d774d3&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;rect&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">6703</span><span class="p">,</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1655</span><span class="p">,</span>
+        <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">4037</span><span class="p">,</span>
+        <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">9547</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;rectISO&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">5132</span><span class="p">,</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">3364</span><span class="p">,</span>
+        <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">7763</span><span class="p">,</span>
+        <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">7671</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">0.21179962158203125</span><span class="p">,</span>
+    <span class="nt">&quot;quality&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;light&quot;</span><span class="p">:</span> <span class="mf">0.5489501953125</span><span class="p">,</span>
+        <span class="nt">&quot;dark&quot;</span><span class="p">:</span> <span class="mf">0.5999999999999943</span><span class="p">,</span>
+        <span class="nt">&quot;saturation&quot;</span><span class="p">:</span> <span class="mf">0.5409999999974389</span><span class="p">,</span>
+        <span class="nt">&quot;blurriness&quot;</span><span class="p">:</span> <span class="mf">0.296875</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">5683</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">1189</span><span class="p">,</span>
+        <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">0.9500007629394531</span><span class="p">,</span>
+        <span class="nt">&quot;emotions&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;anger&quot;</span><span class="p">:</span> <span class="mf">0.29999999701976776</span><span class="p">,</span>
+            <span class="nt">&quot;disgust&quot;</span><span class="p">:</span> <span class="mf">0.7535799741744995</span><span class="p">,</span>
+            <span class="nt">&quot;fear&quot;</span><span class="p">:</span> <span class="mf">0.6145333320000006</span><span class="p">,</span>
+            <span class="nt">&quot;happiness&quot;</span><span class="p">:</span> <span class="mf">0.6109999418258667</span><span class="p">,</span>
+            <span class="nt">&quot;neutral&quot;</span><span class="p">:</span> <span class="mf">0.7282988984952681</span><span class="p">,</span>
+            <span class="nt">&quot;sadness&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="nt">&quot;surprise&quot;</span><span class="p">:</span> <span class="mf">0.3499999999985448</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;ethnicities&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;asian&quot;</span><span class="p">:</span> <span class="mf">0.3944000005722046</span><span class="p">,</span>
+            <span class="nt">&quot;indian&quot;</span><span class="p">:</span> <span class="mf">0.9000015258789062</span><span class="p">,</span>
+            <span class="nt">&quot;caucasian&quot;</span><span class="p">:</span> <span class="mf">0.2538437959390052</span><span class="p">,</span>
+            <span class="nt">&quot;african&quot;</span><span class="p">:</span> <span class="mf">0.4230000000000018</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;head_pose&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;yaw&quot;</span><span class="p">:</span> <span class="mi">5850</span><span class="p">,</span>
+            <span class="nt">&quot;pitch&quot;</span><span class="p">:</span> <span class="mi">6558</span><span class="p">,</span>
+            <span class="nt">&quot;roll&quot;</span><span class="p">:</span> <span class="mi">1472</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="one_match_result_person">
+<!--[one_match_result_person]--><code class="descname">one_match_result_person</code><a class="headerlink" href="#one_match_result_person" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – person id with linked best match descriptor</li>
+<li><strong>similarity</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – similarity</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – person data</li>
+<li><strong>descriptor_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – descriptor id with best match to person, descriptor id is linked to.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a2bec8f8-e8cc-4a4e-989d-a58513c2592e&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.6144800186157227</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;graveschristopher&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;dbfbf2e1-2650-46fc-a5ee-6b41167c814e&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="one_match_result_descriptor">
+<!--[one_match_result_descriptor]--><code class="descname">one_match_result_descriptor</code><a class="headerlink" href="#one_match_result_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – descriptor id</li>
+<li><strong>similarity</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – similarity</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;563c623a-11c7-454f-821d-bdcadf0a5435&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="auth_token">
+<!--[auth_token]--><code class="descname">auth_token</code><a class="headerlink" href="#auth_token" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Propery token_id:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">token id</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Propery token_data:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">token_data if auth is token else nothing</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;7bd64fb9-9d8b-450a-84ab-e8cc0a161d88&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;9870 Melissa Creek&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="check_connection.html">Check connections</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="account_api.html">Account API</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

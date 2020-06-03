@@ -1,0 +1,461 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.app.rest_handlers.lists_handler &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.app.rest_handlers.lists_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.app.rest_handlers.lists_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tornado</span>
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">web</span><span class="p">,</span> <span class="n">escape</span><span class="p">,</span> <span class="n">gen</span>
+
+<span class="kn">from</span> <span class="nn">app</span> <span class="k">import</span> <span class="n">functions</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.storage_handlers</span> <span class="k">import</span> <span class="n">StorageHandler</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.handlers.query_getters</span> <span class="k">import</span> <span class="n">isUUID4</span>
+
+
+<div class="viewcode-block" id="deleteLists"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.deleteLists">[docs]</a><span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+<span class="k">def</span> <span class="nf">deleteLists</span><span class="p">(</span><span class="n">lists</span><span class="p">,</span> <span class="n">accountId</span><span class="p">,</span> <span class="n">dbContext</span><span class="p">,</span> <span class="n">lunaContext</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete account list.</span>
+
+<span class="sd">    :param lunaContext: context to Luna Core</span>
+<span class="sd">    :param dbContext: context to postgres</span>
+<span class="sd">    :param lists: account lists</span>
+<span class="sd">    :param accountId: account id</span>
+<span class="sd">    :return: deletion result is returned from postgres</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lunaLists</span> <span class="o">=</span> <span class="n">dbContext</span><span class="o">.</span><span class="n">getLunaListsByAccountLists</span><span class="p">(</span><span class="n">lists</span><span class="p">,</span> <span class="n">accountId</span><span class="p">)</span>
+    <span class="n">dbContext</span><span class="o">.</span><span class="n">removeAccountLists</span><span class="p">(</span><span class="n">lists</span><span class="p">,</span> <span class="n">accountId</span><span class="p">)</span>
+
+    <span class="k">yield</span> <span class="n">lunaContext</span><span class="o">.</span><span class="n">removeListsFromLuna</span><span class="p">(</span><span class="n">lunaLists</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ListHandler"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListHandler">[docs]</a><span class="k">class</span> <span class="nc">ListHandler</span><span class="p">(</span><span class="n">StorageHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler to operate with account lists. Before start you need to authorize and account must be active.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ListHandler.get"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListHandler.get">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resource to get all account lists</span>
+
+<span class="sd">        .. http:get:: /storage/lists</span>
+
+<span class="sd">            :optparam page: A number of page. Minimum 1, default 1.</span>
+<span class="sd">            :optparam page_size: Number of lists of the same type on page.  Minimum 1, maximum 100, default 10.</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 200: Object (person, descriptor) data is received successfully</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">               HTTP/1.1 200 Ok</span>
+<span class="sd">               Vary: Accept</span>
+<span class="sd">               Content-Type: application/json</span>
+<span class="sd">               LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            .. json:object:: info lists</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property person_lists: person lists</span>
+<span class="sd">                :proptype person_lists: _list_(:json:object:`account_list`)</span>
+<span class="sd">                :property descriptor_lists: descriptor lists</span>
+<span class="sd">                :proptype descriptor_lists: _list_(:json:object:`account_list`)</span>
+<span class="sd">                :property persons_list_count: number of person lists</span>
+<span class="sd">                :proptype persons_list_count: int</span>
+<span class="sd">                :property descriptors_list_count: number of descriptors lists</span>
+<span class="sd">                :proptype descriptors_list_count: int</span>
+
+<span class="sd">            Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPagination</span><span class="p">()</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getLists</span><span class="p">(</span><span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">listType</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                             <span class="n">pageSize</span><span class="o">=</span><span class="n">pageSize</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
+                                                             <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">personsLists</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">],</span> <span class="s2">&quot;list_data&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;user_data&quot;</span><span class="p">],</span> <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;person_count&quot;</span><span class="p">]}</span> <span class="k">for</span>
+            <span class="n">lunaList</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">]]</span>
+        <span class="n">personsListCount</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;person_lists&quot;</span><span class="p">:</span> <span class="n">personsLists</span><span class="p">}</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getLists</span><span class="p">(</span><span class="n">accountId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">listType</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                                             <span class="n">pageSize</span><span class="o">=</span><span class="n">pageSize</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
+                                                             <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">descriptorsLists</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">],</span> <span class="s2">&quot;list_data&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;user_data&quot;</span><span class="p">],</span> <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;face_count&quot;</span><span class="p">]}</span> <span class="k">for</span>
+            <span class="n">lunaList</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">]]</span>
+        <span class="n">descriptorsListCount</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span>
+
+        <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;descriptor_lists&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">descriptorsLists</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;lists&quot;</span><span class="p">:</span> <span class="n">payload</span><span class="p">,</span> <span class="s2">&quot;persons_list_count&quot;</span><span class="p">:</span> <span class="n">personsListCount</span><span class="p">,</span>
+                                      <span class="s2">&quot;descriptors_list_count&quot;</span><span class="p">:</span> <span class="n">descriptorsListCount</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="ListHandler.post"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListHandler.post">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request for creation of new list for the account</span>
+
+<span class="sd">        .. http:post:: /storage/lists?type=descriptors</span>
+
+<span class="sd">            :optparam type: List type (&quot;persons&quot; or &quot;descriptors&quot;, &quot;persons&quot; by default)</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                POST /storage/lists HTTP/1.1</span>
+<span class="sd">                Accept: application/json</span>
+
+<span class="sd">            You can attach list data in format :json:object:`list_data`.</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 201: List created successfully</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">               HTTP/1.1 201 Created</span>
+<span class="sd">               Vary: Accept</span>
+<span class="sd">               Content-Type: application/json</span>
+<span class="sd">               LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            .. json:object:: list_id</span>
+<span class="sd">               :showexample:</span>
+
+<span class="sd">               :property list_id: new list id</span>
+<span class="sd">               :proptype list_id: uuid4</span>
+
+<span class="sd">            Error message is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 400: wrong format for &#39;type&#39;</span>
+<span class="sd">            :statuscode 400: field *list_data* is too large</span>
+<span class="sd">            :statuscode 400: field *list_data* has wrong type, *string* type is required</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">listType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_query_argument</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1">#: TODO: make test type</span>
+        <span class="k">if</span> <span class="n">listType</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">listType</span> <span class="o">==</span> <span class="s2">&quot;persons&quot;</span><span class="p">:</span>
+            <span class="n">typeList</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">listType</span> <span class="o">==</span> <span class="s2">&quot;descriptors&quot;</span><span class="p">:</span>
+                <span class="n">typeList</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">BadQueryParams</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getInfoFromRequest</span><span class="p">(</span><span class="s2">&quot;list_data&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">BadTypeOfFieldInJSON</span><span class="p">,</span> <span class="s1">&#39;list_data&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BigUserData</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">createList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">typeList</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListHandler.delete"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListHandler.delete">[docs]</a>    <span class="nd">@tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request for account lists deletion</span>
+
+<span class="sd">        .. http:delete:: /storage/lists</span>
+
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                POST /accounts HTTP/1.1</span>
+<span class="sd">                Accept: application/json</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            .. json:object:: json for lists deletion</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property lists: list of tokens to delete</span>
+<span class="sd">                :proptype lists: _list_(uuid4)</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 204 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 400: no json in request</span>
+<span class="sd">            :statuscode 400: no field *lists* in json</span>
+<span class="sd">            :statuscode 400: field *lists* is not a list</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">strJson</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">body</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reqJson</span> <span class="o">=</span> <span class="n">tornado</span><span class="o">.</span><span class="n">escape</span><span class="o">.</span><span class="n">json_decode</span><span class="p">(</span><span class="n">strJson</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;failed decode json&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">RequestNotContainsJson</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reqJson</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">EmptyJson</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s2">&quot;lists&quot;</span> <span class="ow">in</span> <span class="n">reqJson</span><span class="p">):</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">FieldNotInJSON</span><span class="p">,</span> <span class="s1">&#39;lists&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="n">lists</span> <span class="o">=</span> <span class="n">reqJson</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">lists</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">BadTypeOfFieldInJSON</span><span class="p">,</span> <span class="s1">&#39;lists&#39;</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">accountList</span> <span class="ow">in</span> <span class="n">lists</span><span class="p">:</span>
+            <span class="n">resCheckUUID</span> <span class="o">=</span> <span class="n">isUUID4</span><span class="p">(</span><span class="n">accountList</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">resCheckUUID</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BadFormatUUID</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">deleteLists</span><span class="p">(</span><span class="n">reqJson</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ListOfObjectHandler"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler">[docs]</a><span class="k">class</span> <span class="nc">ListOfObjectHandler</span><span class="p">(</span><span class="n">StorageHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler to work with account lists. Before start you need to authorize and account must be active.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ListOfObjectHandler.get"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.get">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request to get all objects in list.</span>
+
+<span class="sd">        .. http:get:: /storage/lists/{listId}</span>
+
+<span class="sd">            :param listId: list id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 200: objects list, number of objects and list_data are received successfully.</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 200 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            Json example for persons list:</span>
+
+<span class="sd">            .. json:object:: list_persons_json</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property persons: persons list</span>
+<span class="sd">                :proptype persons: _list_(:json:object:`person`)</span>
+<span class="sd">                :property count: number of objects in list</span>
+<span class="sd">                :proptype count: int</span>
+<span class="sd">                :property list_data: list data</span>
+<span class="sd">                :proptype list_data: city</span>
+
+<span class="sd">            Json example for descriptors list:</span>
+
+<span class="sd">            .. json:object:: list_descriptors_json</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property persons: persons list</span>
+<span class="sd">                :proptype persons: _list_(:json:object:`descriptor`)</span>
+<span class="sd">                :property count: number of objects in list</span>
+<span class="sd">                :proptype count: int</span>
+<span class="sd">                :property list_data: list data</span>
+<span class="sd">                :proptype list_data: city</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 404: list not found</span>
+<span class="sd">            :statuscode 400: field *page* or *page_size* has wrong type</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span><span class="p">,</span> <span class="n">pageSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPagination</span><span class="p">()</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">getList</span><span class="p">(</span><span class="n">listId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                            <span class="n">pageSize</span><span class="o">=</span><span class="n">pageSize</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">)</span>
+        <span class="n">lunaList</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span>
+
+        <span class="k">if</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;persons&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">person</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">],</span> <span class="s2">&quot;create_time&quot;</span><span class="p">:</span> <span class="n">functions</span><span class="o">.</span><span class="n">convertDateTime</span><span class="p">(</span><span class="n">person</span><span class="p">[</span><span class="s2">&quot;create_time&quot;</span><span class="p">]),</span>
+                             <span class="s2">&quot;lists&quot;</span><span class="p">:</span> <span class="n">person</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">],</span> <span class="s2">&quot;descriptors&quot;</span><span class="p">:</span> <span class="n">person</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">],</span> <span class="s2">&quot;user_data&quot;</span><span class="p">:</span> <span class="n">person</span><span class="p">[</span><span class="s2">&quot;user_data&quot;</span><span class="p">],</span>
+                             <span class="s2">&quot;external_id&quot;</span><span class="p">:</span> <span class="n">person</span><span class="p">[</span><span class="s2">&quot;external_id&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;persons&quot;</span><span class="p">]],</span>
+                <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;person_count&quot;</span><span class="p">],</span> <span class="s2">&quot;list_data&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;user_data&quot;</span><span class="p">]})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;attributes_id&quot;</span><span class="p">],</span> <span class="s2">&quot;last_update&quot;</span><span class="p">:</span> <span class="n">functions</span><span class="o">.</span><span class="n">convertDateTime</span><span class="p">(</span><span class="n">face</span><span class="p">[</span><span class="s2">&quot;create_time&quot;</span><span class="p">]),</span>
+                 <span class="s2">&quot;person_id&quot;</span><span class="p">:</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">],</span>
+                 <span class="s2">&quot;lists&quot;</span><span class="p">:</span> <span class="n">face</span><span class="p">[</span><span class="s2">&quot;lists&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">]],</span>
+                <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;face_count&quot;</span><span class="p">],</span> <span class="s2">&quot;list_data&quot;</span><span class="p">:</span> <span class="n">lunaList</span><span class="p">[</span><span class="s2">&quot;user_data&quot;</span><span class="p">]})</span></div>
+
+<div class="viewcode-block" id="ListOfObjectHandler.delete"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.delete">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Request for list deletion.</span>
+
+<span class="sd">        .. http:delete:: /storage/lists/{listId}</span>
+
+<span class="sd">            :param listId: list id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 204: list was deleted successfully.</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 204 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 404: list not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">deleteList</span><span class="p">(</span><span class="n">listId</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ListOfObjectHandler.patch"><a class="viewcode-back" href="../../../../lists.html#luna_api.app.rest_handlers.lists_handler.ListOfObjectHandler.patch">[docs]</a>    <span class="nd">@StorageHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+    <span class="k">def</span> <span class="nf">patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A request to change the data about the list.</span>
+
+<span class="sd">        .. http:patch:: /storage/lists/{listId}</span>
+
+<span class="sd">            :param listId: list id</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">                **or**</span>
+
+<span class="sd">            :reqheader X-Auth-Token: &#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                POST /storage/lists/{id} HTTP/1.1</span>
+<span class="sd">                Accept: application/json</span>
+
+<span class="sd">            Data has to be attached in format :json:object:`list_data`.</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            :statuscode 204: list was modified successfully.</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 204 Ok</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 400: field *list_data* is too large</span>
+<span class="sd">            :statuscode 400: field *list_data* has wrong type, *string* type is required</span>
+<span class="sd">            :statuscode 404: list not found</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getInfoFromRequest</span><span class="p">(</span><span class="s2">&quot;list_data&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">BadTypeOfFieldInJSON</span><span class="p">,</span> <span class="s1">&#39;list_data&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">BigUserData</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">luna3Client</span><span class="o">.</span><span class="n">lunaFaces</span><span class="o">.</span><span class="n">updateListUserData</span><span class="p">(</span><span class="n">listId</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accountId</span><span class="p">,</span> <span class="n">raiseError</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">204</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

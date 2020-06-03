@@ -1,0 +1,91 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="install.html" />
+    <link rel="prev" title="Welcome to luna-faces’s documentation!" href="index.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>Introduction</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to luna-faces’s documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="install.html">Installation</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Service for work with faces and lists.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Face is a object  with  folowings fields:</dt>
+<dd><ol class="first last arabic simple">
+<li>create time - face create time;</li>
+<li>last update time - time of last action with face (change user data, attach or detach face from list,
+update event id);</li>
+<li>event id - reference to event id  which created the face;</li>
+<li>account id - id of account to which the face belongs;</li>
+<li>user data - user data of face;</li>
+<li>attributes id - reference to face attributes;</li>
+<li>face id - face id.</li>
+<li>external id - external id of the face, if it has its own mapping in external system</li>
+</ol>
+</dd>
+<dt>List is a set of faces. Every list must consist of faces from one account. There are the following fields in list:</dt>
+<dd><ol class="first last arabic simple">
+<li>list id - list id;</li>
+<li>user data - user data of list;</li>
+<li>account id - id of to account which the list belongs;</li>
+<li>create time - list create time;</li>
+<li>last update time - time of last action with list (attach or detach face from list);</li>
+</ol>
+</dd>
+</dl>
+<p>Service provides RESTFul api interface for creating, removing faces and lists, attaching and detaching faces to
+lists. Also you can get faces, lists and list attributes by filters</p>
+</div></blockquote>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to luna-faces’s documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="install.html">Installation</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+Lists handler
+=============
+
+.. automodule:: luna_faces.app.handlers.lists_handler
+	:members:

@@ -1,0 +1,15 @@
+=======
+v.0.2.5
+=======
+
+-------------
+Improvements:
+-------------
+
+1) new InfluxDB version added in the docs (installation info).
+
+-----------
+Bugs fixed:
+-----------
+
+None.

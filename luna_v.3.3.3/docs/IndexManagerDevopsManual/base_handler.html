@@ -1,0 +1,90 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Base handler &#8212; luna-index-manager v.0.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Version handler" href="version_handler.html" />
+    <link rel="prev" title="Documentation of tornado-handlers" href="handlers.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-index-manager v.0.0.3 documentation</span></a></h1>
+        <h2 class="heading"><span>Base handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="handlers.html">Documentation of tornado-handlers</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="version_handler.html">Version handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_index_manager.app.handlers.base_handler">
+<span id="base-handler"></span><h1>Base handler<a class="headerlink" href="#module-luna_index_manager.app.handlers.base_handler" title="Permalink to this headline">¶</a></h1>
+<p>Base handler</p>
+<p>Module realize base class for all handlers.</p>
+<dl class="class">
+<dt id="luna_index_manager.app.handlers.base_handler.BaseRequestHandler">
+<em class="property">class </em><code class="descclassname">luna_index_manager.app.handlers.base_handler.</code><code class="descname">BaseRequestHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/app/handlers/base_handler.html#BaseRequestHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.app.handlers.base_handler.BaseRequestHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base handler for other handlers.</p>
+<dl class="attribute">
+<dt id="luna_index_manager.app.handlers.base_handler.BaseRequestHandler.logger">
+<code class="descname">logger</code><a class="headerlink" href="#luna_index_manager.app.handlers.base_handler.BaseRequestHandler.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Logger</em> – logger for input request</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="luna_index_manager.app.handlers.base_handler.BaseRequestHandler.requestId">
+<code class="descname">requestId</code><a class="headerlink" href="#luna_index_manager.app.handlers.base_handler.BaseRequestHandler.requestId" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – request id</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_index_manager.app.handlers.base_handler.BaseRequestHandler.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_index_manager/app/handlers/base_handler.html#BaseRequestHandler.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_index_manager.app.handlers.base_handler.BaseRequestHandler.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize logger for request and  create request id and contexts to Postgres and LunaCore.</p>
+<p>RequestId consists of two parts. first - timestamp of server time or utc, second - short id, first 8 symbols
+from uuid4.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="handlers.html">Documentation of tornado-handlers</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="version_handler.html">Version handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

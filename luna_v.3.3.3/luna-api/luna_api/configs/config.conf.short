@@ -1,0 +1,23 @@
+DB_USER_NAME = "faceis"                             #: postgresql login
+DB_PASSWORD = "faceis"                              #: postgresql password
+DB_NAME = "faceis_db"                               #: name of database, where necessary schemes are created
+DB_HOST = "127.0.0.1"                               #: ip-address of postgresql
+
+LUNA_CORE_ORIGIN = "http://127.0.0.1:8083"          #: address, on which LUNA listens
+LUNA_CORE_API_VERSION = 14                          #: api version of LUNA
+
+LUNA_INDEX_MANAGER_ORIGIN = "http://127.0.0.1:5060" #: address, on which LUNA Index Manager listens
+LUNA_INDEX_MANAGER_API_VERSION = 1                  #: api version of LUNA Index Manager
+
+SEND_ADMIN_STATS = 0                                #: parameter, which indicates whether send admin statistics or not
+
+SEND_ACCOUNT_STATS = 0                              #: parameter, which indicates whether send client statistics or not
+
+MAX_CANDIDATE_IN_RESPONSE = 5                       #: max result count in response for match
+MAX_PERSON_IN_LIST = 4096                           #: max descriptors count, stored in one LUNA list
+
+LOG_LEVEL = "INFO"                                  #: level of debug print, by priority: ERROR, WARNING, INFO, DEBUG
+
+FOLDER_WITH_LOGS = "./"                             #: folder, where logs are saved
+
+ENABLE_PLUGINS = 0                                  #: flag to enable plug-ins

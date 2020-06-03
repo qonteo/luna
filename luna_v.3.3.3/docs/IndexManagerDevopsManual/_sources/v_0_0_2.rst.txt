@@ -1,0 +1,21 @@
+v.0.0.2
+=======
+
+Improvements:
+-------------
+
+    1) Up luna3.
+
+    #) Use alembic migration instead of SQLAlchemy-migrate.
+
+
+Bugs fixed:
+-----------
+
+    1) Fixed run http server.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_index_manager, tests* and update dependencies from
+requirements.txt.

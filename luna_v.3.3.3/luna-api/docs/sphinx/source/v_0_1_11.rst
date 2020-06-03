@@ -1,0 +1,29 @@
+v.0.1.11
+========
+
+Improvements:
+-------------
+	1) Advanced logging of failed request to internal service (S3, stats).
+
+	#) Replace *LoginHandler* to *storage_handlers.py*. Now resource "/login" is available with token authentication.
+
+Bugs fixed:
+-----------
+
+	1) Fix alignment in install.rst for correct generate doc.
+
+	#) Fix linked to list and update count of object in list. Effect: failed matching by list.
+
+	#) Fix check the state of account, now blocking is working.
+
+	#) Fix saving several faces to s3 from one photo.
+
+	#) Fix increment of references count of descriptor, when remove a list of descriptors.
+
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

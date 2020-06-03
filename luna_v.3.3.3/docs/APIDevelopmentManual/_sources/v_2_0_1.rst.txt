@@ -1,0 +1,27 @@
+v.2.0.1
+=======
+
+Improvements:
+-------------
+
+    1) Up api version of luna api. Now it is equal to 4.
+
+    #) Up luna3 and lunavl.
+
+    #) Add search by user data for persons. Available at */storage/persons* resource.
+
+    #) Add external id for persons. More information available at person's description.
+
+    #) Add */storage/linker* resource for link/unlink persons/descriptors to/from lists.
+
+    #) Add external id for persons to match result.
+
+Bugs fixed:
+-----------
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_api, tests, uploads_scripts*
+and update dependencies from requirements.txt.

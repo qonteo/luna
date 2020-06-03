@@ -1,0 +1,24 @@
+v.0.1.9
+=======
+
+Improvements:
+-------------
+	1) Password storage format is changed. Passwords are now stored in DB as hash-functions, not in unencrypted view.
+	   For more details go to hash_algorithm_.
+
+	2) Add parameters "count" to public description of API, resource '/lists/{list_id}', '/descriptors', '/persons',
+	   method 'GET.
+
+Bugs fixed:
+-----------
+
+	3) Add person_handler to sphinx docs.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, sphinx_docs, raml* and \
+files *version.py, config.py*. It is strongly recommended to backup DB postgres and server. To update passwords it's necessary
+to install passlib from *pip* and  launch script *reset_passwords.py* from folder *base_scripts*.
+
+.. _hash_algorithm: https://passlib.readthedocs.io/en/stable/lib/passlib.hash.pbkdf2_digest.html#passlib.hash.pbkdf2_sha512

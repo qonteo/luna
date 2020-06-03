@@ -1,0 +1,410 @@
+<!DOCTYPE HTML><html><head><title>StatServiceApi API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/raml2html/raml2html 6.3.0"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $('.page-header pre code, .top-resource-description pre code, .modal-body pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+
+        $('[data-toggle]').click(function() {
+          var selector = $(this).data('target') + ' pre code';
+          $(selector).each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+        });
+
+        // open modal on hashes like #_action_get
+        $(window).bind('hashchange', function(e) {
+          var anchor_id = document.location.hash.substr(1); //strip #
+          var element = $('#' + anchor_id);
+
+          // do we have such element + is it a modal?  --> show it
+          if (element.length && element.hasClass('modal')) {
+            element.modal('show');
+          }
+        });
+
+        // execute hashchange on first page load
+        $(window).trigger('hashchange');
+
+        // remove url fragment on modal hide
+        $('.modal').on('hidden.bs.modal', function() {
+          try {
+            if (history && history.replaceState) {
+                history.replaceState({}, '', '#');
+            }
+          } catch(e) {}
+        });
+      });
+    </script><style>
+      .hljs {
+        background: transparent;
+      }
+      .parent {
+        color: #999;
+      }
+      .list-group-item > .badge {
+        float: none;
+        margin-right: 6px;
+      }
+      .panel-title > .methods {
+        float: right;
+      }
+      .badge {
+        border-radius: 0;
+        text-transform: uppercase;
+        width: 70px;
+        font-weight: normal;
+        color: #f3f3f6;
+        line-height: normal;
+      }
+      .badge_get {
+        background-color: #63a8e2;
+      }
+      .badge_post {
+        background-color: #6cbd7d;
+      }
+      .badge_put {
+        background-color: #22bac4;
+      }
+      .badge_delete {
+        background-color: #d26460;
+      }
+      .badge_patch {
+        background-color: #ccc444;
+      }
+      .list-group, .panel-group {
+        margin-bottom: 0;
+      }
+      .panel-group .panel+.panel-white {
+        margin-top: 0;
+      }
+      .panel-group .panel-white {
+        border-bottom: 1px solid #F5F5F5;
+        border-radius: 0;
+      }
+      .panel-white:last-child {
+        border-bottom-color: white;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+      .panel-white .panel-heading {
+        background: white;
+      }
+      .tab-pane ul {
+        padding-left: 2em;
+      }
+      .tab-pane h1 {
+        font-size: 1.3em;
+      }
+      .tab-pane h2 {
+        font-size: 1.2em;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab-pane h3 {
+        font-size: 1.1em;
+      }
+      .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+      }
+      #sidebar {
+        margin-top: 30px;
+        padding-right: 5px;
+        overflow: auto;
+        height: 90%;
+      }
+      .top-resource-description {
+        border-bottom: 1px solid #ddd;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description {
+        border-bottom: 1px solid #fcfcfc;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description p:last-child {
+        margin: 0;
+      }
+      .list-group .badge {
+        float: left;
+      }
+      .method_description {
+        margin-left: 85px;
+      }
+      .method_description p:last-child {
+        margin: 0;
+      }
+      .list-group-item {
+        cursor: pointer;
+      }
+      .list-group-item:hover {
+        background-color: #f5f5f5;
+      }
+      pre code {
+        overflow: auto;
+        word-wrap: normal;
+        white-space: pre;
+      }
+      .items {
+        background: #f5f5f5;
+        color: #333;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 9.5px;
+        margin: 0 0 10px;
+        font-size: 13px;
+        line-height: 1.42857143;
+      }
+      .examples {
+        margin-left: 0.5em;
+      }
+      .resource-modal li > ul {
+        margin-bottom: 1em;
+      }
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>StatServiceApi API documentation <small>version v.0.2.12, api 1</small></h1><p>api.stats.luna.visionlabs.com</p><h3><a href="#"></a></h3><h1 id="welcome-to-the-luna-statistics-and-events-service">Welcome to the Luna statistics and events service</h1><h2 id="introduction">Introduction</h2><p>This service solves the following problems:</p><ul><li><strong>subscribe to</strong> face descriptor extraction and matching <strong>events</strong></li><li><strong>get statistics</strong> on selected events.</li></ul><h3 id="subscribe-to-events">Subscribe to events</h3><p>Supported events:</p><ul><li>A successful request for <code>matching</code> in the Luna.</li><li>A successful request to <code>extract</code> the descriptor in the Luna.</li></ul><p>Notifications appear upon subscription. Every notification contain a copy of the Luna API response to the original request and some additional information. You can specify a set of filters that an event must satisfy when subscribing. For example, you can receive only those results of matching, in which similarity is more than the given number. All supported filters are listed below.</p><p><strong>Common filters</strong></p><table class="table"><thead><tr><th>Filter</th><th>Description</th><th>Possible Values</th></tr></thead><tbody><tr><td>event_type</td><td>Event type</td><td><code>match</code> or <code>extract</code></td></tr><tr><td>observe</td><td>List of tokens to watch</td><td><code>%2C</code>-separated list of authorization tokens and basic</td></tr><tr><td>gender</td><td>Gender estimation</td><td><code>male</code> or <code>female</code></td></tr><tr><td>age</td><td>Age estimation (range)</td><td>Any nonnegative number</td></tr><tr><td>glasses</td><td>Estimates whether the persons wears eye glasses (range)</td><td>Number between 0.0-1.0</td></tr></tbody></table><p><strong>Filters for <code>match</code> events</strong></p><table class="table"><thead><tr><th>Filter</th><th>Description</th><th>Possible Values</th></tr></thead><tbody><tr><td>similarity__gt</td><td>Lower threshold similarity</td><td>Number between 0.0-1.0</td></tr><tr><td>list</td><td>A specific list to get statistics on</td><td>list uuid</td></tr></tbody></table><blockquote><h3 id="attention-">Attention!</h3><p><strong>Subscription to events occurs via <a href="https://en.wikipedia.org/wiki/WebSocket">WebSocket</a>.</strong></p></blockquote><h3 id="getting-statistics">Getting statistics</h3><p>Stat server implements restful API for statistics.</p><p>All occurred events are recorded as time series. One may obtain the number of events happened during specified period of time. Service API provides means of event filtering and statistic aggregation. You can specify a set of filters that an event must satisfy when subscribing. For example, you can opt to receive only matching results with similarity score above some given threshold. All supported filters are listed below.</p><p><strong>Common filters</strong></p><table class="table"><thead><tr><th>Filter</th><th>Description</th><th>Possible Values</th></tr></thead><tbody><tr><td>event_type</td><td>Event type (required)</td><td><code>match</code> or <code>extract</code></td></tr><tr><td>observe</td><td>List of tokens to watch</td><td><code>%2C</code>-separated list of authorization tokens and <code>basic</code></td></tr><tr><td>source</td><td>Event source in Luna API</td><td><code>identify</code>, <code>search</code>, <code>verify</code>, <code>match</code> or <code>descriptors</code></td></tr><tr><td>gender</td><td>Gender estimation</td><td><code>male</code> or <code>female</code></td></tr><tr><td>face_score</td><td>Face detection confidence (range)</td><td>Number between 0.0-1.0</td></tr><tr><td>age</td><td>Age estimation (range)</td><td>Any nonnegative number</td></tr><tr><td>glasses</td><td>Estimates whether the persons wears eyeglasses (range)</td><td>Number between 0.0-1.0</td></tr></tbody></table><p>For <strong>range</strong> filters (such as face_score and glasses), you can specify the upper and lower limits: To denote the lower limit, the postfix <code>__gt</code> (greater than) is added to filter. To indicate the upper limit, postfix <code>__lt</code> (lower than) is added to filter.</p><p>For example <code>?glasses__gt=0.5</code> means that we are interested in events with the <em>glasses</em> attribute is greater than 0.5.</p><p><strong>Filters for <code>match</code> events</strong></p><table class="table"><thead><tr><th>Filter</th><th>Description</th><th>Possible Values</th></tr></thead><tbody><tr><td>similarity</td><td>Lower threshold similarity</td><td>Number between 0.0-1.0</td></tr><tr><td>list</td><td>A specific list on which to get statistics</td><td>List uuid</td></tr></tbody></table><p>Note: detailed attribute descriptions are given in Luna API documentation</p><p><strong>Aggregators</strong></p><table class="table"><thead><tr><th>Aggregation</th><th>Description</th><th>Possible Values</th></tr></thead><tbody><tr><td>aggregator</td><td>Way of aggregation</td><td><code>count</code>, <code>min</code>, <code>max</code> or <code>mean</code></td></tr><tr><td>time</td><td>Boundaries of the range for events we are interested in (see the range above)</td><td><code>now</code> or <code>now-&lt;time&gt;</code> or <code>YYYY-MM-DD-hh-mm-ss</code></td></tr><tr><td>group_step</td><td>The duration of the periods over which the range is broken up</td><td><code>&lt;time&gt;</code></td></tr></tbody></table><p><code>&lt;time&gt;</code> consists of a number lying in the range 1-9999, and a character, one of the following:</p><ul><li>s - second</li><li>m - minute</li><li>h - hour</li><li>d - day</li><li>w - week</li></ul><p>For example, the empty request is equal to <code>?aggregator=max&amp;time__gt=now-3h&amp;time__lt=now&amp;group_step=1h</code> and means selecting the maximum values for the last three hours with period per hour.</p><p>Note: Getting statistics occurs via <a href="https://en.wikipedia.org/wiki/http">HTTP</a>.</p></div><div class="panel panel-default"><div class="panel-heading"><h3 id="version" class="panel-title">/version</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_version"><span class="parent"></span>/version</a> <span class="methods"><a href="#version_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_version" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#version_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Response with current API version</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="version_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/version</h4></div><div class="modal-body"><div class="alert alert-info"><p>Response with current API version</p></div><ul class="nav nav-tabs"><li class="active"><a href="#version_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="version_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{"Version":{"api":1,"major":0,"minor":1,"patch":0}}
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="api" class="panel-title">/api</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_api_subscribe"><span class="parent">/api</span>/subscribe</a> <span class="methods"><a href="#api_subscribe_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_api_subscribe" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>This resource used to subscribe on raw <strong>LUNA Events</strong> using websockets.</p><blockquote><h3 id="attention-">Attention!</h3><p>You <strong>must</strong> use WebSockets, otherwise you will get 400 Bad Request</p></blockquote><p><strong>JS example</strong></p><pre><code class="lang-js">ws = new WebSocket(&#39;ws://&#39; + base_url + &#39;/api/subscribe?event_type=match&amp;auth_token=141d2706-8baf-433b-82eb-8c7fada847da&#39;)
+ws.onmessage = function(message) { console.log(message.data) }
+</code></pre><p><strong>Output example</strong></p><pre><code class="lang-console_output">
+  {
+    "timestamp":1490281006.88603,
+    "source":"match",
+    "event_type":"match",
+    "authorization":"basic",
+    "result":{
+      "canditates":[
+        {
+          "id":"c51f1644-a6d9-419b-ba50-322a8ca4d413",
+          "descriptor_id":"d930a808-b563-4e4e-9d0b-5830fa870e25",
+          "similarity":0.5
+        }
+      ]
+    },
+    "template":{
+      "person_id":"e182bf55-5384-4f7a-a2c6-8e6fda993a1f"
+    },
+    "candidate":{
+      "descriptor_ids":[
+        "d930a808-b563-4e4e-9d0b-5830fa870e25"
+      ]
+    }
+  }
+
+       ...
+</code></pre></div><div class="list-group"><div onclick="window.location.href = '#api_subscribe_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Request to init websocket protocol</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="api_subscribe_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/api</span>/subscribe</h4></div><div class="modal-body"><div class="alert alert-info"><p>Request to init websocket protocol</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>basic</b><p>This API supports Basic Authentication for a access to the account. Used to send the Base64-encoded "username:password" credentals passed throught headers or as query parameter.</p><p>You should use one of security shemas to access data.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>x-Auth-Token</b><p>API supports access via X-Auth-Token authorization to access the account&#39;s storage by headers or query parametres.</p><p>You should use one of security schemas to access data.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#api_subscribe_get_request" data-toggle="tab">Request</a></li><li><a href="#api_subscribe_get_response" data-toggle="tab">Response</a></li><li><a href="#api_subscribe_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="api_subscribe_get_request"><h3>Query Parameters</h3><ul><li><strong>event_type</strong>: <em>(one of match, extract)</em><p>Event type, will not filter if not specified</p></li><li><strong>observe</strong>: <em>(string)</em><p>If you need to collect data only from special tokens, use this parameter in the following format: <code>%2C</code>-separated list of <code>tokens</code> and <code>"basic"</code> for authorization with login/password pair. Will not filter if not specified.</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>550e8400-e29b-41d4-a716-446655440000%2C550e8400-e29b-41d4-b716-446655440000%2Cbasic</code></pre></div></li><li><strong>gender</strong>: <em>(one of male, female)</em><p>Specify estimated gender, one of <code>male</code> or <code>female</code>. Will be ignored if not specified</p></li><li><strong>age__gt</strong>: <em>(number - default: 0 - minimum: 0)</em><p>Lower limit of age to filter by</p></li><li><strong>age__lt</strong>: <em>(number - default: 9999 - minimum: 0)</em><p>Upper limit of age to filter by</p></li><li><strong>glasses__gt</strong>: <em>(number - default: 0 - minimum: 0 - maximum: 1)</em><p>Lower limit of glasses estimation</p></li><li><strong>glasses__lt</strong>: <em>(number - default: 1 - minimum: 0 - maximum: 1)</em><p>Upper limit of glasses estimation</p></li><li><strong>similarity__gt</strong>: <em>(number - default: 0 - minimum: 0 - maximum: 1)</em><p>Specify similarity lower limit (works if <code>event_type</code> is not <code>extract</code>)</p></li><li><strong>list</strong>: <em>(string)</em><p>Specify list (works if <code>event_type</code> is not <code>extract</code>)</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>550e8400-e29b-41d4-a716-446655440000</code></pre></div></li></ul></div><div class="tab-pane" id="api_subscribe_get_response"><h2>HTTP status code <a href="http://httpstatus.es/101" target="_blank">101</a></h2><p>The handshake passed successfully, connection upgraded. After that server starts message sending. Some example messages are listed below.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>timestamp</strong>: <em>required (number)</em><p>Event occurance UTC timestamp in seconds</p></li><li><strong>event_type</strong>: <em>required (string)</em><p><code>match</code> or <code>extract</code></p></li><li><strong>source</strong>: <em>required (string)</em><p>Event source in Luna API, one of: <code>identify</code>, <code>search</code>, <code>verify</code>, <code>match</code> or <code>descriptors</code></p></li><li><strong>authorization</strong>: <em>required (Authorization | string)</em><p>Authorisation token_id with token_data or <code>basic</code> for login:password pair initiated event</p></li><li><strong>result</strong>: <em>required (object)</em><p>Copy of Luna event</p></li><li><strong>template</strong>: <em>(object)</em><p>What to match (only for match events)</p><ul><li><strong>descriptor_id</strong>: <em>(string - pattern: ^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}$)</em><p>Descriptor to match</p></li><li><strong>person_id</strong>: <em>(string - pattern: ^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}$)</em><p>Person to match</p></li></ul></li><li><strong>candidate</strong>: <em>(object)</em><p>What to match with (only for match events)</p><ul><li><strong>list_id</strong>: <em>(string - pattern: ^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}$)</em><p>Match with list</p></li><li><strong>list_data</strong>: <em>(string)</em><p>the list user data</p></li><li><strong>list_type</strong>: <em>(one of 0, 1)</em><p>0 - descriptors list, 1 - persons list</p></li><li><strong>descriptor_ids</strong>: <em>(array of UUID)</em><p>Match with array of descriptors</p></li><li><strong>person_ids</strong>: <em>(array of UUID)</em><p>Match with array of persons</p></li></ul></li></ul><p><strong>Examples</strong>:</p><div class="examples"><p><strong>verify</strong>:<br></p><pre><code>{
+  "timestamp": 1499165315.541058,
+  "source": "verify",
+  "event_type": "match",
+  "account_id": "15e6ecdc-1459-4e84-bd99-bdfd8bce2831",
+  "authorization": "basic",
+  "template": {
+    "descriptor_id": "69d3e523-a721-49b9-8e01-954efc333826"
+  },
+  "candidate": {
+    "person_id": "ab6dbe68-cb2f-4d94-8157-3b5c6d36dcfe"
+  },
+  "result": {
+    "candidates": [
+      {
+        "similarity": 0.1939874291,
+        "person_id": "ab6dbe68-cb2f-4d94-8157-3b5c6d36dcfe",
+        "descriptor_id": "a825577d-fd4c-4716-9126-6de8d8fdd133",
+        "user_data": ""
+      }
+    ]
+  }
+}
+</code></pre><p><strong>search</strong>:<br></p><pre><code>{
+  "timestamp": 1499165296.387002,
+  "event_type": "match",
+  "source": "search",
+  "account_id": "15e6ecdc-1459-4e84-bd99-bdfd8bce2831",
+  "authorization": {
+    "token_id": "bbecf5f3-fdbc-4d36-b6ca-e4e030a101ea",
+    "token_data": "Some data about token"
+  },
+  "template": {
+    "descriptor_id": "7b1d0ef0-2fc0-4304-82f1-7b49b5170580"
+  },
+  "candidate": {
+    "list_id": "9085e704-5dc7-48b6-9d77-0652e1635fb5"
+  },
+  "result": {
+    "candidates": [
+      {
+        "id": "213541c1-aa79-4c1b-8e2b-78f17744d06d",
+        "similarity": 0.2312608808
+      }
+    ],
+    "face": {
+      "id": "7b1d0ef0-2fc0-4304-82f1-7b49b5170580",
+      "rect": {
+        "height": 546,
+        "width": 395,
+        "x": 537,
+        "y": 82
+      },
+      "rectISO": {
+        "height": 923,
+        "width": 692,
+        "x": 324,
+        "y": -117
+      },
+      "score": 0.9716411233
+    }
+  }
+}
+</code></pre><p><strong>extract</strong>:<br></p><pre><code>{
+  "timestamp": 1499165295.835836,
+  "event_type": "extract",
+  "source": "descriptors",
+  "account_id": "15e6ecdc-1459-4e84-bd99-bdfd8bce2831",
+  "authorization": {
+    "token_id": "bbecf5f3-fdbc-4d36-b6ca-e4e030a101ea",
+    "token_data": "Some data about token"
+  },
+  "result": {
+    "faces": [
+      {
+        "id": "ffc27a49-4498-496d-aa75-af84c4b445c9",
+        "rect": {
+          "height": 204,
+          "width": 157,
+          "x": 124,
+          "y": 77
+        },
+        "rectISO": {
+          "height": 384,
+          "width": 288,
+          "x": 57,
+          "y": -24
+        },
+        "score": 0.9974294305
+      }
+    ]
+  }
+}
+</code></pre><p><strong>extract_with_estimate_attributes</strong>:<br></p><pre><code>{
+  &#39;result&#39;: {
+    &#39;faces&#39;: [
+      {
+        &#39;attributes&#39;: {
+          &#39;age&#39;: 26.5325050354,
+          &#39;eyeglasses&#39;: 9.713010000000001e-05,
+          &#39;gender&#39;: 0.9810492992000001
+        },
+        &#39;id&#39;: &#39;fc662e42-4e7c-4ad4-9a87-e79e31aacf8c&#39;,
+        &#39;rect&#39;: {
+          &#39;height&#39;: 173,
+          &#39;width&#39;: 142,
+          &#39;x&#39;: 70,
+          &#39;y&#39;: 45
+        },
+        &#39;rectISO&#39;: {
+          &#39;height&#39;: 304,
+          &#39;width&#39;: 228,
+          &#39;x&#39;: 12,
+          &#39;y&#39;: -24
+        },
+        &#39;score&#39;: 0.9999606609
+        }
+      ]
+    },
+    &#39;account_id&#39;: &#39;15e6ecdc-1459-4e84-bd99-bdfd8bce2831&#39;,
+    &#39;source&#39;: &#39;descriptors&#39;,
+    &#39;event_type&#39;: &#39;extract&#39;,
+    &#39;authorization&#39;: {
+        &#39;token_id&#39;: &#39;9d290edd-ef4d-4639-97f9-13db6a3d3c2b&#39;,
+        &#39;token_data&#39;: &#39;first token&#39;
+    }
+}
+</code></pre></div></div><div class="tab-pane" id="api_subscribe_get_securedby"><h1>Secured by basic</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>Basic login:password(base64)</code></pre></div></li></ul><h3>Query Parameters</h3><ul><li><strong>basic</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>Basic%20login:password(base64)</code></pre></div></li></ul><h1>Secured by x-Auth-Token</h1><h3>Headers</h3><ul><li><strong>X-Auth-Token</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>11c59254-e83f-41a3-b0eb-28fae998f271</code></pre></div></li></ul><h3>Query Parameters</h3><ul><li><strong>auth_token</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>11c59254-e83f-41a3-b0eb-28fae998f271</code></pre></div></li></ul></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_api_events"><span class="parent">/api</span>/events</a> <span class="methods"><a href="#api_events_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_api_events" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#api_events_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Request to get statistics</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="api_events_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/api</span>/events</h4></div><div class="modal-body"><div class="alert alert-info"><p>Request to get statistics</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>basic</b><p>This API supports Basic Authentication for a access to the account. Used to send the Base64-encoded "username:password" credentals passed throught headers or as query parameter.</p><p>You should use one of security shemas to access data.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>x-Auth-Token</b><p>API supports access via X-Auth-Token authorization to access the account&#39;s storage by headers or query parametres.</p><p>You should use one of security schemas to access data.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#api_events_get_request" data-toggle="tab">Request</a></li><li><a href="#api_events_get_response" data-toggle="tab">Response</a></li><li><a href="#api_events_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="api_events_get_request"><h3>Query Parameters</h3><ul><li><strong>event_type</strong>: <em>required (one of match, extract)</em><p>Event type</p></li><li><strong>observe</strong>: <em>(string)</em><p>If you need to collect data only from special tokens, use this parameter in the following format: <code>%2C</code>-separated list of <code>tokens</code> and <code>"basic"</code> for authorization with login/password pair. Will not filter if not specified.</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>550e8400-e29b-41d4-a716-446655440000%2C550e8400-e29b-41d4-b716-446655440000%2Cbasic</code></pre></div></li><li><strong>aggregator</strong>: <em>(one of count, min, max, mean - default: max)</em><p>Aggregation method, one of (count, min, max, mean). Where max (default) - get maximum <em>values</em>; min - get minimum <em>values</em>; count - get only count of <em>values</em>; mean - get average <em>values</em>. <strong><em>Values</em></strong> are "time", "age", "face_score", "gender" and "glasses" (see Response), however "time" is <strong>not</strong> aggregated</p></li><li><strong>group_step</strong>: <em>(string - default: 1h - pattern: ^(now?(-\d+[smhdw])?)|(\d{4}(-\d{2}(-\d{2}(-\d{2}(-\d{2}(-\d{2})?)?)?)?)?)$)</em><p>Group events by using given step. Minimum value depends on time delta: <code>5s</code> for time delta up to "1 hour", <code>1m</code> for time delta up to "1 day", <code>10m</code> for time delta up to "4 weeks", <code>1h</code> for greater.</p></li><li><strong>similarity__gt</strong>: <em>(number - default: 0 - minimum: 0 - maximum: 1)</em><p>Lower limit of <code>similarity</code> (works if <code>match</code> is not <code>extract</code>)</p></li><li><strong>similarity__lt</strong>: <em>(number - default: 1 - minimum: 0 - maximum: 1)</em><p>Upper limit of <code>similarity</code> (works if <code>match</code> is not <code>extract</code>)</p></li><li><strong>list</strong>: <em>(string - pattern: ^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}$)</em><p>Specify list (works if <code>event_type</code> is <code>match</code>), you will get info about all lists if not specified</p></li><li><strong>time__lt</strong>: <em>(string - default: now - pattern: ^(now?(-\d+[smhdw])?)|(\d{4}(-\d{2}(-\d{2}(-\d{2}(-\d{2}(-\d{2})?)?)?)?)?)$)</em><p>Upper limit of period you are interested in</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>now-3h</code></pre></div></li><li><strong>time__gt</strong>: <em>(string - default: now-3h - pattern: ^(now?(-\d+[smhdw])?)|(\d{4}(-\d{2}(-\d{2}(-\d{2}(-\d{2}(-\d{2})?)?)?)?)?)$)</em><p>Lower limit of period you are interested in</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>2017-10-06-08-30-00</code></pre></div></li><li><strong>gender</strong>: <em>(string)</em><p>One of <code>male</code> (for &#39;gender&#39; parameter to be higher than 0.5 or equal) or <code>female</code> (for &#39;gender&#39; parameter to be lower than 0.5).</p></li><li><strong>source</strong>: <em>(one of identify, search, verify, match, descriptors)</em><p>Specify LUNA API call to generate event (one of <code>identify</code>, <code>search</code>, <code>verify</code>, <code>match</code>, <code>descriptors</code>)</p></li><li><strong>face_score</strong>: <em>(number - default: 0 - minimum: 0 - maximum: 1)</em><p>Lower limit of <code>face_score</code></p></li><li><strong>glasses__lt</strong>: <em>(number - default: 1 - minimum: 0 - maximum: 1)</em><p>Upper limit of <code>glasses</code></p></li><li><strong>glasses__gt</strong>: <em>(number - default: 0 - minimum: 0 - maximum: 1)</em><p>Lower limit of <code>glasses</code></p></li><li><strong>age__lt</strong>: <em>(number - default: 9999 - minimum: 0 - maximum: 9999)</em><p>Upper limit of <code>age</code></p></li><li><strong>age__gt</strong>: <em>(number - default: 0 - minimum: 0 - maximum: 9999)</em><p>Lower limit of <code>age</code></p></li></ul></div><div class="tab-pane" id="api_events_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>The answer contains the "columns" field - these are the headers for data arrays from the next "values" field, which is a list of the data arrays. Every <code>null</code> value in "Value" array means full empty column in table of existing events for specified period.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>columns</strong>: <em>required (array of string)</em><p>Headers of the following "values" arrays</p><p><strong>Examples</strong>:</p><div class="examples"><p><strong>extract</strong>:<br></p><pre><code>[
+  "time",
+  "age",
+  "face_score",
+  "gender"
+]</code></pre><p><strong>match</strong>:<br></p><pre><code>[
+  "time",
+  "face_score",
+  "similarity"
+]</code></pre></div></li><li><strong>values</strong>: <em>required (array of Value)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>[["2017-04-04T13:21:50Z",
+   30.6225852966,
+   0.9999941587,
+   0.25232,
+   0.0001710758]]
+</code></pre></div></li></ul><p><strong>Examples</strong>:</p><div class="examples"><p><strong>extract_max</strong>:<br></p><pre><code>{
+  "columns": [
+    "time",
+    "age",
+    "face_score",
+    "gender",
+    "glasses"
+  ],
+  "values": [
+    [
+      "2017-04-04T13:21:50Z",
+      null,
+      0.9999941587,
+      null,
+      null
+    ],
+    [
+      "2017-04-04T13:22:00Z",
+      null,
+      0.9999996424,
+      null,
+      null,
+    ],
+    [
+      "2017-04-04T13:22:10Z",
+      28.7178764343,
+      0.9999991655,
+      0.0128634805,
+      0.0065359818
+    ],
+    [
+      "2017-04-04T13:22:20Z",
+      44.0852165222,
+      0.9999998808,
+      null,
+      0.0065359818
+    ]
+  ]
+}
+</code></pre><p><strong>match_count</strong>:<br></p><pre><code>{
+  "columns":[
+    "time",
+    "age",
+    "face_score",
+    "gender",
+    "similarity"
+  ],
+  "values":[
+    [
+      "2017-06-19T06:00:00Z",
+      40,
+      40,
+      40,
+      40
+    ],
+    [
+      "2017-06-19T07:00:00Z",
+      152,
+      152,
+      152,
+      152
+    ],
+    [
+      "2017-06-19T12:00:00Z",
+      1904,
+      1904,
+      1904,
+      1904
+    ]
+  ]
+}
+</code></pre></div></div><div class="tab-pane" id="api_events_get_securedby"><h1>Secured by basic</h1><h3>Headers</h3><ul><li><strong>Authorization</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>Basic login:password(base64)</code></pre></div></li></ul><h3>Query Parameters</h3><ul><li><strong>basic</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>Basic%20login:password(base64)</code></pre></div></li></ul><h1>Secured by x-Auth-Token</h1><h3>Headers</h3><ul><li><strong>X-Auth-Token</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>11c59254-e83f-41a3-b0eb-28fae998f271</code></pre></div></li></ul><h3>Query Parameters</h3><ul><li><strong>auth_token</strong>: <em>(string)</em><p><strong>Example</strong>:</p><div class="examples"><pre><code>11c59254-e83f-41a3-b0eb-28fae998f271</code></pre></div></li></ul></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#version">/version</a></li><li><a href="#api">/api</a></li></ul></div></div></div></div></body></html>

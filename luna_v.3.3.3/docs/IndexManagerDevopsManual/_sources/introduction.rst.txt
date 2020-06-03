@@ -1,0 +1,17 @@
+Introduction
+============
+
+
+Service manage a process of creating indexes from luna-faces lists and delivery them to matchers. It determinate
+which lists should be indexing. There is two ability for indexation: Either list will be indexed if count of
+faces in it more than a some number or you can set a list of indexing lists to config.
+
+Service run periodic task for collecting lists for indexation in background. All lists for indexation
+puts to a queue. A worker takes a list from this queue and process following steps:
+
+  * send task to indexer to build index
+  * send task to download builded index to matchers machine
+  * send task to restart matcher with new indexes.
+
+Simultaneously can be processed several tasks of the download index step. Only one task can be run on for others
+steps simultaneously.

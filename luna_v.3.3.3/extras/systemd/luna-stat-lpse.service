@@ -1,0 +1,13 @@
+[Unit]
+Description=Luna Statistic Server service
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/lib/luna/current/luna-stat-server
+ExecStart=/var/lib/luna/current/luna-stat-server/venv/bin/python3 /var/lib/luna/current/luna-stat-server/run.py lpse --port 5009
+
+[Install]
+WantedBy=multi-user.target
+

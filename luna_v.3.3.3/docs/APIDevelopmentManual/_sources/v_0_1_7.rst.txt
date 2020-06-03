@@ -1,0 +1,25 @@
+v.0.1.7
+=======
+
+Improvements:
+-------------
+
+	1) Option ACCESS_CONTROL_ALLOW_ORIGIN is added to config.py, which allows to limit the range of domain servers, \
+	   which can correctly run sites with cookies support (up to one).
+
+Bugs fixed:
+-----------
+
+	1) Fixed bug with type of returned value of list objects []->int.
+
+	#) Fixed bug with best descriptor for person returned to identify, search, verify results.
+
+	#) Fixed bug of tagged versions versioning.
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders app, error, base_scripts, tests, sphinx_docs, raml and \
+file version.py. It is strongly recommended to backup DB postgres and server.
+
+.. _CORS: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORSа.

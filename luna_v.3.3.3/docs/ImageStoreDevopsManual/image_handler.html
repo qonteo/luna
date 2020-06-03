@@ -1,0 +1,306 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Image handler &#8212; luna-image-store v.1.2.8 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Images handler" href="images_handler.html" />
+    <link rel="prev" title="Base handler" href="base_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-image-store v.1.2.8 documentation</span></a></h1>
+        <h2 class="heading"><span>Image handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="base_handler.html">Base handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="images_handler.html">Images handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_image_store.app.handlers.image_handler">
+<span id="image-handler"></span><h1>Image handler<a class="headerlink" href="#module-luna_image_store.app.handlers.image_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_image_store.app.handlers.image_handler.ImageHandler">
+<em class="property">class </em><code class="descclassname">luna_image_store.app.handlers.image_handler.</code><code class="descname">ImageHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/image_handler.html#ImageHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.image_handler.ImageHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for work with single image</p>
+<dl class="method">
+<dt id="luna_image_store.app.handlers.image_handler.ImageHandler.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>bucketName</em>, <em>imageId</em>, <em>thumbnail</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/image_handler.html#ImageHandler.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.image_handler.ImageHandler.delete" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="delete">
+<dt id="delete--buckets-bucketName-images-imageIdthumbnail">
+<code class="descname">DELETE </code><code class="descname">/buckets/{bucketName}/images/{imageId}{thumbnail}</code><a class="headerlink" href="#delete--buckets-bucketName-images-imageIdthumbnail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete image from bucket</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucketName</strong> – bucket name</li>
+<li><strong>imageId</strong> – image id</li>
+<li><strong>thumbnail</strong> – thumbnail - create or not</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">DELETE</span> <span class="nn">/buckets/3a02c949-3f60-4143-90cb-8ea0a25b8d15/images/dbf98a33-6e05-4fb2-ba53-17a2caba4647</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 204
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5">204 No Content</a> – No content</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[+T_co, -T_contra, +V_co]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_image_store.app.handlers.image_handler.ImageHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>bucketName</em>, <em>imageId</em>, <em>thumbnail</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/image_handler.html#ImageHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.image_handler.ImageHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="get">
+<dt id="get--buckets-bucketName-images-imageIdthumbnail">
+<code class="descname">GET </code><code class="descname">/buckets/{bucketName}/images/{imageId}{thumbnail}</code><a class="headerlink" href="#get--buckets-bucketName-images-imageIdthumbnail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get image from bucket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucketName</strong> – bucket name</li>
+<li><strong>imageId</strong> – image id</li>
+<li><strong>thumbnail</strong> – thumbnail - create or not</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/buckets/3a02c949-3f60-4143-90cb-8ea0a25b8d15/images/dbf98a33-6e05-4fb2-ba53-17a2caba4647</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 200
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+Content-Type: image/jpeg
+
+b&#39;image body ...&#39;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generator</span></code>[+T_co, -T_contra, +V_co]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_image_store.app.handlers.image_handler.ImageHandler.head">
+<code class="descname">head</code><span class="sig-paren">(</span><em>bucketName</em>, <em>imageId</em>, <em>thumbnail</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/image_handler.html#ImageHandler.head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.image_handler.ImageHandler.head" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="head">
+<dt id="head--buckets-bucketName-images-imageIdthumbnail">
+<code class="descname">HEAD </code><code class="descname">/buckets/{bucketName}/images/{imageId}{thumbnail}</code><a class="headerlink" href="#head--buckets-bucketName-images-imageIdthumbnail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check image exists in bucket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucketName</strong> – bucket name</li>
+<li><strong>imageId</strong> – image id</li>
+<li><strong>thumbnail</strong> – thumbnail</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">HEAD</span> <span class="nn">/buckets/3a02c949-3f60-4143-90cb-8ea0a25b8d15/images/dbf98a33-6e05-4fb2-ba53-17a2caba4647</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 200
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+Content-Type: image/jpeg
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – image not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_image_store.app.handlers.image_handler.ImageHandler.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>bucketName</em>, <em>imageId</em>, <em>thumbnail</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_image_store/app/handlers/image_handler.html#ImageHandler.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_image_store.app.handlers.image_handler.ImageHandler.put" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="put">
+<dt id="put--buckets-bucketName-images-imageIdthumbnail">
+<code class="descname">PUT </code><code class="descname">/buckets/{bucketName}/images/{imageId}{thumbnail}</code><a class="headerlink" href="#put--buckets-bucketName-images-imageIdthumbnail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put image to bucket</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bucketName</strong> – bucket name</li>
+<li><strong>imageId</strong> – image id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>thumbnail</strong> – thumbnail - create or not</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example request</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">PUT</span> <span class="nn">/buckets/3a02c949-3f60-4143-90cb-8ea0a25b8d15/images/dbf98a33-6e05-4fb2-ba53-17a2caba4647</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">image/jpeg</span>
+
+b&#39;image body ...&#39;
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 200
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+Content-Type: application/json
+
+{&quot;url&quot;: &quot;/1/buckets/3a02c949-3f60-4143-90cb-8ea0a25b8d15/images/dbf98a33-6e05-4fb2-ba53-17a2caba4647&quot;}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a> – Bad Request</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – Not Found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="base_handler.html">Base handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="images_handler.html">Images handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+v.1.0.1
+========
+
+Improvements:
+-------------
+
+    1) Improved work with postgresql, deleted useless requests to postgres.
+
+    #) Added support utc-time for date in database.
+
+    #) Added ability of choose logs time.
+
+
+Bugs fixed:
+-----------
+
+
+    1) Added retry unblock list.
+
+    #) Added retry unblock person
+
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

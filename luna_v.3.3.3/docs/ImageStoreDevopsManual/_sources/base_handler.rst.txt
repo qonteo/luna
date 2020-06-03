@@ -1,0 +1,5 @@
+Base handler
+============
+
+.. automodule:: luna_image_store.app.handlers.base_handler
+	:members:

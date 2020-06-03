@@ -1,0 +1,56 @@
+.. Facestreammanager2 documentation master file, created by
+   sphinx-quickstart on Wed Jan 24 11:20:25 2018.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+==============================================
+Welcome to Facestreammanager2's documentation!
+==============================================
+
+------------------------
+Installation and startup
+------------------------
+
+.. toctree::
+    :maxdepth: 2
+
+    manage
+
+-----
+About
+-----
+
+.. toctree::
+    :maxdepth: 2
+
+    about
+
+
+---------------
+Version history
+---------------
+
+.. toctree::
+    :maxdepth: 1
+    :glob:
+
+    v_*_*_*
+
+
+------------------
+Database Structure
+------------------
+
+.. toctree::
+    :maxdepth: 1
+
+    es
+
+----------------------------------
+Other Database Structures
+----------------------------------
+
+.. toctree::
+    :maxdepth: 2
+
+    es_types

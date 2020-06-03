@@ -1,0 +1,6 @@
+sphinx
+sphinx_bootstrap_theme
+recommonmark
+sphinxcontrib-restbuilder
+pandoc
+lxml

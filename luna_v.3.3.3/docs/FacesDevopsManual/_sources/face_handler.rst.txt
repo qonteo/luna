@@ -1,0 +1,5 @@
+Face handler
+============
+
+.. automodule:: luna_faces.app.handlers.face_handler
+	:members:

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="css/dataTables.semanticui.min.css">
+  <link rel="stylesheet" type="text/css" href="css/buttons.dataTables.min.css">
+
+	<style type="text/css" class="init">	</style>
+
+  <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+  <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="js/moment-with-locales.js"></script>
+  <script type="text/javascript" src="js/indexes.js"></script>
+  <script type="text/javascript" src="js/queues.js"></script>
+  <script type="text/javascript" src="js/patch.js"></script>
+  <script type="text/javascript" src="js/indexes_lists.js"></script>
+
+</head>
+
+<body>
+
+  <hr><h2 align="center">Indexes</h2>
+  <table id="tableIndexes" class="cell-border" width="100%">
+    <thead>
+      <th>Task ID</th>
+      <th>Generation</th>
+      <th>List ID</th>
+      <th>Status</th>
+      <th>Start index time</th>
+      <th>End index time</th>
+      <th>Start upload index time</th>
+      <th>End upload index time</th>
+      <th>Start reload index time</th>
+      <th>End reload index time</th>
+      <th>Start time</th>
+      <th>End time</th>
+      <th>Last update time</th>
+      <th>Error</th>
+    </thead>
+  </table>
+
+  <br><hr>
+  <h2 align="center">Queues</h2>
+  <table id="tableQueues" class="cell-border" width="100%">
+    <thead>
+      <th>List ID</th>
+      <th>Last update time</th>
+      <th>Face count</th>
+    </thead>
+  </table>
+  <hr>
+
+  <br>
+  <h2 align="center">Forward</h2>
+  <p align="center">
+      List ID:
+      <input style="height:33px;width:250px" type="text" id="patchListId" placeholder=" list uuid">
+      Forward:
+      <button id="patchForward" onclick="patchForward()">Forward</button>
+      <h3><p align="center" id="patchResult"></p></h3>
+  </p>
+  <br><br>
+
+  <br><hr>
+  <h2 align="center">Indexes lists</h2>
+  <table id="tableIndexesLists" class="cell-border" width="100%">
+    <thead>
+      <th>List ID</th>
+      <th>Generation</th>
+    </thead>
+  </table>
+  <hr>
+
+  <br><br><br><br><br><br>
+
+</body>
+
+</html>

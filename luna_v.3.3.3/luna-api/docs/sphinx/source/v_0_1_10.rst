@@ -1,0 +1,32 @@
+v.0.1.10
+========
+
+Improvements:
+-------------
+
+	1) Translated all sphinx documentation with comments in the code to english.
+
+	#) Refactoring of receiving headers for request to s3. Now support signature of authorization version 4 (default for
+	   amazon). Details see in s3.py. Add to config variable "S3_AUTHORIZATION_SIGNATURE", "S3_REGION".
+
+	#) Add tests for simultaneously attach objects to list.
+
+	#) Add add handler of connect and request timeout to eternal services. Error code in these case 3 or 4.
+
+Bugs fixed:
+-----------
+
+	1) Update information about migration from version v.0.1.8 to v.0.1.9.
+
+	#) Fix bag with max return persons or descriptors in response on match. Now if you set in config.
+
+	#) Fix problem with runing *bigtest.py*. Now you can run *python tests/bigtest.py*.
+
+	#) Fix problem with deadlock at the time of simultaneously attach objects to list.
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

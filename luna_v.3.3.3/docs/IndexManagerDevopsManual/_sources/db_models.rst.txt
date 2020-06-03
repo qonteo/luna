@@ -1,0 +1,11 @@
+DB model
+========
+
+DB scheme.
+----------
+.. image:: db_model.jpg
+
+DB models structure
+-------------------
+.. automodule:: luna_index_manager.db.models
+	:members:

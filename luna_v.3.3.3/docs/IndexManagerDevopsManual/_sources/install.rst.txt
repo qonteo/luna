@@ -1,0 +1,48 @@
+Installation
+============
+For proper installation you need to clone project from git.
+
+Surroundings
+------------
+
+The service can be installed on Windows 10 and CentOS 7 (not tested on other system versions).
+
+Required predefined dependencies:
+
+
+- Python v. 3.5 or higher is required.
+- It is strongly recommended to create virtual surroundings for python dependencies installation.
+- Python setuptools module can be installed via pip (pip install setuptools).
+
+
+Dependencies installation
+-------------------------
+
+After surroundings installation launch *pip install* with *"-r requirements.txt"* parameter.
+
+.. code-block:: bash
+
+    pip install -r requirements.txt
+
+Configuration
+-------------
+After dependencies installation configuration file should be set. File is placed in *"./luna_index_manager/configs/config.conf"*.
+
+First launch and testing
+------------------------
+If all previous actions are executed successfully, server is ready to work. To start server please launch *run.py* \
+script. While start you can add arguments: server message port and number of workers, servicing the server. \
+By default 5060 port is used and one worker is launched. \
+Example:
+
+.. code-block:: bash
+
+    ./run.py --workers=1 --port=5060 --config=./configs/myconfig.conf
+
+After server is started, testing is recommended. To perform testing execute command
+
+.. code-block:: bash
+
+    python -m unittest tests.unittests_main
+
+All tests should perform successfully.

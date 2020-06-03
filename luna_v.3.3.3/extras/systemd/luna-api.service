@@ -1,0 +1,13 @@
+[Unit]
+Description=Luna API
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+SyslogIdentifier=luna-api
+WorkingDirectory=/var/lib/luna/current/luna-api/luna_api
+ExecStart=/var/lib/luna/current/luna-api/venv/bin/python3 /var/lib/luna/current/luna-api/luna_api/run.py --workers=4 --port=5000
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,31 @@
+v.1.0.5
+=======
+
+Improvements:
+-------------
+
+
+    1) Added indexes by list id and link_key/unlink_key.
+
+    #) Resources "/lists/{list_id}/attributes" and "/linker/unlink_history" doesn't return Null attributes_id.
+
+    #) Set "attributes_id" not null in tabels "face" and "unlink_attributes_log".
+
+    #) Set "attributes_id" as required for creating face.
+
+    #) Reduced a request time for the resource /lists and method OPTIONS.
+
+Bugs fixed:
+-----------
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *docs, luna_faces, tests* and update dependencies from
+requirements.txt. Then run the commands:
+
+.. code-block:: bash
+
+	alembic upgrade head
+

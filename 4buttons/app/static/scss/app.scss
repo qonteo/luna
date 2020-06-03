@@ -1,0 +1,15 @@
+@import "./base/custom-reset";
+@import "./base/colors";
+@import "./base/fonts";
+
+@import "./components/inputs/input-text";
+@import "./components/buttons";
+
+@import "./layout/general";
+@import "./layout/header";
+
+@import "./pages/main-page";
+@import "./pages/createid-page";
+@import "./pages/mobile-page";
+@import "./pages/browser-page";
+@import "./pages/video-page";

@@ -1,0 +1,26 @@
+v.1.0.0
+=======
+
+Improvements:
+-------------
+
+    1) Luna-admin service works as RESTfull api service.
+
+    #) Luna-admin service is divided into two parts: *back* and *tasks*. Every part is RESTfull service. Back component
+       gives access to view all the objects in the system: accounts, tokens, faces, persons. Also one can set long task
+       (re-extract descriptors, clean up non-linked faces) from it. Second component process long tasks. It is assumed
+       that administrator of luna-platform will use first component. Components is run separately.
+
+    #) Removed  functionality of unblocking persons and lists.
+
+    #)  Removed periodic tasks. Task on clean up not linked faces is run manually.
+
+    #) Added several helpfull resources (see raml documentation).
+
+    #) Added oracle database support
+
+    #) Added Luna-Request-Id header
+
+    #) Now ORIGIN is used in configs. Origin consists of "<schema>://<ip-address>:<port>"
+
+    #) Add submodule to projects, some features, such as baseHandler, errors, utils, regexps and log moved there

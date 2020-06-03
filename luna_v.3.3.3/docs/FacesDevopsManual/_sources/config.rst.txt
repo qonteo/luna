@@ -1,0 +1,13 @@
+Configuration
+=============
+
+Configuration file for administrator
+------------------------------------
+
+.. literalinclude:: ../../../luna_faces/configs/config.conf
+
+Extended administrator configuration
+------------------------------------
+
+.. automodule:: configs.config
+	:members:

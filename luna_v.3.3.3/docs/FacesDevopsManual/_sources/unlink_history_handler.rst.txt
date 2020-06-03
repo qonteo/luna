@@ -1,0 +1,5 @@
+Unlink history handler
+======================
+
+.. automodule:: luna_faces.app.handlers.unlink_history_handler
+	:members:

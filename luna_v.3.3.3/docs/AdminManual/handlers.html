@@ -1,0 +1,382 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Documentation of tornado-handlers &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Accounts handler" href="accounts_handlers.html" />
+    <link rel="prev" title="Garbage collectors" href="gc.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>Documentation of tornado-handlers</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="gc.html">Garbage collectors</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="accounts_handlers.html">Accounts handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="documentation-of-tornado-handlers">
+<h1>Documentation of tornado-handlers<a class="headerlink" href="#documentation-of-tornado-handlers" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="accounts_handlers.html">Accounts handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="account_handler.html">Account handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lists_handler.html">Lists handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tokens_handler.html">Tokens handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="persons_handler.html">Persons handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_handler.html">Version handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_handler.html">Config handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search_handler.html">Search handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks_handlers.html">Tasks handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reextract.html">Update neural network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internal_task_handler.html">Internal task handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats_handler.html">Admin statistics handler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grafana_handler.html">Grafana handler</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="common-jsons">
+<h1>Common jsons<a class="headerlink" href="#common-jsons" title="Permalink to this headline">¶</a></h1>
+<dl class="object">
+<dt id="server_error">
+<!--[server_error]--><code class="descname">server_error</code><a class="headerlink" href="#server_error" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>error_code</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – inner error code, for more info about errors go to <a class="reference internal" href="errors.html#errors-label"><span class="std std-ref">Service errors</span></a>.</li>
+<li><strong>detail</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>string</em></a>) – error description</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;error_code&quot;</span><span class="p">:</span> <span class="mi">763</span><span class="p">,</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;mSroErobYXYiKPsOcywK&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="account_info">
+<!--[account_info]--><code class="descname">account_info</code><a class="headerlink" href="#account_info" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – account id</li>
+<li><strong>email</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc2822#section-3.4.1" title="Email Address"><em>email</em></a>) – email of account</li>
+<li><strong>organization_name</strong> (<em>organization_name</em>) – organization name</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#boolean-values" title="Python Boolean"><em>boolean</em></a>) – if account is currently blocked, system returns <em>True</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b8262b9f-b79d-461a-86c8-d04dafa270e0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;cjones@mercer-spencer.com&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;organization_name&quot;</span><span class="p">:</span> <span class="s2">&quot;{organization_name object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="account_stats">
+<!--[account_stats]--><code class="descname">account_stats</code><a class="headerlink" href="#account_stats" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – person count of account</li>
+<li><strong>list_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – list count of account</li>
+<li><strong>descriptor_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – descriptor count of account</li>
+<li><strong>token_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – token count of account</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_count&quot;</span><span class="p">:</span> <span class="mi">7085</span><span class="p">,</span>
+    <span class="nt">&quot;list_count&quot;</span><span class="p">:</span> <span class="mi">9067</span><span class="p">,</span>
+    <span class="nt">&quot;descriptor_count&quot;</span><span class="p">:</span> <span class="mi">3222</span><span class="p">,</span>
+    <span class="nt">&quot;token_count&quot;</span><span class="p">:</span> <span class="mi">1405</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="account">
+<!--[account]--><code class="descname">account</code><a class="headerlink" href="#account" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>info</strong> (<a class="reference internal" href="#account_info"><code class="xref json json-object docutils literal notranslate"><span class="pre">account_info</span></code></a>) – account info</li>
+<li><strong>stats</strong> (<a class="reference internal" href="#account_stats"><code class="xref json json-object docutils literal notranslate"><span class="pre">account_stats</span></code></a>) – account stats</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b3ebd840-1984-4bd3-88ca-89fe18ad5159&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;mroberts@montgomery.com&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;organization_name&quot;</span><span class="p">:</span> <span class="s2">&quot;{organization_name object}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="kc">false</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;stats&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;person_count&quot;</span><span class="p">:</span> <span class="mi">3908</span><span class="p">,</span>
+        <span class="nt">&quot;list_count&quot;</span><span class="p">:</span> <span class="mi">9023</span><span class="p">,</span>
+        <span class="nt">&quot;descriptor_count&quot;</span><span class="p">:</span> <span class="mi">5303</span><span class="p">,</span>
+        <span class="nt">&quot;token_count&quot;</span><span class="p">:</span> <span class="mi">786</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="luna_list">
+<!--[luna_list]--><code class="descname">luna_list</code><a class="headerlink" href="#luna_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – list id</li>
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – account id</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – user data about list</li>
+<li><strong>count_object_in_list</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – object’s count in list</li>
+<li><strong>last_update_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – time of last action with list (attach or detach face from list)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;620d1cc2-3626-4477-91b9-d606f9c17c26&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;40b351a9-330c-41af-8d2a-57cb025d2df6&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;sheila01&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;count_object_in_list&quot;</span><span class="p">:</span> <span class="mi">1251</span><span class="p">,</span>
+    <span class="nt">&quot;last_update_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1971-05-08T23:19:47&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="luna_person">
+<!--[luna_person]--><code class="descname">luna_person</code><a class="headerlink" href="#luna_person" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – person id</li>
+<li><strong>faces</strong> (<em>_list_(uuid4)</em>) – linked faces</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) – time of face creating</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) – user data about face</li>
+<li><strong>account_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – account id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a1645a28-59ba-425d-b34a-30c6ac10670f&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;faces&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;53441489-be79-441d-8dac-fdfae85df3e7&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;f4ceac07-cd1d-470b-9876-94675b4d6845&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;66606c3d-75e3-4b66-ae7a-bed3e9a8ee84&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1997-02-23T06:30:57&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;carpenternoah&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;account_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0c541816-2802-4ca1-8a36-dfa4f132afe7&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="auth_token">
+<!--[auth_token]--><code class="descname">auth_token</code><a class="headerlink" href="#auth_token" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>token_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) – token id</li>
+<li><strong>token_data</strong> (<em>street_address</em>) – token_data if auth is token else nothing</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;token_id&quot;</span><span class="p">:</span> <span class="s2">&quot;ba8028c7-49e6-4cf0-a1a3-c278a17be78e&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;token_data&quot;</span><span class="p">:</span> <span class="s2">&quot;3383 Olson Island&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="task_info">
+<!--[task_info]--><code class="descname">task_info</code><a class="headerlink" href="#task_info" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>duration</strong> (<em>time</em>) – duration of task (“in progress” if not ended)</li>
+<li><strong>target</strong> (<em>_enum_(all)_(account)</em>) – target of task</li>
+<li><strong>error_count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – error count</li>
+<li><strong>progress</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) – task progress</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;duration&quot;</span><span class="p">:</span> <span class="s2">&quot;21:19:18&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;target&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;uuid4&quot;</span><span class="p">:</span> <span class="s2">&quot;{target id object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;error_count&quot;</span><span class="p">:</span> <span class="mi">9937</span><span class="p">,</span>
+    <span class="nt">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">0.19442000007256866</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="taskreextractdetails">
+<!--[taskreextractdetails]--><code class="descname">taskReextractDetails</code><a class="headerlink" href="#taskreextractdetails" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>re-extract descriptors</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – re-extract descriptors count</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;� (Unspecified)&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="taskgcolddescriptorsdetails">
+<!--[taskgcolddescriptorsdetails]--><code class="descname">taskGCOldDescriptorsDetails</code><a class="headerlink" href="#taskgcolddescriptorsdetails" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>count_delete_descriptors</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – removed descriptors count</li>
+<li><strong>count_s3_errors</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) – luna-image-store error count</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;count_delete_descriptors&quot;</span><span class="p">:</span> <span class="mi">4064</span><span class="p">,</span>
+    <span class="nt">&quot;count_s3_errors&quot;</span><span class="p">:</span> <span class="mi">8898</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="task_type">
+<!--[task_type]--><code class="descname">task_type</code><a class="headerlink" href="#task_type" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>task_type</strong> (<em>_enum_(removing old descriptors)_(re-extract descriptors)</em>) – “removing old descriptors” or “re-extract descriptors”</li>
+<li><strong>taskDetail</strong> (_enum_(<a class="reference internal" href="#taskgcolddescriptorsdetails"><code class="xref json json-object docutils literal notranslate"><span class="pre">taskGCOldDescriptorsDetails</span></code></a>)_(<a class="reference internal" href="#taskreextractdetails"><code class="xref json json-object docutils literal notranslate"><span class="pre">taskReextractDetails</span></code></a>)) – detail of task</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;task_type&quot;</span><span class="p">:</span> <span class="s2">&quot;re-extract descriptors&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;taskDetail&quot;</span><span class="p">:</span> <span class="s2">&quot;taskGCOldDescriptorsDetails&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="gc.html">Garbage collectors</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="accounts_handlers.html">Accounts handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,131 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_admin.app.handlers.realtime_statistics &#8212; Luna-python-server-admin v.1.0.4 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna-python-server-admin v.1.0.4 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_admin.app.handlers.realtime_statistics</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_admin.app.handlers.realtime_statistics</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Admin stats handler</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">influxdb.client</span> <span class="k">import</span> <span class="n">InfluxDBClient</span>
+<span class="kn">from</span> <span class="nn">configs</span> <span class="k">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">app.handlers.base_handler</span> <span class="k">import</span> <span class="n">BaseHandlerWithAuth</span>
+<span class="kn">from</span> <span class="nn">app.handlers.statistic_helpers</span> <span class="k">import</span> <span class="n">prepare_params</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.exception</span> <span class="k">import</span> <span class="n">VLException</span>
+<span class="kn">from</span> <span class="nn">tzlocal</span> <span class="k">import</span> <span class="n">get_localzone</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">IP</span><span class="p">,</span> <span class="n">PORT</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">ADMIN_STATISTICS_SERVER_ORIGIN</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+<span class="n">IP</span> <span class="o">=</span> <span class="n">IP</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="n">influxClient</span> <span class="o">=</span> <span class="n">InfluxDBClient</span><span class="p">(</span><span class="n">IP</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">ADMIN_STATISTICS_DB</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">PORT</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RealtimeStatisticsHandler"><a class="viewcode-back" href="../../../../stats_handler.html#luna_admin.app.handlers.realtime_statistics.RealtimeStatisticsHandler">[docs]</a><span class="k">class</span> <span class="nc">RealtimeStatisticsHandler</span><span class="p">(</span><span class="n">BaseHandlerWithAuth</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Admin stats handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RealtimeStatisticsHandler.get"><a class="viewcode-back" href="../../../../stats_handler.html#luna_admin.app.handlers.realtime_statistics.RealtimeStatisticsHandler.get">[docs]</a>    <span class="nd">@BaseHandlerWithAuth</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search element by id or email.</span>
+
+<span class="sd">        .. http:get:: /realtime_statistics/{series}</span>
+
+
+<span class="sd">            :param series: extract_success|matching_success|errors</span>
+<span class="sd">            :query resource: resource to get statistics about. Will be ignored if not set.</span>
+<span class="sd">                             (&quot;descriptors&quot;, &quot;search&quot;, &quot;match&quot;, &quot;identify&quot;, &quot;verify&quot;)</span>
+<span class="sd">            :query error: luna API error code to get statistics about</span>
+<span class="sd">            :query aggregator: aggregation type (&quot;max&quot;, &quot;min&quot;, &quot;mean&quot;, &quot;count&quot;)</span>
+<span class="sd">            :query count_faces: result count faces on photo</span>
+<span class="sd">            :query limit: matching limit in match request</span>
+<span class="sd">            :query template: template in match request. 1 - person, 0 - descriptor</span>
+<span class="sd">            :query candidate: candidate in match request. 1 - dynamic list, 0 - static Luna API list</span>
+
+<span class="sd">            :reqheader Authorization: basic authorization</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">                .. sourcecode:: http</span>
+
+<span class="sd">                    HTTP/1.1 200 Ok</span>
+<span class="sd">                    Vary: Accept</span>
+<span class="sd">                    Content-Type: application/json</span>
+<span class="sd">                    LUNA-Request-Id: 1516179740,d3abc2f6-70f1-4ae0-9d10-475103e0891d</span>
+
+<span class="sd">                .. json:object:: stats result</span>
+<span class="sd">                    :showexample:</span>
+
+<span class="sd">                    :property name:  The name of current series</span>
+<span class="sd">                    :proptype name: _enum_(extract_success)_(matching_success,errors)</span>
+<span class="sd">                    :property columns: Titles of cells in values&#39; batches</span>
+<span class="sd">                    :property values: List of values&#39; batches</span>
+
+<span class="sd">            Message error is returned in format :json:object:`server_error`.</span>
+
+<span class="sd">            :statuscode 200: success</span>
+<span class="sd">            :statuscode 400: Bad query parameters</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">paramsRes</span> <span class="o">=</span> <span class="n">prepare_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_query_argument</span><span class="p">,</span> <span class="n">series</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">paramsRes</span><span class="o">.</span><span class="n">fail</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">generateError</span><span class="p">(</span><span class="n">paramsRes</span><span class="o">.</span><span class="n">error</span><span class="p">,</span>
+                                        <span class="n">paramsRes</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">isCriticalError</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">paramsRes</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT </span><span class="si">{aggregator}</span><span class="s2">(*) FROM </span><span class="si">{series}</span><span class="s2">  WHERE </span><span class="si">{time__gte}</span><span class="s2"> &lt; time AND time &lt; </span><span class="si">{time__lt}</span><span class="s2"> </span><span class="si">{where}</span><span class="s2"> group by time(</span><span class="si">{group_by}</span><span class="s2">) fill(none)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">influxClient</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span> <span class="o">+</span> <span class="s2">&quot; TZ(&#39;</span><span class="si">{}</span><span class="s2">&#39;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_localzone</span><span class="p">()))</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">InfluxConnectionTimeout</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">outputJson</span><span class="o">=</span><span class="n">res</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;series&#39;</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">raw</span> <span class="k">else</span> <span class="p">{})</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

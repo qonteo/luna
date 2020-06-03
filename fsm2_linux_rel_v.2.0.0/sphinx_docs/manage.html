@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &#8212; Facestreammanager2 2.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="about.html" />
+    <link rel="prev" title="Welcome to Facestreammanager2’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Facestreammanager2 2.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Installation</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to Facestreammanager2&#8217;s documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="about.html">Introduction</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="packages-and-requirements-installation">
+<h2>Packages and requirements installation<a class="headerlink" href="#packages-and-requirements-installation" title="Permalink to this headline">¶</a></h2>
+<p>For the Facestreammanager2 operation, one needs to install packages and requirements:</p>
+<ol class="arabic simple">
+<li>Install python 3.5 or higher;</li>
+<li>Install Elasticsearch 6 (read <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/6.x/_installation.html">here</a>);</li>
+<li>Install latex</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sudo yum -y install texlive texlive-*.noarch
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Install Python libraries:</li>
+</ol>
+<p>Note: Virtual environment is strongly recommended for installation.</p>
+<ul class="simple">
+<li>Create a virtual environment</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python3.x -m venv venv
+</pre></div>
+</div>
+<ul class="simple">
+<li>Activate the virtual environment by the command</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">source</span> ./venv/bin/activate
+</pre></div>
+</div>
+<p>for deactivation enter</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>deactivate
+</pre></div>
+</div>
+<ul class="simple">
+<li>Go to the folder with the project</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> facestreammanager2
+</pre></div>
+</div>
+<ul class="simple">
+<li>Install dependencies by the command</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install -r requirements.txt
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-and-startup">
+<h2>Setup and Startup<a class="headerlink" href="#setup-and-startup" title="Permalink to this headline">¶</a></h2>
+<p>To start the Facestreammanager2, one should:</p>
+<ol class="arabic simple" start="0">
+<li>Start Elasticsearch by the command <cite>./elasticsearch-6.x.x/bin/elasticsearch</cite>;</li>
+<li>Check and change the service settings in the configuration file <cite>./configs/config.conf</cite> (if necessary):</li>
+</ol>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ELASTICSEARCH_HOST</span><span class="o">=</span><span class="s2">&quot;http://localhost&quot;</span>         <span class="c1">#: Elasticsearch address</span>
+<span class="n">ELASTICSEARCH_PORT</span><span class="o">=</span><span class="mi">9200</span>                       <span class="c1">#: Elasticsearch port</span>
+
+
+<span class="n">LUNA_API_HOST</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1&quot;</span>            <span class="c1">#: LUNA API address</span>
+<span class="n">LUNA_API_PORT</span> <span class="o">=</span> <span class="mi">5000</span>                          <span class="c1">#: LUNA API port</span>
+<span class="n">LUNA_API_API_VERSION</span> <span class="o">=</span> <span class="mi">4</span>                      <span class="c1">#: LUNA API api version</span>
+<span class="n">LUNA_API_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>                           <span class="c1">#: LUNA API account token</span>
+
+
+<span class="n">LUNA_CORE_HOST</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1&quot;</span>           <span class="c1">#: LUNA CORE address</span>
+<span class="n">LUNA_CORE_PORT</span> <span class="o">=</span> <span class="mi">8083</span>                         <span class="c1">#: LUNA CORE port</span>
+<span class="n">LUNA_CORE_API_VERSION</span> <span class="o">=</span> <span class="mi">14</span>                    <span class="c1">#: LUNA CORE api version</span>
+
+<span class="n">LUNA_IMAGE_STORE_HOST</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1&quot;</span>              <span class="c1">#: LUNA IMAGE STORE address</span>
+<span class="n">LUNA_IMAGE_STORE_PORT</span> <span class="o">=</span> <span class="mi">5020</span>                            <span class="c1">#: LUNA IMAGE STORE port</span>
+<span class="n">LUNA_IMAGE_STORE_API_VERSION</span> <span class="o">=</span> <span class="mi">1</span>                        <span class="c1">#: LUNA IMAGE STORE api version</span>
+<span class="n">LUNA_IMAGE_STORE_WARPS_BUCKET</span> <span class="o">=</span> <span class="s2">&quot;luna-core-warp-images&quot;</span> <span class="c1">#: LUNA IMAGE STORE bucket for storing warped images from extractor</span>
+
+
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="s2">&quot;DEBUG&quot;</span>                           <span class="c1">#: level of debug print, by priority: ERROR, WARNING, INFO, DEBUG</span>
+
+<span class="n">FOLDER_WITH_LOGS</span><span class="o">=</span><span class="s2">&quot;./&quot;</span>                         <span class="c1">#: folder, where logs are saved</span>
+
+<span class="n">USE_LATEX</span> <span class="o">=</span> <span class="mi">0</span>                                 <span class="c1">#: whether to use latex</span>
+
+<span class="n">SAVE_INPUT_IMAGES</span> <span class="o">=</span> <span class="mi">0</span>                         <span class="c1">#: whether to save input event images</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Create Elasticsearch database by the <cite>python make_index.py</cite> script;</li>
+<li>Start the Facestreammanager2 by the command <cite>python run.py</cite>. The Facestreammanager2 provides application and analytics modules, that start at ports 5100 and 5101 respectively. You can assign different ports using parameters <cite>events_port</cite> and <cite>analytics_port</cite> if needed, also you can change default config file location through <cite>config</cite> parameter, for example <cite>python run.py &#8211;config=./configs/new_config.conf &#8211;events_port=8080 &#8211;analytics_port=8081</cite>.</li>
+</ol>
+</div>
+<div class="section" id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ensure that both modules and Luna API are running.</li>
+<li>Check and, if necessary, change the test settings in the <cite>tests/system_tests/config.py</cite> configuration file:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>ELASTICSEARCH_URL = &#8220;&lt;Elasticsearch url&gt;&#8221;</li>
+<li>LUNA_API_HOST = &#8220;&lt;Luna API host&gt;&#8221;</li>
+<li>LUNA_API_PORT = &lt;Luna API port&gt;</li>
+<li>LUNA_API_API = &lt;Luna API api version&gt;</li>
+<li>LUNA_AUTH_TOKEN = &#8220;&lt;Luna API token&gt;&#8221;</li>
+<li>FSM2_URL = &#8220;&lt;Facestreammanager2 url&gt;&#8221;</li>
+<li>FSM2_API_VERSION = &lt;Facestreammanager2 api version&gt;</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Run tests by the command</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python -m unittest tests.system_tests.unittests_main
+</pre></div>
+</div>
+<p>For api reference usage see ./raml/fsm2.html</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to Facestreammanager2&#8217;s documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="about.html">Introduction</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Visionlabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+v.1.2.2
+=======
+
+Improvements:
+-------------
+
+
+Bugs fixed:
+-----------
+
+    1) Fixed download_photos script.
+
+    #) Fixed version of some requirements (Flask-CORS and flask).
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.
+
+.. _pillow-simd: https://github.com/uploadcare/pillow-simd.

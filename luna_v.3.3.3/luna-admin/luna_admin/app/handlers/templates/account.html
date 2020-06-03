@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    html {
+        font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .table {
+        border: none;
+    }
+
+    .table-definition thead th:first-child {
+        pointer-events: none;
+        background: white;
+        border: none;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .page-item > * {
+        border: none;
+    }
+
+    .custom-checkbox {
+        min-height: 1rem;
+        padding-left: 0;
+        margin-right: 0;
+        cursor: pointer;
+    }
+
+    .custom-checkbox .custom-control-indicator {
+        content: "";
+        display: inline-block;
+        position: relative;
+        width: 30px;
+        height: 10px;
+        background-color: #818181;
+        border-radius: 15px;
+        margin-right: 10px;
+        -webkit-transition: background .3s ease;
+        transition: background .3s ease;
+        vertical-align: middle;
+        margin: 0 16px;
+        box-shadow: none;
+    }
+
+    .custom-checkbox .custom-control-indicator:after {
+        content: "";
+        position: absolute;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background-color: #84c7c1;
+        border-radius: 21px;
+        box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4);
+        left: -2px;
+        top: -4px;
+        -webkit-transition: left .3s ease, background .3s ease, box-shadow .1s ease;
+        transition: left .3s ease, background .3s ease, box-shadow .1s ease;
+    }
+
+    .custom-checkbox .custom-control-input:checked ~ .custom-control-indicator {
+        background-color: #c70009;
+        background-image: none;
+        box-shadow: none !important;
+    }
+
+    .custom-checkbox .custom-control-input:checked ~ .custom-control-indicator:after {
+        background-color: #c70009;
+        left: 15px;
+    }
+
+    .custom-checkbox .custom-control-input:focus ~ .custom-control-indicator {
+        box-shadow: none !important;
+    }
+
+.stylish-input-group .input-group-addon{
+    background: white !important;
+}
+.stylish-input-group .form-control{
+	border-right:0;
+	box-shadow:0 0 0;
+	border-color:#ccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+.custom-glyphicon {
+    font-size: 28px;
+}
+
+</style>
+
+<legend>Account:</legend>
+<form>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Email:</label>
+<div class="col-sm-10">
+            {{ email}}
+    </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Organization name:</label>
+    <div class="col-sm-10">
+            {{ organization_name}}
+    </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Id:</label>
+    <div class="col-sm-10">
+            {{id}}
+    </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Status:</label>
+        <div class="col-sm-10">
+            <div class="form-group row">
+                <div class="col-sm-10" id={{"status_" + id}}>{% if status%}active{% else %}suspended{% end%}</div>
+                <label class="custom-control custom-checkbox">
+                    <input id='{{ "checkbox_" + id}}' type="checkbox"
+                           class="custom-control-input"
+                           onclick="submitAccountBlock('{{id}}')"
+                           {% if not status %}
+                    checked="checked"
+                    {% end %}
+                    hidden="hidden"
+                    >
+                    <span class="custom-control-indicator"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</form>
+
+<legend>Common:</legend>
+<div class="card-block p-0">
+    <table class="table table-bordered table-striped table-hover">
+        <tr>
+            <th>Tokens</th>
+            <th>Account lists</th>
+            <th>Persons</th>
+            <th>Descriptors</th>
+            <th><i class="glyphicon glyphicon-cog"></i> Remove descriptors</th>
+        </tr>
+        <tr>
+            <td>{{ (token_count)}}</td>
+            <td>{{ (list_count)}}</td>
+            <td>{{ (person_count)}}</td>
+            <td>{{ (descriptor_count)}}</td>
+            <td align="center">
+                <button type="button" class="btn btn-default btn-sm" title="start remove old descriptors"
+                        onclick="submitGCDesc('{{id}}')">
+                    <span class="glyphicon custom-glyphicon glyphicon-trash"></span>
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<legend>Tokens:</legend>
+<div id="tokens_tabel" class="card-block p-0">
+</div>
+<legend>Lists:</legend>
+<div id="lists_tabel">
+</div>
+<script>
+
+    function runScript(e) {
+        if (e.keyCode == 13) {
+            getPerson();
+        }
+    }
+
+
+    function submitAccountBlock(accountId) {
+        console.log(accountId);
+
+
+        var status = $("#status_" + accountId).text();
+        if (status == "active") {
+
+            var currentStatus = 1;
+            var newStatus = "suspended";
+        }
+        else {
+            var currentStatus = 0;
+            var newStatus = "active";
+        }
+
+
+        jQuery.ajax({
+            url: '/2/accounts/' + accountId + "?status=" + (1- currentStatus),
+            type: 'PATCH',
+
+            timeout: 60000,
+            success: function (response) {
+                // redirect must be defined and must be true
+                $("#status_" + accountId).text(newStatus);
+            },
+            error: function (response) {
+                $('#checkbox_' + accountId).prop('checked', 1-currentStatus);
+            }
+
+        })
+
+    }
+
+    function getTokens(account_id, page, page_size) {
+
+        jQuery.ajax({
+            url: '/accounts/' + account_id + "/tokens?page=" + page + "&page_size=" + page_size,
+            type: 'GET',
+
+            timeout: 60000,
+            success: function (reply) {
+                // redirect must be defined and must be true
+                document.getElementById("tokens_tabel").innerHTML = reply;
+
+            },
+            error: function (response) {
+                $('#checkbox_' + accountId).prop('checked', !currentStatus);
+            }
+
+        })
+
+    }
+
+    function getLists(account_id, page, page_size) {
+
+        jQuery.ajax({
+            url: '/accounts/' + account_id + "/lists?page=" + page + "&page_size=" + page_size,
+            type: 'GET',
+
+            timeout: 60000,
+            success: function (reply) {
+                // redirect must be defined and must be true
+                document.getElementById("lists_tabel").innerHTML = reply;
+
+            },
+            error: function (response) {
+                var errorJs = jQuery.parseJSON( response.responseText );
+                showErrorModalWindowWithText("Error get lists " + account_id, errorJs,  "Get lists");
+            }
+        })
+
+    }
+
+
+    function submitGCDesc(accountId){
+        jQuery.ajax({
+            url: '/2/gc?task_type=descriptors&target=account&target_id=' + accountId,
+            type: 'POST',
+
+            timeout: 60000,
+            success: function (response) {
+                // redirect must be defined and must be true
+                showModalWindowWithText("Success create task", "GC descriptors");
+
+            },
+            error: function (response) {
+                var errorJs = jQuery.parseJSON( response.responseText );
+                showErrorModalWindowWithText("Error create task 'clean old descriptors " + accountId, errorJs,
+                    "Clean old descriptors");
+            }
+        })
+    }
+
+    getTokens('{{id}}', 1, 10);
+    getLists('{{id}}', 1, 10);
+
+</script>
+{% end %}

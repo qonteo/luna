@@ -1,0 +1,12 @@
+[Unit]
+Description=Luna Broker
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/lib/luna/current/
+ExecStart=/var/lib/luna/current/bin/luna-broker --config-path ./conf/broker.conf --log-to-stderr --log-verbosity 0
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tests.unittests_linkAsync &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>tests.unittests_linkAsync</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for tests.unittests_linkAsync</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tornado</span>
+
+<span class="kn">from</span> <span class="nn">tests.classes</span> <span class="k">import</span> <span class="n">TestBase</span><span class="p">,</span> <span class="n">authStr</span><span class="p">,</span> <span class="n">authArr</span>
+<span class="kn">from</span> <span class="nn">tornado.ioloop</span> <span class="k">import</span> <span class="n">IOLoop</span>
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">gen</span>
+<span class="kn">from</span> <span class="nn">tests.functions</span> <span class="k">import</span> <span class="n">createPayloadImg</span>
+<span class="kn">from</span> <span class="nn">tests.resources</span> <span class="k">import</span> <span class="n">warpedImage</span>
+<span class="kn">from</span> <span class="nn">tests</span> <span class="k">import</span> <span class="n">luna_api_functions</span>
+
+
+<span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+<span class="k">def</span> <span class="nf">asyncCreateDescriptors</span><span class="p">(</span><span class="n">headers</span><span class="p">):</span>
+    <span class="n">descriptorFutures</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">binBody</span> <span class="o">=</span> <span class="n">createPayloadImg</span><span class="p">(</span><span class="n">warpedImage</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">future</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">authData</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">binBody</span><span class="p">,</span> <span class="n">warpedImage</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                       <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">descriptorFutures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+    <span class="n">descriptorIds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">descriptorFutures</span><span class="p">:</span>
+        <span class="n">reply</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">future</span>
+        <span class="n">descriptorIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">descriptorIds</span>
+
+
+<div class="viewcode-block" id="TestAsyncLink"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkAsync.TestAsyncLink">[docs]</a><span class="k">class</span> <span class="nc">TestAsyncLink</span><span class="p">(</span><span class="n">TestBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simultaneously attach object to list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestAsyncLink.setUp"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkAsync.TestAsyncLink.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createAccountAndToken</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">authorization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+        <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">auth</span> <span class="ow">in</span> <span class="n">authArr</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">subTest</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">auth</span> <span class="o">==</span> <span class="s2">&quot;basic&quot;</span><span class="p">:</span>
+                        <span class="n">headers</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createAuthHeader</span><span class="p">(</span><span class="s1">&#39;login&#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">headers</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createAuthHeader</span><span class="p">(</span><span class="s1">&#39;token&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">func</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="o">*</span><span class="n">func_args</span><span class="p">,</span> <span class="o">**</span><span class="n">func_kwargs</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">return</span> <span class="n">wrap</span>
+
+    <span class="k">def</span> <span class="nf">runAsyncTest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">runTest</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">IOLoop</span><span class="o">.</span><span class="n">current</span><span class="p">()</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">headers</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">failure</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">failure</span> <span class="o">=</span> <span class="n">e</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">failure</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">runTest</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure</span>
+
+        <span class="n">test</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TestAsyncLink.test_async_link_link_descriptors_to_list"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkAsync.TestAsyncLink.test_async_link_link_descriptors_to_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_async_link_link_descriptors_to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_async_link_link_descriptors_to_list</span>
+
+<span class="sd">            :resources: &quot;/storage/descriptors/\{descriptor_id\}/linked_lists&quot;</span>
+<span class="sd">            :description: success simultaneously attaching descriptors to list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+        <span class="k">def</span> <span class="nf">testLinkDescriptorsToList</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">headers</span><span class="p">):</span>
+
+            <span class="n">descriptorIds</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">asyncCreateDescriptors</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+
+            <span class="n">listResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createList</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="n">listResponse</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">]</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">descriptorId</span> <span class="ow">in</span> <span class="n">descriptorIds</span><span class="p">:</span>
+                <span class="n">future</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkListToDescriptor</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">descriptorId</span><span class="p">,</span> <span class="n">listId</span><span class="p">,</span> <span class="s1">&#39;attach&#39;</span><span class="p">,</span>
+                                                                 <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">future</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">headers</span><span class="p">))</span>
+
+        <span class="n">tornado</span><span class="o">.</span><span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="n">testLinkDescriptorsToList</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestAsyncLink.test_async_link_link_persons_to_list"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkAsync.TestAsyncLink.test_async_link_link_persons_to_list">[docs]</a>    <span class="k">def</span> <span class="nf">test_async_link_link_persons_to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_async_link_link_persons_to_list</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_lists&quot;</span>
+<span class="sd">            :description: success simultaneously attaching persons to list</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+        <span class="k">def</span> <span class="nf">testLinkPersonsToList</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">headers</span><span class="p">):</span>
+
+            <span class="n">personIds</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">descriptorIds</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">asyncCreateDescriptors</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">descriptorId</span> <span class="ow">in</span> <span class="n">descriptorIds</span><span class="p">:</span>
+                <span class="n">personResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">personId</span> <span class="o">=</span> <span class="n">personResponse</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]</span>
+                <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">descriptorId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="c1"># self.linkPersonToPhoto(headers, descriptorId, personId)</span>
+                <span class="n">personIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">personId</span><span class="p">)</span>
+
+            <span class="n">listResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createList</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="n">listResponse</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">]</span>
+
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">personId</span> <span class="ow">in</span> <span class="n">personIds</span><span class="p">:</span>
+                <span class="n">future</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkListToPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">listId</span><span class="p">,</span> <span class="s1">&#39;attach&#39;</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">future</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">headers</span><span class="p">))</span>
+
+        <span class="n">tornado</span><span class="o">.</span><span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="n">testLinkPersonsToList</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestAsyncLink.test_async_link_link_descriptors_to_person"><a class="viewcode-back" href="../../testing.html#tests.unittests_linkAsync.TestAsyncLink.test_async_link_link_descriptors_to_person">[docs]</a>    <span class="k">def</span> <span class="nf">test_async_link_link_descriptors_to_person</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. test:: test_async_link_link_descriptors_to_person</span>
+
+<span class="sd">            :resources: &quot;/storage/persons/\{person_id\}/linked_descriptors&quot;</span>
+<span class="sd">            :description: success simultaneously attaching descriptors to person</span>
+<span class="sd">            :LIS: No</span>
+<span class="sd">            :tag: Linking</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@self</span><span class="o">.</span><span class="n">authorization</span>
+        <span class="nd">@gen</span><span class="o">.</span><span class="n">coroutine</span>
+        <span class="k">def</span> <span class="nf">testLinkDescriptorsToPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">headers</span><span class="p">):</span>
+
+            <span class="n">descriptorIds</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">asyncCreateDescriptors</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+
+            <span class="n">listResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createList</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">listId</span> <span class="o">=</span> <span class="n">listResponse</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;list_id&quot;</span><span class="p">]</span>
+
+            <span class="n">personResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">createPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">personId</span> <span class="o">=</span> <span class="n">personResponse</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;person_id&quot;</span><span class="p">]</span>
+            <span class="n">descriptorResponse</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">extractDescriptors</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">warpedImage</span><span class="p">,</span>
+                                                                             <span class="n">warpedImage</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">descriptorId</span> <span class="o">=</span> <span class="n">descriptorResponse</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">descriptorId</span><span class="p">,</span> <span class="s2">&quot;attach&quot;</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">future</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkListToPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">listId</span><span class="p">,</span> <span class="s1">&#39;attach&#39;</span><span class="p">,</span> <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">reply</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">future</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">headers</span><span class="p">))</span>
+
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">descriptorId</span> <span class="ow">in</span> <span class="n">descriptorIds</span><span class="p">:</span>
+                <span class="n">future</span> <span class="o">=</span> <span class="n">luna_api_functions</span><span class="o">.</span><span class="n">linkDescriptorToPerson</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">personId</span><span class="p">,</span> <span class="n">descriptorId</span><span class="p">,</span> <span class="s1">&#39;attach&#39;</span><span class="p">,</span>
+                                                                   <span class="n">asyncRequest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
+                <span class="n">reply</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">future</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">reply</span><span class="o">.</span><span class="n">statusCode</span><span class="p">,</span> <span class="mi">204</span><span class="p">,</span> <span class="n">authStr</span><span class="p">(</span><span class="n">headers</span><span class="p">))</span>
+
+        <span class="n">tornado</span><span class="o">.</span><span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">run_sync</span><span class="p">(</span><span class="n">testLinkDescriptorsToPerson</span><span class="p">)</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

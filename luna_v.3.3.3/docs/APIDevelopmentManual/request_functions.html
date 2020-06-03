@@ -1,0 +1,272 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Request functions &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Upload scripts" href="upload_scripts.html" />
+    <link rel="prev" title="Plug-ins" href="plugins.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>Request functions</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="plugins.html">Plug-ins</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="upload_scripts.html">Upload scripts</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="request-functions">
+<h1>Request functions<a class="headerlink" href="#request-functions" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-luna_api.app.tornado_request_function"></span><dl class="class">
+<dt id="luna_api.app.tornado_request_function.IndexedLists">
+<em class="property">class </em><code class="descclassname">luna_api.app.tornado_request_function.</code><code class="descname">IndexedLists</code><a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#IndexedLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.IndexedLists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Singleton indexed lists storage.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>lastUpdateTime: last update time timestamp
+lists: current lists cache</dd>
+</dl>
+<dl class="classmethod">
+<dt id="luna_api.app.tornado_request_function.IndexedLists.getLists">
+<em class="property">classmethod </em><code class="descname">getLists</code><span class="sig-paren">(</span><em>luna3Client: luna3.client.Client</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#IndexedLists.getLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.IndexedLists.getLists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get indexed lists’ ids.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>luna3Client: luna3 Index Manager client</dd>
+<dt>Returns:</dt>
+<dd>list of indexed lists’ ids</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext">
+<em class="property">class </em><code class="descclassname">luna_api.app.tornado_request_function.</code><code class="descname">LunaCoreContext</code><span class="sig-paren">(</span><em>logger</em>, <em>luna3Client</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for requests to luna core.
+Attributes:</p>
+<blockquote>
+<div>logger: logger
+requestId: request id
+luna3client: luna3 client</div></blockquote>
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.aggregateRequestParamAndSendPhotoToLuna">
+<code class="descname">aggregateRequestParamAndSendPhotoToLuna</code><span class="sig-paren">(</span><em>body: bytes</em>, <em>requestHeaders: dict</em>, <em>queryParams: luna_api.app.tornado_request_function.queryExtractImgParam</em><span class="sig-paren">)</span> &#x2192; Generator[[None, None], dict]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.aggregateRequestParamAndSendPhotoToLuna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.aggregateRequestParamAndSendPhotoToLuna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate params and extract descriptors</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>body: input bytes
+requestHeaders: headers
+queryParams: extract params</dd>
+<dt>Returns:</dt>
+<dd>extract result</dd>
+<dt>Raises:</dt>
+<dd>VLException: bad params of request</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.convertBodyAndContentTypeFromBase64">
+<em class="property">static </em><code class="descname">convertBodyAndContentTypeFromBase64</code><span class="sig-paren">(</span><em>body</em>, <em>contentType</em><span class="sig-paren">)</span> &#x2192; tuple<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.convertBodyAndContentTypeFromBase64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.convertBodyAndContentTypeFromBase64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert body from base64 to bytes if need and get correct content content-type.
+Args:</p>
+<blockquote>
+<div>body: body
+contentType: content type of request</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>tuple and content type</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.getCoordOfFace">
+<em class="property">static </em><code class="descname">getCoordOfFace</code><span class="sig-paren">(</span><em>replyJson: dict</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.getCoordOfFace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.getCoordOfFace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive coordinates from detection.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>replyJson:  JSON from LUNA after description detection.</dd>
+<dt>Returns:</dt>
+<dd>dictionary with fields left, right, bottom, top.</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.getFaceFromImg">
+<em class="property">static </em><code class="descname">getFaceFromImg</code><span class="sig-paren">(</span><em>byteImg: bytes</em>, <em>coord: dict</em><span class="sig-paren">)</span> &#x2192; bytes<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.getFaceFromImg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.getFaceFromImg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that realizes cropping of portrait from photo by detection coordinates.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">byteImg: input image, byte type</p>
+<p class="last">coord: detection coordinates</p>
+</dd>
+<dt>Returns:</dt>
+<dd>portrait</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.getLunaVersion">
+<code class="descname">getLunaVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Generator[[None, None], dict]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.getLunaVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.getLunaVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get version of LUNA Core</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>version of luna core</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.getPortraitsFromLunaImageStore">
+<code class="descname">getPortraitsFromLunaImageStore</code><span class="sig-paren">(</span><em>photoId: str</em>, <em>requestId: str</em><span class="sig-paren">)</span> &#x2192; Generator[[None, None], bytes]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.getPortraitsFromLunaImageStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.getPortraitsFromLunaImageStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive portrait from luna-image-store.</p>
+<p>Args:</p>
+<blockquote>
+<div>photoId: descriptor id, whose portrait we get.
+requestId: id of request</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>return portraits in bytes</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.match">
+<code class="descname">match</code><span class="sig-paren">(</span><em>templatePhotoId: str, candidates: List[str], candidateIsLists: bool = True, limit: int = 5</em><span class="sig-paren">)</span> &#x2192; Generator[[None, None], dict]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that realizes matching request.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>templatePhotoId: Template candidate (photo id)
+candidates: list of candidates or list set from LUNA
+candidateIsLists: list type (descriptors list or list set)
+limit: reply limit</dd>
+<dt>Returns:</dt>
+<dd>In case of success, system returns dict with json from LUNA and status code.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.mimicryCore12">
+<code class="descname">mimicryCore12</code><span class="sig-paren">(</span><em>inputJson: dict</em>, <em>queryParams: luna_api.app.tornado_request_function.queryExtractImgParam</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.mimicryCore12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.mimicryCore12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimicry extract reply from core to  extract of version 12.
+Args:</p>
+<blockquote>
+<div>inputJson:  output extract reply
+queryParams: extract params</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>extract result as core version 12</dd>
+<dt>Raises:</dt>
+<dd>VLException: if extract is failed</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.patchLunaLists">
+<code class="descname">patchLunaLists</code><span class="sig-paren">(</span><em>patchData: List</em>, <em>mode: str</em><span class="sig-paren">)</span> &#x2192; Generator[[None, None], None]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.patchLunaLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.patchLunaLists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that realizes list modification in LUNA.
+Args:</p>
+<blockquote>
+<div>patchData: list of pairs (first element in pair is list of descriptor ids, second one is list id/
+mode: list modification mode</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.putPortraitsInLunaImageStore">
+<code class="descname">putPortraitsInLunaImageStore</code><span class="sig-paren">(</span><em>imgBytes: bytes</em>, <em>extractFacesJSON: List</em>, <em>isWarpImage: bool = False</em><span class="sig-paren">)</span> &#x2192; Generator[[None, None], None]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.putPortraitsInLunaImageStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.putPortraitsInLunaImageStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Addition of portraits, which were extracted in LUNA, to luna-image-store.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>imgBytes: image bytes.
+extractFacesJSON: JSON from LUNA with all extracted faces.
+isWarpImage: flag, which indicates whether image was warped or not.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.removeListsFromLuna">
+<code class="descname">removeListsFromLuna</code><span class="sig-paren">(</span><em>lists: List[str]</em><span class="sig-paren">)</span> &#x2192; Generator[[None, None], None]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.removeListsFromLuna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.removeListsFromLuna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that realizes list deletion in LUNA.
+Args:</p>
+<blockquote>
+<div>lists: list of all list ids in LUNA</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="luna_api.app.tornado_request_function.LunaCoreContext.sendPhotoToLuna">
+<code class="descname">sendPhotoToLuna</code><span class="sig-paren">(</span><em>binBody: bytes</em>, <em>headers: dict</em>, <em>queryParams: luna_api.app.tornado_request_function.queryExtractImgParam</em><span class="sig-paren">)</span> &#x2192; Generator[[None, None], dict]<a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#LunaCoreContext.sendPhotoToLuna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.LunaCoreContext.sendPhotoToLuna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>binBody: input bytes
+headers: headers
+queryParams: extract params</dd>
+<dt>Returns:</dt>
+<dd>extract result</dd>
+<dt>Raises:</dt>
+<dd>VLException(Error.UnknownError, 500): in the case any exceptions except VLException, LunaApiException.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_api.app.tornado_request_function.queryExtractImgParam">
+<em class="property">class </em><code class="descclassname">luna_api.app.tornado_request_function.</code><code class="descname">queryExtractImgParam</code><a class="reference internal" href="_modules/luna_api/app/tornado_request_function.html#queryExtractImgParam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_api.app.tornado_request_function.queryExtractImgParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure to save extraction request query parameters.</p>
+<dl class="attribute">
+<dt id="luna_api.app.tornado_request_function.queryExtractImgParam.asLuna3Params">
+<code class="descname">asLuna3Params</code><a class="headerlink" href="#luna_api.app.tornado_request_function.queryExtractImgParam.asLuna3Params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get extract params as kwargs</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>dict with keys as kwargs params for luna3.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="plugins.html">Plug-ins</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="upload_scripts.html">Upload scripts</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

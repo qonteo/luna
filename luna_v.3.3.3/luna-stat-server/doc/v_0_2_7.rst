@@ -1,0 +1,31 @@
+=======
+v.0.2.7
+=======
+
+-------------
+Improvements:
+-------------
+
+1) sphinx laguage was changed in config.
+
+2) overExposed and skinColor estimation attributes were removed from LUNA API "api" version 2;
+
+3) /src/_version.py script removed;
+
+4) absolute time filter format was added;
+
+5) default value for LUNA_API_VERSION changed to 2.
+
+-----------
+Bugs fixed:
+-----------
+
+1) benchmark works now;
+
+2) hold API and User exceptions.
+
+------------------------------------
+How to update from the previous version:
+------------------------------------
+
+To update from the previous version one needs to install "tzlocal" package via `pip install tzlocal`.

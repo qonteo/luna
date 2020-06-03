@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Document</title>
+
+  <link rel="stylesheet" href="static/css/app.css">
+    <script type="text/javascript" src="/static/js/socket.io.min.js"></script>
+    <script src="/static/js/websocket.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/app.js"></script>
+    <style>
+
+
+        .passport-stream__wrap.hide .waiting{
+            opacity: 0;
+        }
+
+        .passport-stream__wrap.hide .passport-stream__block-right {
+            opacity: 0;
+        }
+
+        .passport-stream__wrap.hide .passport-stream__block-left {
+            opacity: 0;
+        }
+
+        .passport-stream__wrap.view .passport-stream__block-right h5{
+            width: 0;
+        }
+        .passport-stream__wrap.view .passport-stream__block-right {
+            width: 0;
+            height: 0;
+            font-size: 0.01em;
+        }
+        .passport-stream__wrap.view .passport-stream__block-left {
+            margin-left: -2000px;
+            border-right: 5px solid transparent;
+        }
+
+        .passport-stream__wrap.view .passport-stream__block-left:after {
+            opacity: 0;
+        }
+
+        .passport-stream__wrap.view .passport-stream__block-left:before {
+            opacity: 0;
+        }
+
+
+        .passport-stream__wrap .waiting {
+            font-size: 5em;
+            color: #6f6f6f;
+            text-align: center;
+            line-height: 10em;
+            width: 100%;
+            display: block;
+            opacity: 1;
+
+            -moz-transition: opacity 0.5s 0s ease-out;
+            -o-transition: opacity 0.5s 0s ease-out;
+            -webkit-transition: opacity 0.5s 0s ease-out;
+            transition: opacity 0.5s 0s ease-out;
+        }
+        .passport-stream__wrap {
+            width: 100%;
+            position: relative;
+            height: 83vh;
+            /* padding-top: 20vh; */
+            /* margin-top: -20vh; */
+            min-height: 100%;
+        }
+        .passport-stream__block-left {
+            opacity: 1;
+            width: 70%;
+            display: inline-block;
+            border-right: 5px solid #e4e4e4;
+            position: relative;
+            padding: 10% 0;
+            height: 100%;
+            margin-left: 0;
+            vertical-align: top;
+
+
+            -moz-transition: opacity 0.5s 0s ease-out, margin-left 0.7s 0s ease-out, border-right 0.9s 1.1s ease-out;
+            -o-transition: opacity 0.5s 0s ease-out, margin-left 0.7s 0s ease-out, border-right 0.9s 1.1s ease-out;
+            -webkit-transition: opacity 0.5s 0s ease-out, margin-left 0.7s 0s ease-out, border-right 0.9s 1.1s ease-out;
+            transition: opacity 0.5s 0s ease-out, margin-left 0.7s 0s ease-out, border-right 0.9s 1.1s ease-out;
+        }
+        .passport-stream__block-left:before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: -2.19em;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 1.8rem 0 1.8rem 1.8rem;
+            border-color: transparent transparent transparent #e4e4e4;
+            opacity: 1;
+            /* background-color: #ffffff; */
+
+            -moz-transition: opacity 0.9s 1.5s ease-out;
+            -o-transition: opacity 0.9s 1.5s ease-out;
+            -webkit-transition: opacity 0.9s 1.5s ease-out;
+            transition: opacity 0.9s 1.5s ease-out;
+        }
+
+        .passport-stream__block-left:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: -1.59em;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 1.8rem 0 1.8rem 1.8rem;
+            border-color: transparent transparent transparent #ffffff;
+            opacity: 1;
+            /* background-color: #ffffff; */
+
+            -moz-transition: opacity 0.9s 1.5s ease-out;
+            -o-transition: opacity 0.9s 1.5s ease-out;
+            -webkit-transition: opacity 0.7s 1.5s ease-out;
+            transition: opacity 0.9s 1.5s ease-out;
+        }
+        .passport-stream__block-left .passport-stream__block-left_img {
+            display: inline-block;
+            max-width: 49%;
+            max-height: 100%;
+            border-radius: 5em;
+            box-shadow: 0 4.1rem 6.9rem 0 rgba(0, 0, 0, 0.4);
+            vertical-align: top;
+        }
+        .passport-stream__block-left .passport-stream__block-left_content {
+            vertical-align: top;
+            width: 45%;
+            display: inline-block;
+            padding-left: 5%;
+            overflow-x: hidden;
+        }
+        .passport-stream__block-left .passport-stream__block-left_content p {
+            font-size: 2rem;
+            color: #783674;
+        }
+        .passport-stream__block-right {
+            text-align: center;
+            opacity: 1;
+            vertical-align: top;
+            width: 19%;
+            display: inline-block;
+            /*margin-right: 0;*/
+            margin: 0 5%;
+            padding: 10% 0;
+            height: 100%;
+            font-size: 1em;
+
+            -moz-transition: opacity 0.5s 0s ease-out, height 0.9s 2.3s ease-out, width 0.9s 2.3s ease-out, font-size 0.7s 1.9s ease-out;
+            -o-transition: opacity 0.5s 0s ease-out, height 0.9s 2.3s ease-out, width 0.9s 2.3s ease-out, font-size 0.7s 1.9s ease-out;
+            -webkit-transition: opacity 0.5s 0s ease-out, height 0.9s 2.3s ease-out, width 0.9s 2.3s ease-out, font-size 0.7s 1.9s ease-out;
+            transition: opacity 0.5s 0s ease-out, height 0.9s 2.3s ease-out, width 0.9s 2.3s ease-out, font-size 0.7s 1.9s ease-out;
+        }
+
+        .passport-stream__block-right h5 {
+            text-align: left;
+            width: 100%;
+            overflow: hidden;
+            -moz-transition:  width 0.7s 1.1s ease-out;
+            -o-transition: width 0.7s 1.1s ease-out;
+            -webkit-transition: width 0.7s 1.1s ease-out;
+            transition: width 0.7s 1.1s ease-out;
+        }
+
+
+        .passport-stream__block-right .passport-stream__block-right_img {
+            vertical-align: bottom;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .passport-stream__block-left .passport-stream__block-left_img, .passport-stream__block-right .passport-stream__block-right_img {
+            border-radius: 5em;
+            box-shadow: 0 4.1rem 6.9rem 0 rgba(0, 0, 0, 0.4);
+        }
+
+
+    </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="main-header">
+      <div class="main-header__left-col">
+        <a href="/" class="main-header__back-btn">
+          <span class="main-header__back-btn-ico"></span>
+          ID recognition and verification
+        </a>
+      </div>
+      <div class="main-header__right-col">
+        <img src="static/img/icons/visionlab.png" alt="" class="main-header__right-col-img">
+        <img src="static/img/icons/connect.png" id="connectID_logo" alt="" class="main-header__right-col-img">
+      </div>
+    </header>
+    <div class="main-content main-content--passport">
+      <div class="passport-stream__wrap">
+          <span class="waiting">Waiting</span>
+      </div>
+    </div>
+  </div>
+
+  <script>initSockets("{{namespace}}","passport_room");</script>
+</body>
+</html>

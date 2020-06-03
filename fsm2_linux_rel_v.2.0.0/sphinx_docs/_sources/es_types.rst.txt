@@ -1,0 +1,629 @@
+---------------------------------
+Other database objects structures
+---------------------------------
+
+.. json:object:: crossMatchReference
+   :showexample:
+
+   :property reference: object id
+   :proptype reference: uuid4
+   :property source: the source of the object, if the reference was an event or group
+   :proptype source: user_name
+   :property last_update: The last descriptor update time, if the reference was a descriptor
+   :proptype last_update: iso8601
+   :property tags: object tags, if the reference was an event or group
+   :proptype tags: :json:object:`_list_string`
+   :property user_data: person user_data, if the reference was a person
+   :proptype user_data: user_name
+   :property candidates: The match candidates list.
+   :proptype candidates: :json:object:`_list_crossMatchCandidate`
+   :property create_time: the creation time of the reference, if the reference was a person, event or group
+   :proptype create_time: iso8601
+
+.. json:object:: crossMatchCandidate
+   :showexample:
+
+   :property person_id: id of the candidate-person, indicated if the a list of persons was matched
+   :proptype person_id: uuid4
+   :property similarity: Similarity with the reference descriptor. * 1 means that descriptors are obtained from identical images * numbers close to 1 mean the descriptors a from the same person * numbers close to 0 mean the descriptors from different people
+   :proptype similarity: float
+   :property id: id of the descriptor, specified if a list of descriptors was matched
+   :proptype id: uuid4
+   :property descriptor_id: descriptor of the candidate person, specified if a list of persons was matched
+   :proptype descriptor_id: uuid4
+   :property user_data: user_data of the candidate-person, specified if a list of persons was matched
+   :proptype user_data: user_name
+
+
+.. json:object:: match_handler
+   :showexample:
+
+   :property person_policy: rules for creating a person from the descriptor and then attaching it to the lists
+   :proptype person_policy: :json:object:`person_policy`
+   :property type:
+   :proptype type: user_name
+   :property grouping_policy: rules for grouping events into groups, creating persons from a group and attaching events to persons
+   :proptype grouping_policy: :json:object:`grouping_policy`
+   :property descriptor_policy: rules for attaching the extracted descriptor to descriptor lists
+   :proptype descriptor_policy: :json:object:`descriptor_policy`
+   :property search_policy: rules for searching similar descriptors
+   :proptype search_policy: :json:object:`search_policy`
+   :property handler_id: handle id
+   :proptype handler_id: uuid4
+   :property extract_policy: Set the extract flags to be included when extracting the descriptor.
+   :proptype extract_policy: :json:object:`extract_policy`
+   :property name: the name of the handler
+   :proptype name: user_name
+
+
+.. json:object:: lists_filter
+   :showexample:
+
+   :property lists:
+   :proptype lists: :json:object:`_list_list_filter`
+   :property policy: the policy of checking the result of the match. * 1 - the filter is recognized passed successfully, if at least one list we found a similar object with similarity greater than specified for this list. * 2 -  we did not find a similar object for all lists.
+   :proptype policy: integer
+
+
+.. json:object:: person_policy
+   :showexample:
+
+   :property create_person_policy: The policy of creating a person from the descriptor. This policy is incompatible with the creation of a person from the group
+   :proptype create_person_policy: :json:object:`create_person_policy`
+
+
+.. json:object:: reports
+   :showexample:
+
+   :property task_id: the report task id
+   :proptype task_id: integer
+   :property params:
+   :proptype params: :json:object:`report_params`
+   :property create_time: the time the task was created
+   :proptype create_time: iso8601
+
+
+.. json:object:: basic_filters
+   :showexample:
+
+   :property gender: Filter by sex. Allowed values are: 1 for man, 0 for woman
+   :proptype gender: integer
+   :property age_range: filter by age
+   :proptype age_range: :json:object:`age_range`
+   :property similarity_filter: filter based on search results
+   :proptype similarity_filter: :json:object:`lists_filter`
+
+
+.. json:object:: attributes
+   :showexample:
+
+   :property age: Age estimation (in years).
+   :proptype age: float
+   :property gender: Gender estimation. * 0 - female * 1 - male
+   :proptype gender: float
+   :property eyeGlasses: Estimates are the persons wears eye glasses. * 0 - no glasses * 1 - eye glasses This attribute does not classify eyewear, ie both sunglasses and transparent glasses are reported as 1.
+   :proptype eyeGlasses: float
+
+
+.. json:object:: events
+   :showexample:
+
+   :property events: event list
+   :proptype events: :json:object:`_list_event`
+   :property total: total number of events
+   :proptype total: integer
+
+
+.. json:object:: markup_filters
+   :showexample:
+
+   :property age__lt: upper age limit.
+   :proptype age__lt: integer
+   :property create_time__lt: end of the interesting period in which the event occurred
+   :proptype create_time__lt: iso8601
+   :property age__gt: the lower age limit.
+   :proptype age__gt: integer
+   :property tags: a set of tags for filtering.
+   :proptype tags: :json:object:`_list_string`
+   :property similarity__gt: lower threshold of similary.
+   :proptype similarity__gt: float
+   :property handler_ids: list of id handlers, as a result, events will be displayed with any of the indicated handlers.
+   :proptype handler_ids: uuid4
+   :property create_time__gt: start of the interesting period in which the event occurred
+   :proptype create_time__gt: iso8601
+   :property gender: Filter by sex. Allowed values are: 1 for man, 0 for woman
+   :proptype gender: integer
+   :property sources: a list of event sources, as a result, events from any of the specified sources will be output.
+   :proptype sources: :json:object:`_list_string`
+
+
+.. json:object:: list_clusters
+   :showexample:
+
+   :property clusters: clusters
+   :proptype clusters: uuid4
+   :property total_clusters: number of clusters
+   :proptype total_clusters: integer
+   :property objects:
+   :proptype objects: user_name
+
+
+.. json:object:: descriptor_policy
+   :showexample:
+
+   :property attach_policy: set of lists to attach the descriptor to
+   :proptype attach_policy: :json:object:`_list_attach_to_list`
+
+
+.. json:object:: search_policy
+   :showexample:
+
+   :property search_lists: list of Luna API lists, which are supposed to match
+   :proptype search_lists: :json:object:`_list_search_list`
+   :property search_priority: The search by lists priority.
+      * 1 - Search is on all lists, the results are combined.
+      * 2 - the search is in order, if the result of the match on some list has exceeded *threshold*, the search stops.
+   :proptype search_priority: integer
+
+
+.. json:object:: search_result
+   :showexample:
+
+   :property list_id: list in the Luna API which looked for similar objects
+   :proptype list_id: uuid4
+   :property candidates: search result
+   :proptype candidates: :json:object:`_list_core_match` | :json:object:`_list_match`
+
+
+.. json:object:: match
+   :showexample:
+
+   :property descriptor_id: Matched descriptor identifier.
+   :proptype descriptor_id: uuid4
+   :property similarity: Similarity with the reference descriptor.
+      * 1 means that descriptors are obtained from identical images
+      * numbers close to 1 mean the descriptors a from the same person
+      * numbers close to 0 mean the descriptors from different people
+   :proptype similarity: float
+   :property person_id: Matched person identifier.
+   :proptype person_id: uuid4
+   :property user_data: Matched person user data.
+   :proptype user_data: user_name
+
+
+.. json:object:: search_list
+   :showexample:
+
+   :property list_id: the Luna API list id
+   :proptype list_id: uuid4
+   :property list_type: in the Luna API list type, sheet of descriptors or persons
+   :proptype list_type: user_name
+   :property threshold: the threshold for filtering search results and recognizing a successful search
+   :proptype threshold: float
+   :property limit: the number of results that are needed to search this list
+   :proptype limit: integer
+
+
+.. json:object:: search_result_for_group
+   :showexample:
+
+   :property list_id: list in the Luna API which was searched for similar objects
+   :proptype list_id: uuid4
+   :property candidate: search result
+   :proptype candidate: :json:object:`_list_core_match` | :json:object:`_list_match`
+
+
+.. json:object:: abstractSuccess
+   :showexample:
+
+   :property succeed: the number of successful operations
+   :proptype succeed: integer
+   :property failed: number of unsuccessful operations
+   :proptype failed: integer
+
+
+.. json:object:: reportSuccess
+   :showexample:
+
+   :proptype Location: url
+   :property Location: the address where you can pick up the done report
+
+
+.. json:object:: task_filters
+   :showexample:
+
+   :property age__lt: upper age limit.
+   :proptype age__lt: integer
+   :property create_time__lt: end of the required period in which the event occurred
+   :proptype create_time__lt: iso8601
+   :property age__gt: the lower age limit.
+   :proptype age__gt: integer
+   :property tags: a list of tags for filtering.
+   :proptype tags: :json:object:`_list_string`
+   :property similarity__gt: lower threshold of similary.
+   :proptype similarity__gt: float
+   :property handler_ids: list of handler ids, events will be displayed with any of the indicated handlers in the result.
+   :proptype handler_ids: _list_uuid4
+   :property create_time__gt: start of the required period in which the event occurred
+   :proptype create_time__gt: iso8601
+   :property list_id: Luna API list id, all other filters are ignored if this option is specified.
+   :proptype list_id: uuid4
+   :property gender: Filter by sex. Allowed values are: 1 for man, 0 for woman
+   :proptype gender: integer
+   :property sources: a list of event sources, events from any of the specified sources will be displayed in the result.
+   :proptype sources: :json:object:`_list_string`
+
+
+.. json:object:: attach_to_list
+   :showexample:
+
+   :property list_id: the Luna API list id to attach the object to is supposed
+   :proptype list_id: uuid4
+   :property filters: A list of filters regulating to attach an object to the Luna API list or not.
+   :proptype filters: :json:object:`basic_filters`
+
+
+
+
+.. json:object:: age_range
+   :showexample:
+
+   :property start: the start of the age range filter.
+   :proptype start: integer
+   :property end: the end of the age range filter.
+   :proptype end: integer
+
+
+.. json:object:: ended_report_for_list
+   :showexample:
+
+   :property progress: The task completion percentage.
+   :proptype progress: float
+   :property description: The task user comment.
+   :proptype description: user_name
+   :property status: The task status, can be done, canceled, or failed.
+   :proptype status: user_name
+   :property format: The report format. Can be `pdf` or `csv`.
+   :proptype format: user_name
+   :property id: The report id.
+   :proptype id: integer
+   :property task_id: The source task id for the report.
+   :proptype task_id: integer
+   :property last_update: The last update time, the task finish time also if the task is finished.
+   :proptype last_update: iso8601
+   :property create_time: The task create time.
+   :proptype create_time: iso8601
+
+
+.. json:object:: group_search_result
+   :showexample:
+
+   :property candidates: The search result candidates.
+   :proptype candidates: :json:object:`_list_core_match` | :json:object:`_list_match`
+
+
+.. json:object:: group_attributes
+   :showexample:
+
+   :property age: The age of the groups calculated according to the rules established in the handler.
+   :proptype age: integer
+   :property gender: The gender of the group, is calculated according to the rules established in the handler.
+   :proptype gender: float
+
+
+.. json:object:: face
+   :showexample:
+
+   :property rectISO: Face portrait bounding box.
+   :proptype rectISO: :json:object:`rect`
+   :property score: Face detection confidence.
+   :proptype score: float
+   :property attributes: Face attributes estimation.
+   :proptype attributes?: :json:object:`attributes`
+   :property quality?: Image quality estimation.
+   :proptype quality?: float
+   :property rect: Face detection bounding box.
+   :proptype rect: :json:object:`rect`
+   :property id: Face descriptor unique identifier.
+   :proptype id: uuid4
+
+
+.. json:object:: groups
+   :showexample:
+
+   :property groups: List of groups.
+   :proptype groups: :json:object:`_list_group`
+   :property total: Total number of groups.
+   :proptype total: integer
+
+
+.. json:object:: core_match_result
+   :showexample:
+
+   :property candidates: Matching results list.
+   :proptype candidates: :json:object:`_list_core_match`
+
+
+.. json:object:: handler_id
+   :showexample:
+
+   :property handler_id: The id of the created handler.
+   :proptype handler_id: uuid4
+
+
+.. json:object:: ended_task_for_list
+   :showexample:
+
+   :property progress: The task completion percentage.
+   :proptype progress: float
+   :property description: The task user comment.
+   :proptype description: user_name
+   :property last_update: The last update time, the task finish time also if the task is finished.
+   :proptype last_update: iso8601
+   :property type: task type
+   :proptype type: user_name
+   :property status: the status of the task, can be either done, or canceled, or completed with an error
+   :proptype status: user_name
+   :property id: task id
+   :proptype id: integer
+   :property create_time: The task create time.
+   :proptype create_time: iso8601
+
+
+.. json:object:: create_person_policy
+   :showexample:
+
+   :property create_filters: The list of filters regulating a person creation.
+   :proptype create_filters: :json:object:`basic_filters`
+   :property create_person: Create a person or not. Allowed values are `1` or `0`.
+   :proptype create_person: integer
+   :property attach_policy: A list of rules for attaching the created person to the lists.
+   :proptype attach_policy: :json:object:`_list_attach_to_list`
+
+
+.. json:object:: extract_policy
+   :showexample:
+
+   :property score_threshold: The extracted face quality threshold value. The descriptor will not be extracted if face quality is smaller than threshold.
+   :proptype score_threshold: float
+   :property estimate_quality: Calculate the "quality" of the extracted face or not. Allowed values are `1` or `0`.
+   :proptype estimate_quality: integer
+   :property estimate_attributes: Calculate attributes of the extracted face: sex, age, the presence of glasses or not. Allowed values are `1` or `0`.
+   :proptype estimate_attributes: integer
+
+
+.. json:object:: rect
+   :showexample:
+
+   :property width: Rectangle width.
+   :proptype width: integer
+   :property height: Rectangle height.
+   :proptype height: integer
+   :property y: Top left corner y coordinate.
+   :proptype y: integer
+   :property x: Top left corner x coordinate.
+   :proptype x: integer
+
+
+.. json:object:: cross_matching_reference
+   :showexample:
+
+   :property filters: The reference selection filters.
+   :proptype filters: :json:object:`task_filters`
+   :property objects: The references objects. Allowed values are `events`, `groups` or `luna_list`.
+   :proptype objects: user_name
+
+
+.. json:object:: cross_matching_candidate
+   :showexample:
+
+   :property list_id: The candidates Luna API list to match with.
+   :proptype list_id: uuid4
+
+
+.. json:object:: searchResponse
+
+   :property total: The results number in the response.
+   :proptype total: integer
+   :property hits: Result array. Result is an ordered key-value pair: the key format depends on the grouping method, the format of the value is number. Pay attention that day grouping periods start as in GMT time zone. For example, if the Facestreammanager 2 is located in time zone GMT+03:00, than day starts is at 03:00 in local time.
+   :proptype hits: _list_object
+   :examples:
+      :groupStep1d:
+         .. code-block :: js
+
+            {"hits": [["2017-11-14T03:00:00Z", 11], ["2017-11-15T03:00:00Z", 47]], "total": 2}
+
+
+      :groupStep1dAvgAge:
+         .. code-block :: js
+
+            {"hits": [["2017-11-14T03:00:00Z", 27.96410233322184], ["2017-11-15T03:00:00Z", 34.33495368785891]], "total": 2}
+
+
+      :groupStep1dMaxGender:
+         .. code-block :: js
+
+            {"hits": [["2017-11-14T03:00:00Z", 0.8214666400490959], ["2017-11-15T03:00:00Z", 0.7103766001908647]], "total": 2}
+
+
+      :daysOfWeek:
+         .. code-block :: js
+
+            {"hits": [["1", 1], ["2", 2], ["3", 41], ["4", 8], ["5", 0], ["6" , 32], ["7", 64]], "total": 7}
+
+
+.. json:object:: hitTopSuccess
+   :showexample:
+
+   :property tops: The ordered array of *n* elements containing probabilities of hits in the first *n* results
+   :proptype tops: _list_float
+   :property total: The number *n* of items.
+   :proptype total: integer
+
+
+.. json:object:: handler_create
+   :showexample:
+
+   :property person_policy: A person creation from the descriptor and person attaching to the lists rules.
+   :proptype person_policy: :json:object:`person_policy`
+   :property multiple_faces_policy: Handle multiple entities in the incoming event or not. Allowed values are `1` or `0`.
+   :proptype multiple_faces_policy: integer
+   :property type: The handler type. Allowed values are `extract` or `search`
+   :proptype type: user_name
+   :property grouping_policy: Combining events into groups, creating persons from the groups and attaching the created persons to Luna API lists.
+   :proptype grouping_policy: :json:object:`grouping_policy`
+   :property descriptor_policy: Attaching the extracted descriptor to Luna API descriptor lists rules.
+   :proptype descriptor_policy: :json:object:`descriptor_policy`
+   :property search_policy: rules for Search similar descriptors rules. Is required if the handler type is "search".
+   :proptype search_policy: :json:object:`search_policy`
+   :property extract_policy: The flags list to be included when extracting the descriptor.
+   :proptype extract_policy: :json:object:`extract_policy`
+   :property name: The handler name.
+   :proptype name: user_name
+
+
+.. json:object:: taskErrors
+   :showexample:
+
+   :property errors: An error list.
+   :proptype errors: :json:object:`_list_error_response`
+   :property total: The errors number.
+   :proptype total: integer
+
+
+.. json:object:: error_response
+   :showexample:
+
+   :property error_code: System error code.
+   :proptype error_code: integer
+   :property detail: Error description.
+   :proptype detail: user_name
+
+
+.. json:object:: list_filter
+   :showexample:
+
+   :property list_id: The Luna API list id.
+   :proptype list_id: uuid4
+   :property threshold: Similarity threshold for the list.
+   :proptype threshold: float
+
+
+.. json:object:: grouping_policy
+   :showexample:
+
+   :property age: Age aggregator for the group of events. Now the only kind of aggregator is available - mean value.
+   :proptype age: integer
+   :property grouper: The events grouping policy: * 1 - by the face track id from which the image was obtained; * 2 - by the similarity to last events from this handler and the given source; 3 - mixed grouping, by id of the track and similarity.
+   :proptype grouper: integer
+   :property create_person_policy: The creating a person from the group policy. The person is created when the group closes. It is impossible to create a person from the group, if a person is created from the descriptor.
+   :proptype create_person_policy: :json:object:`create_person_policy`
+   :property ttl: A group time to live. Group closes if no events added during this period. Period in seconds.
+   :proptype ttl: integer
+   :property threshold: The events grouping similarity threshold for the second and third grouping policy. The new event is assigned to the group if the new event is similar to any of the events from the group with similarity more than this number. If there are several proper groups, then event is attached to the one to which the most similar descriptor belongs.
+   :proptype threshold: float
+   :property gender: An events' group gender aggregator. Now two types of aggregators are available: * 1 - maximum deviation from 0.5; * 2 - average value.
+   :proptype gender: integer
+   :property search: The search results aggregator. Now there are two types of aggregators available: * 1 - top 3 results by similarity; * 2 - top 3 results by the majority voting.
+   :proptype search: integer
+
+
+.. json:object:: taskId
+   :showexample:
+
+   :property task_id: Task number in the system.
+   :proptype task_id: integer
+
+
+.. json:object:: core_match
+   :showexample:
+
+   :property similarity: Similarity with the reference descriptor. * 1 means that descriptors are extracted from the same images * numbers close to 1 mean the descriptors belong the same person * numbers close to 0 mean the descriptors belong different persons
+   :proptype similarity: float
+   :property id: Matched descriptor identifier.
+   :proptype id: uuid4
+
+
+.. json:object:: extract_handler
+   :showexample:
+
+   :property person_policy: Person creation from the descriptor and person attaching to the lists rules.
+   :proptype person_policy: :json:object:`person_policy`
+   :property type: The handler type. Allowed values are `extract` or `search`.
+   :proptype type: user_name
+   :property multiple_faces_policy: Handle or not multiple faces in the incoming event, only available if the handler type is extract. Allowed values are `1` or `0`.
+   :proptype multiple_faces_policy: integer
+   :property grouping_policy: Events combining into groups, creating persons from the groups and attaching created persons to Luna API lists rules.
+   :proptype grouping_policy: :json:object:`grouping_policy`
+   :property descriptor_policy: The extracted descriptor attach to Luna API descriptor lists rules.
+   :proptype descriptor_policy: :json:object:`descriptor_policy`
+   :property handler_id: The handler id.
+   :proptype handler_id: uuid4
+   :property extract_policy: Set of the extract flags to be included when extracting the descriptor.
+   :proptype extract_policy: :json:object:`extract_policy`
+   :property name: The handler name.
+   :proptype name: user_name
+
+
+.. json:object:: markup_for_list
+   :showexample:
+
+   :property progress: The task completion percentage.
+   :proptype progress: float
+   :property description: The task user comment.
+   :proptype description: user_name
+   :property last_update: The last update time, the task finish time also if the task is finished.
+   :proptype last_update: iso8601
+   :property create_time: The task create time.
+   :proptype create_time: iso8601
+   :property task_id: The source report task id.
+   :proptype task_id: integer
+   :property id: The markup id.
+   :proptype id: integer
+
+
+.. json:object:: markup_params
+   :showexample:
+
+   :property filters: A set of filters that defines the set marking period
+   :proptype filters: :json:object:`markup_filters`
+   :property description: user comment on the task
+   :proptype description: user_name
+   :property limit: The maximum of reference objects number for matchings.
+   :proptype limit: float
+
+
+.. json:object:: success
+   :showexample:
+
+   :property total_clusters: The clusters number.
+   :proptype total_clusters: integer
+   :property total_objects: The objects for clustering number.
+   :proptype total_objects: integer
+
+
+.. json:object:: candidates
+   :showexample:
+
+   :property list_id: The Luna API list to search by.
+   :proptype list_id: uuid4
+
+
+.. json:object:: parameters
+   :showexample:
+
+   :property save_portraits: To save or not the photos for report objects if the format is `csv`. Allowed values are `1` or `0`.
+   :proptype save_portraits: integer
+   :property colors_bounds: If the type of the task on which to build the report is cross_matching and the format `pdf` is selected, set here the lower boundaries of similarity for each of the colors.
+   :proptype colors_bounds: :json:object:`colors_bounds`
+
+
+.. json:object:: colors_bounds
+   :showexample:
+
+   :property green: Images with similarity more than this parameter will be marked in green.
+   :proptype green: float
+   :property red: images with similarity more than this parameter will be marked in red.
+   :proptype red: float
+   :property orange: Images with similarity more than this parameter will be marked in orange.
+   :proptype orange: float

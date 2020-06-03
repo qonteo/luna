@@ -1,0 +1,13 @@
+
+[Unit]
+Description=Luna Indexer (Slave)
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/lib/luna/current/
+ExecStart=/var/lib/luna/current/bin/luna-indexer --log-to-stderr --config-path /var/lib/luna/current/conf/indexer.conf --num-threads 8 --log-verbosity 0
+
+[Install]
+WantedBy=multi-user.target

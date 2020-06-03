@@ -1,0 +1,782 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Database structure &#8212; Facestreammanager2 2.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Other database objects structures" href="es_types.html" />
+    <link rel="prev" title="v.2.0.0" href="v_2_0_0.html" /> 
+  </head>
+  <body role="document">
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Facestreammanager2 2.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Database structure</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="v_2_0_0.html">v.2.0.0</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="es_types.html">Other database objects structures</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="database-structure">
+<h1>Database structure<a class="headerlink" href="#database-structure" title="Permalink to this headline">¶</a></h1>
+<p>Elasticsearch is a search engine based on Lucene.
+It provides a distributed, multitenant-capable full-text search engine with an HTTP web interface and schema-free JSON documents.</p>
+<p>The entire database is divided into indexes, each of which has one mapping.</p>
+<p>Six indices with one mapping &#8220;/doc&#8221; in each are used in the current version of the project.
+Indexes are listed below:</p>
+<div class="section" id="handlers">
+<h2>/handlers<a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h2>
+<p>/handlers structure is used to store &#8216;handlers&#8217; objects - event processing policies, read RAML for more information.</p>
+<p>You can see index structure and example here <a class="reference internal" href="#handlers-label"><span class="std std-ref">/handlers objects&#8217; structure</span></a>.</p>
+</div>
+<div class="section" id="events">
+<h2>/events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">/events</span></kbd></td>
+<td>structure is used to store &#8216;events&#8217; objects - &lt;description&gt;.</td></tr>
+</tbody>
+</table>
+<p>You can see structure and example here <a class="reference internal" href="#events-label"><span class="std std-ref">/events objects&#8217; structure</span></a>.</p>
+</div>
+<div class="section" id="groups">
+<h2>/groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h2>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">/groups</span></kbd></td>
+<td>structure is used to store &#8216;groups&#8217; objects - &lt;description&gt;.</td></tr>
+</tbody>
+</table>
+<p>You can see structure and example here <a class="reference internal" href="#groups-label"><span class="std std-ref">/groups objects&#8217; structure</span></a>.</p>
+</div>
+<div class="section" id="tasks-counter">
+<h2>/tasks_counter<a class="headerlink" href="#tasks-counter" title="Permalink to this headline">¶</a></h2>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">/tasks_counter</span></kbd></td>
+<td>structure is used to store the only &#8216;tasks_counter&#8217; object (&#8220;/tasks_counter/doc/0&#8221;) - incremental counter of the last created task id.</td></tr>
+</tbody>
+</table>
+<p>You can see structure and example here <a class="reference internal" href="#tasks-counter-label"><span class="std std-ref">/tasks_counter object structure</span></a>.</p>
+</div>
+<div class="section" id="tasks">
+<h2>/tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h2>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">/tasks</span></kbd></td>
+<td>structure is used to store &#8216;tasks&#8217; objects - abstract long-time instructions, that Facestreammanager2 receive and perform.</td></tr>
+</tbody>
+</table>
+<p>You can see structure and example here <a class="reference internal" href="#tasks-label"><span class="std std-ref">/tasks objects&#8217; structure</span></a>.</p>
+</div>
+<div class="section" id="tasks-done">
+<h2>/tasks_done<a class="headerlink" href="#tasks-done" title="Permalink to this headline">¶</a></h2>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">/tasks_done</span></kbd></td>
+<td>structure is used to store &#8216;tasks_done&#8217; objects - ended tasks (succeed, failed or canceled) with corresponding result.</td></tr>
+</tbody>
+</table>
+<p>You can see structure and example here <a class="reference internal" href="#tasks-done-label"><span class="std std-ref">/tasks_done objects&#8217; structure</span></a>.</p>
+</div>
+</div>
+<div class="section" id="database-objects-structure">
+<h1>Database objects&#8217; structure<a class="headerlink" href="#database-objects-structure" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="handlers-objects-structure">
+<span id="handlers-label"></span><h2>/handlers objects&#8217; structure<a class="headerlink" href="#handlers-objects-structure" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="handler">
+<!--[handler]--><code class="descname">handler</code><a class="headerlink" href="#handler" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>multi_face_policy</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Process or not several faces in an input event. Available only for extract-type handlers. Allowed values are <cite>1</cite> or <cite>0</cite>.</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The handler type. Allowed values are <cite>extract</cite> or <cite>search</cite>.</li>
+<li><strong>grouping_policy</strong> (<a class="reference internal" href="es_types.html#grouping_policy"><code class="xref json json-object docutils literal"><span class="pre">grouping_policy</span></code></a>) &#8211; The events grouping, persons creation from the groups and attach created persons to Luna API lists rules.</li>
+<li><strong>descriptor_policy</strong> (<a class="reference internal" href="es_types.html#descriptor_policy"><code class="xref json json-object docutils literal"><span class="pre">descriptor_policy</span></code></a>) &#8211; The attach extracted descriptor to Luna API lists rules.</li>
+<li><strong>search_policy</strong> (<a class="reference internal" href="es_types.html#search_policy"><code class="xref json json-object docutils literal"><span class="pre">search_policy</span></code></a>) &#8211; The similar descriptors search rules. Required for search-type handlers.</li>
+<li><strong>handler_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The handler id.</li>
+<li><strong>extract_policy</strong> (<a class="reference internal" href="es_types.html#extract_policy"><code class="xref json json-object docutils literal"><span class="pre">extract_policy</span></code></a>) &#8211; The descriptor extract rules.</li>
+<li><strong>person_policy</strong> (<a class="reference internal" href="es_types.html#person_policy"><code class="xref json json-object docutils literal"><span class="pre">person_policy</span></code></a>) &#8211; The person creation from extracted descriptor and attach the descriptor to Luna API lists rules.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The handler name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;multi_face_policy&quot;</span><span class="p">:</span> <span class="mi">2700</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;tmendez&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;grouping_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;{grouping_policy object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;descriptor_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;{descriptor_policy object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;search_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;{search_policy object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;handler_id&quot;</span><span class="p">:</span> <span class="s2">&quot;cce506e0-934c-43ba-bc14-46b306b18d24&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;extract_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;{extract_policy object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;person_policy&quot;</span><span class="p">:</span> <span class="s2">&quot;{person_policy object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;williamsanna&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="events-objects-structure">
+<span id="events-label"></span><h2>/events objects&#8217; structure<a class="headerlink" href="#events-objects-structure" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="event">
+<!--[event]--><code class="descname">event</code><a class="headerlink" href="#event" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The event id. The event id equals the extracted descriptor id if event was created successfully, otherwise the event id is generated randomly.</li>
+<li><strong>handler_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The handler id that received the event.</li>
+<li><strong>persons_lists</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>_list_uuid4</em></a>) &#8211; A Luna API persons lists list a person generated from the descriptor was attached.</li>
+<li><strong>error</strong> (<a class="reference internal" href="es_types.html#error_response"><code class="xref json json-object docutils literal"><span class="pre">error_response</span></code></a>) &#8211; An error if occurred.</li>
+<li><strong>search_by_group</strong> (<a class="reference internal" href="es_types.html#group_search_result"><code class="xref json json-object docutils literal"><span class="pre">group_search_result</span></code></a>) &#8211; The result of search extracted descriptor by recent events in group.</li>
+<li><strong>group_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; A event group id it belongs.</li>
+<li><strong>external_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; A event external id from request.</li>
+<li><strong>search</strong> (<a class="reference internal" href="es_types.html#search_result"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">search_result</span></code></a>) &#8211; A search result according to the handler search policy.</li>
+<li><strong>source</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; A event source from request.</li>
+<li><strong>extract</strong> (<a class="reference internal" href="es_types.html#face"><code class="xref json json-object docutils literal"><span class="pre">face</span></code></a>) &#8211; The descriptor extract result.</li>
+<li><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>_list_string</em></a>) &#8211; Event tags list from request.</li>
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; A person id the extracted descriptor was attached to.</li>
+<li><strong>descriptors_lists</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>_list_uuid4</em></a>) &#8211; A Luna API descriptor lists list the extracted descriptor was attached.</li>
+<li><strong>descriptor_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The extracted descriptor id.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The event create time.</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; A user_data the person generated from the descriptor.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;8478a808-15ed-4b85-9c42-7f561823c5f8&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;handler_id&quot;</span><span class="p">:</span> <span class="s2">&quot;6cd2fd7a-fa38-42cb-8fd8-5d17093035ac&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;persons_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;{error_response object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;search_by_group&quot;</span><span class="p">:</span> <span class="s2">&quot;{group_search_result object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;group_id&quot;</span><span class="p">:</span> <span class="s2">&quot;7510647c-b9c1-4686-84bd-d8f4a9806c33&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;external_id&quot;</span><span class="p">:</span> <span class="s2">&quot;ethansmith&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;search&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_resul&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_resul object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_resul&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_resul object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_resul&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_resul object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;hshaffer&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;extract&quot;</span><span class="p">:</span> <span class="s2">&quot;{face object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;7d625f04-a2b7-4c76-b248-0dcb7b8c65dc&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;descriptors_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;cdeb01fc-3dcf-4eb9-8bac-29a59cd677bc&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-06-23T01:35:56&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;andrewschmidt&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="groups-objects-structure">
+<span id="groups-label"></span><h2>/groups objects&#8217; structure<a class="headerlink" href="#groups-objects-structure" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="group">
+<!--[group]--><code class="descname">group</code><a class="headerlink" href="#group" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>descriptors</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>_list_uuid4</em></a>) &#8211; The list of events (=descriptors) in the group.</li>
+<li><strong>error</strong> (<a class="reference internal" href="es_types.html#error_response"><code class="xref json json-object docutils literal"><span class="pre">error_response</span></code></a>) &#8211; A error if occurred.</li>
+<li><strong>source</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The events&#8217; source in group.</li>
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The group id.</li>
+<li><strong>attributes</strong> (<a class="reference internal" href="es_types.html#group_attributes"><code class="xref json json-object docutils literal"><span class="pre">group_attributes</span></code></a>) &#8211; The aggregated events&#8217; attributes.</li>
+<li><strong>external_tracks_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>_list_string</em></a>) &#8211; The events&#8217; external track id list.</li>
+<li><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>_list_string</em></a>) &#8211; The events&#8217; tags list.</li>
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The group person id if created when group is closed.</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The group last update time. It equals group close time if group is closed.</li>
+<li><strong>handler_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The group handler id.</li>
+<li><strong>ttl</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; A group time to live common for all groups in the handler. Group closes if no events added during this period. Period in seconds.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The group create time.</li>
+<li><strong>search</strong> (<a class="reference internal" href="es_types.html#search_result_for_group"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">search_result_for_group</span></code></a>) &#8211; The result of search extracted descriptor by recent events in group. The search rules are set in handler.</li>
+<li><strong>persons_lists</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>_list_uuid4</em></a>) &#8211; A Luna API persons lists list a person generated from the group was attached.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;descriptors&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;{error_response object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;zcastro&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;597970b5-4c0e-4ff9-b5f8-72876167f6e1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="s2">&quot;{group_attributes object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;external_tracks_id&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;12e144c4-d22c-45f7-b886-3a7f12608e4b&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;2002-01-19T05:34:09&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;handler_id&quot;</span><span class="p">:</span> <span class="s2">&quot;e2797a93-a1a6-4bbe-ab16-a9a3d7ff5c20&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;ttl&quot;</span><span class="p">:</span> <span class="mi">3197</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2016-11-18T06:24:30&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;search&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_result_for_grou&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_result_for_grou object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_result_for_grou&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_result_for_grou object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_result_for_grou&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_result_for_grou object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;persons_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="tasks-counter-object-structure">
+<span id="tasks-counter-label"></span><h2>/tasks_counter object structure<a class="headerlink" href="#tasks-counter-object-structure" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="tasks_counter">
+<!--[tasks_counter]--><code class="descname">tasks_counter</code><a class="headerlink" href="#tasks_counter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The current number (=id) of the last created task.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;count&quot;</span><span class="p">:</span> <span class="mi">5237</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="tasks-objects-structure">
+<span id="tasks-label"></span><h2>/tasks objects&#8217; structure<a class="headerlink" href="#tasks-objects-structure" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="task">
+<!--[task]--><code class="descname">task</code><a class="headerlink" href="#task" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>progress</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The task completion percentage.</li>
+<li><strong>Location</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3986" title="URI as described in RFC3986"><em>uri</em></a>) &#8211; The done task location.</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The task id.</li>
+<li><strong>result</strong> (<a class="reference external" href="https://docs.python.org/library/constants.html#None" title="Python None"><em>null</em></a>) &#8211; An empty object while task is not done.</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The last update time, the task finish time also if the task is finished.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The task create time.</li>
+<li><strong>task</strong> (<a class="reference internal" href="#clusterization_param"><code class="xref json json-object docutils literal"><span class="pre">clusterization_param</span></code></a> | <a class="reference internal" href="#hit_top_n_params"><code class="xref json json-object docutils literal"><span class="pre">hit_top_n_params</span></code></a> | <a class="reference internal" href="#cross_matching_params"><code class="xref json json-object docutils literal"><span class="pre">cross_matching_params</span></code></a> | <a class="reference internal" href="#linker_params"><code class="xref json json-object docutils literal"><span class="pre">linker_params</span></code></a> | <a class="reference internal" href="#report_params"><code class="xref json json-object docutils literal"><span class="pre">report_params</span></code></a>) &#8211; The received task, see <a class="reference internal" href="#task-properties-label"><span class="std std-ref">&#8216;task_properties&#8217; structures</span></a>.</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task type.</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task status. Allowed values are <cite>started</cite>, <cite>progress</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">34096008277191.6</span><span class="p">,</span>
+    <span class="nt">&quot;Location&quot;</span><span class="p">:</span> <span class="s2">&quot;http://salas-miles.com/explore/blog/category.jsp&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">6415</span><span class="p">,</span>
+    <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;1992-01-07T16:42:44&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2000-05-19T04:22:39&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;task&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;filters&quot;</span><span class="p">:</span> <span class="s2">&quot;{task_filters object}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;carrie91&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;objects&quot;</span><span class="p">:</span> <span class="s2">&quot;andersontrevor&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;fshelton&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;andersonemily&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="tasks-done-objects-structure">
+<span id="tasks-done-label"></span><h2>/tasks_done objects&#8217; structure<a class="headerlink" href="#tasks-done-objects-structure" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="ended_task">
+<!--[ended_task]--><code class="descname">ended_task</code><a class="headerlink" href="#ended_task" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>result</strong> (<a class="reference internal" href="#clusterizationresult"><code class="xref json json-object docutils literal"><span class="pre">clusterizationResult</span></code></a> | <a class="reference internal" href="#hittopresult"><code class="xref json json-object docutils literal"><span class="pre">hitTopResult</span></code></a> | <a class="reference internal" href="#crossmatchingresult"><code class="xref json json-object docutils literal"><span class="pre">crossMatchingResult</span></code></a> | <a class="reference internal" href="#linkingresult"><code class="xref json json-object docutils literal"><span class="pre">linkingResult</span></code></a> | <a class="reference internal" href="#reportresult"><code class="xref json json-object docutils literal"><span class="pre">reportResult</span></code></a>) &#8211; The task completion result.</li>
+<li><strong>progress</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The task completion percentage.</li>
+<li><strong>task</strong> (<a class="reference internal" href="#clusterization_param"><code class="xref json json-object docutils literal"><span class="pre">clusterization_param</span></code></a> | <a class="reference internal" href="#hit_top_n_params"><code class="xref json json-object docutils literal"><span class="pre">hit_top_n_params</span></code></a> | <a class="reference internal" href="#cross_matching_params"><code class="xref json json-object docutils literal"><span class="pre">cross_matching_params</span></code></a> | <a class="reference internal" href="#linker_params"><code class="xref json json-object docutils literal"><span class="pre">linker_params</span></code></a> | <a class="reference internal" href="#report_params"><code class="xref json json-object docutils literal"><span class="pre">report_params</span></code></a>) &#8211; The received task, see <a class="reference internal" href="#task-properties-label"><span class="std std-ref">&#8216;task_properties&#8217; structures</span></a></li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task type. Allowed values are: <cite>clusterization</cite>, <cite>hit_top_n</cite>, <cite>reports</cite>, <cite>cross_matching</cite>, <cite>linking</cite>.</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The task id.</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The last update time, the task finish time also if the task is finished.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The task create time.</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task status. Allowed values are <cite>cancelled</cite>, <cite>failed</cite> or <cite>done</cite></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;success&quot;</span><span class="p">:</span> <span class="s2">&quot;{success object}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;errors&quot;</span><span class="p">:</span> <span class="s2">&quot;{taskerrors object}&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">32485610865.7</span><span class="p">,</span>
+    <span class="nt">&quot;task&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;filters&quot;</span><span class="p">:</span> <span class="s2">&quot;{task_filters object}&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;noblejennifer&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;objects&quot;</span><span class="p">:</span> <span class="s2">&quot;michaelbowman&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;sarah96&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">8674</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;1995-01-26T02:38:14&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2018-07-27T15:07:45&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;choward&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="task-properties-structures">
+<span id="task-properties-label"></span><h2>&#8216;task_properties&#8217; structures<a class="headerlink" href="#task-properties-structures" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="clusterization_param">
+<!--[clusterization_param]--><code class="descname">clusterization_param</code><a class="headerlink" href="#clusterization_param" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>filters</strong> (<a class="reference internal" href="es_types.html#task_filters"><code class="xref json json-object docutils literal"><span class="pre">task_filters</span></code></a>) &#8211; Set of filters to define objects for clusterization.</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The user description in the task.</li>
+<li><strong>objects</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The objects type to clusterize. One of <cite>events</cite>, <cite>groups</cite> or <cite>luna_list</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;filters&quot;</span><span class="p">:</span> <span class="s2">&quot;{task_filters object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;barnesjoseph&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;objects&quot;</span><span class="p">:</span> <span class="s2">&quot;hernandezdiane&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="hit_top_n_params">
+<!--[hit_top_n_params]--><code class="descname">hit_top_n_params</code><a class="headerlink" href="#hit_top_n_params" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The Luna API persons list id.</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The user description in the task.</li>
+<li><strong>top_n</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The <em>n</em> number of positions in the result. Allowed values are <cite>1</cite> to <cite>5</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b5b86d8c-9ec1-4f09-989c-e040b94700b7&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;vwilson&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;top_n&quot;</span><span class="p">:</span> <span class="mi">6002</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="cross_matching_params">
+<!--[cross_matching_params]--><code class="descname">cross_matching_params</code><a class="headerlink" href="#cross_matching_params" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>references</strong> (<a class="reference internal" href="es_types.html#cross_matching_reference"><code class="xref json json-object docutils literal"><span class="pre">cross_matching_reference</span></code></a>) &#8211; The match references objects.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The matching results lower similarity threshold.</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The user description in the task.</li>
+<li><strong>candidates</strong> (<a class="reference internal" href="es_types.html#cross_matching_candidate"><code class="xref json json-object docutils literal"><span class="pre">cross_matching_candidate</span></code></a>) &#8211; The match candidates objects.</li>
+<li><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The match limit.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;references&quot;</span><span class="p">:</span> <span class="s2">&quot;{cross_matching_reference object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">3856654402354.1</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;daniel07&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="s2">&quot;{cross_matching_candidate object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="mf">592599128.0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="linker_params">
+<!--[linker_params]--><code class="descname">linker_params</code><a class="headerlink" href="#linker_params" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>filters</strong> (<a class="reference internal" href="es_types.html#task_filters"><code class="xref json json-object docutils literal"><span class="pre">task_filters</span></code></a>) &#8211; The filters for selecting events and groups for attaching to the Luna API list.</li>
+<li><strong>list_type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The type of the list to which objects will be attached. For groups, only the type &#8216;persons&#8217; should be set.</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The user description in the task.</li>
+<li><strong>object</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The objects type to attach. One of <cite>events</cite>, <cite>groups</cite> or <cite>luna_list</cite>.</li>
+<li><strong>list_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The <em>list_data</em> field for the list that will be created if no <em>list_id</em> provided.</li>
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The Luna API list id to attach objects to. If the parameter is not set, the list will be created automatically.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;filters&quot;</span><span class="p">:</span> <span class="s2">&quot;{task_filters object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;list_type&quot;</span><span class="p">:</span> <span class="s2">&quot;vclark&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;lisavelazquez&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;johndoyle&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;list_data&quot;</span><span class="p">:</span> <span class="s2">&quot;edwardjones&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;484b40dd-000b-425d-83a4-9e023a853777&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="report_params">
+<!--[report_params]--><code class="descname">report_params</code><a class="headerlink" href="#report_params" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The user description in the task.</li>
+<li><strong>task_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The task id.</li>
+<li><strong>format</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The report format. One of <cite>csv</cite> or <cite>pdf</cite>.</li>
+<li><strong>parameters</strong> (<a class="reference internal" href="es_types.html#parameters"><code class="xref json json-object docutils literal"><span class="pre">parameters</span></code></a>) &#8211; The reporter parameters: the images&#8217; color bounds in pdf-report and save-portraits flag in csv-report.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;marissaduncan&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;task_id&quot;</span><span class="p">:</span> <span class="mi">584</span><span class="p">,</span>
+    <span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;kevin76&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;parameters&quot;</span><span class="p">:</span> <span class="s2">&quot;{parameters object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="task-result-structures">
+<span id="task-result-label"></span><h2>&#8216;task_result&#8217; structures<a class="headerlink" href="#task-result-structures" title="Permalink to this headline">¶</a></h2>
+<dl class="object">
+<dt id="clusterizationresult">
+<!--[clusterizationresult]--><code class="descname">clusterizationResult</code><a class="headerlink" href="#clusterizationresult" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>success</strong> (<a class="reference internal" href="es_types.html#success"><code class="xref json json-object docutils literal"><span class="pre">success</span></code></a>) &#8211; The result clusters.</li>
+<li><strong>errors</strong> (<a class="reference internal" href="es_types.html#taskerrors"><code class="xref json json-object docutils literal"><span class="pre">taskErrors</span></code></a>) &#8211; Errors if occurred.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;success&quot;</span><span class="p">:</span> <span class="s2">&quot;{success object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;errors&quot;</span><span class="p">:</span> <span class="s2">&quot;{taskerrors object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="hittopresult">
+<!--[hittopresult]--><code class="descname">hitTopResult</code><a class="headerlink" href="#hittopresult" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>success</strong> (<a class="reference internal" href="es_types.html#hittopsuccess"><code class="xref json json-object docutils literal"><span class="pre">hitTopSuccess</span></code></a>) &#8211; The result hit top n result.</li>
+<li><strong>errors</strong> (<a class="reference internal" href="es_types.html#taskerrors"><code class="xref json json-object docutils literal"><span class="pre">taskErrors</span></code></a>) &#8211; Errors if occurred.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;success&quot;</span><span class="p">:</span> <span class="s2">&quot;{hittopsuccess object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;errors&quot;</span><span class="p">:</span> <span class="s2">&quot;{taskerrors object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="crossmatchingresult">
+<!--[crossmatchingresult]--><code class="descname">crossMatchingResult</code><a class="headerlink" href="#crossmatchingresult" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>matches</strong> (<a class="reference internal" href="es_types.html#crossmatchreference"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">crossmatchreference</span></code></a>) &#8211; The result matches list.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;matches&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rossmatchreferenc&quot;</span><span class="p">:</span> <span class="s2">&quot;{rossmatchreferenc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rossmatchreferenc&quot;</span><span class="p">:</span> <span class="s2">&quot;{rossmatchreferenc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rossmatchreferenc&quot;</span><span class="p">:</span> <span class="s2">&quot;{rossmatchreferenc object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="linkingresult">
+<!--[linkingresult]--><code class="descname">linkingResult</code><a class="headerlink" href="#linkingresult" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>success</strong> (<a class="reference internal" href="es_types.html#abstractsuccess"><code class="xref json json-object docutils literal"><span class="pre">abstractSuccess</span></code></a>) &#8211; Success and failed numbers of objects.</li>
+<li><strong>errors</strong> (<a class="reference internal" href="es_types.html#taskerrors"><code class="xref json json-object docutils literal"><span class="pre">taskErrors</span></code></a>) &#8211; Errors if occurred.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;success&quot;</span><span class="p">:</span> <span class="s2">&quot;{abstractsuccess object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;errors&quot;</span><span class="p">:</span> <span class="s2">&quot;{taskerrors object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="reportresult">
+<!--[reportresult]--><code class="descname">reportResult</code><a class="headerlink" href="#reportresult" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>success</strong> (<a class="reference internal" href="es_types.html#reportsuccess"><code class="xref json json-object docutils literal"><span class="pre">reportSuccess</span></code></a>) &#8211; Location of completed report.</li>
+<li><strong>errors</strong> (<a class="reference internal" href="es_types.html#taskerrors"><code class="xref json json-object docutils literal"><span class="pre">taskErrors</span></code></a>) &#8211; Errors if occurred.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;success&quot;</span><span class="p">:</span> <span class="s2">&quot;{reportsuccess object}&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;errors&quot;</span><span class="p">:</span> <span class="s2">&quot;{taskerrors object}&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="v_2_0_0.html">v.2.0.0</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="es_types.html">Other database objects structures</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Visionlabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+    </div>
+  </body>
+</html>

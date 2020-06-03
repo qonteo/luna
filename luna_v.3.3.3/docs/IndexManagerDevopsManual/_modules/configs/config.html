@@ -1,0 +1,153 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>configs.config &#8212; luna-index-manager v.0.0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>luna-index-manager v.0.0.3 documentation</span></a></h1>
+        <h2 class="heading"><span>configs.config</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for configs.config</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module for parsing config file</span>
+
+<span class="sd">Module parse config file and set values in global variables.</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    LOG_LEVEL (str): level of debug printing, by priority: ERROR, WARNING, INFO, DEBUG.</span>
+<span class="sd">    FOLDER_WITH_LOGS (str): folder, where logs are saved. Relative path begin in directory with application.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tornado.options</span>
+<span class="kn">from</span> <span class="nn">tornado.options</span> <span class="k">import</span> <span class="n">define</span><span class="p">,</span> <span class="n">options</span>
+<span class="kn">from</span> <span class="nn">configs.comand_line_args_parser</span> <span class="k">import</span> <span class="n">getOptionsParser</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="setPythonPathToAPP"><a class="viewcode-back" href="../../config.html#configs.config.setPythonPathToAPP">[docs]</a><span class="k">def</span> <span class="nf">setPythonPathToAPP</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set python path to root of app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/../&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pardir</span><span class="p">)))</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/../&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="replacePythonPathIfNeed"><a class="viewcode-back" href="../../config.html#configs.config.replacePythonPathIfNeed">[docs]</a><span class="k">def</span> <span class="nf">replacePythonPathIfNeed</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determinate need set python path to root or not</span>
+
+<span class="sd">    If run sphinx, db_create, db_migrate set python path to root app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;sphinx&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;db_create&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;db_migrate&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">setPythonPathToAPP</span><span class="p">()</span></div>
+
+
+<span class="n">replacePythonPathIfNeed</span><span class="p">()</span>
+
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;LOG_LEVEL&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;log level&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;LOG_TIME&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;UTC&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;time in logs: &quot;LOCAL&quot; or &quot;UTC&quot;&#39;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;FOLDER_WITH_LOGS&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Folder with logs&quot;</span><span class="p">)</span>
+
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;DB&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;type of database: postgres, oracle, default postgres&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;DB_USER_NAME&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;luna&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;login to database&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;DB_PASSWORD&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;luna&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;password to database&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;DB_NAME&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;luna_index_manager&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;name of database for postgres, sid name for oracle&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;DB_HOST&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ip-address of database&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;DB_PORT&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">5432</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;database listener port, 5432 - default port of postgres, 1521 - default port of &quot;</span>
+                                     <span class="s2">&quot;oracle&quot;</span><span class="p">)</span>
+
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;LUNA_FACES_ORIGIN&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:5030&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;protocol to LUNA Faces&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;LUNA_FACES_API_VERSION&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;api of LUNA Faces&quot;</span><span class="p">)</span>
+
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;LUNA_CORE_ORIGIN&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8083&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;protocol to LUNA Core&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;LUNA_CORE_API_VERSION&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;api of LUNA Core&quot;</span><span class="p">)</span>
+
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;LUNA_MATCHER_DAEMONS&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;http://127.0.0.1:6000/1&quot;</span><span class="p">],</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;list of luna-matcher-daemon endpoints&quot;</span><span class="p">)</span>
+
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;MIN_FACES_IN_LIST_FOR_INDEXING&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;min face count in list for indexing&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;INDEXED_FACES_LISTS&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[],</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;lists for indexation, for value [&#39;all&#39;] will be indexed all lists with &quot;</span>
+                                               <span class="s2">&quot;attributes count &gt; MIN_FACES_IN_LIST_FOR_INDEXING&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;REQUEST_TIMEOUT&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;timeout for http-request to external services (LUNA-Faces, LUNA-Core, daemon-matchers)&quot;</span><span class="p">)</span>
+<span class="n">define</span><span class="p">(</span><span class="s2">&quot;CONNECT_TIMEOUT&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;timeout for connect to external services (LUNA-Faces, LUNA-Core, daemon-matchers)&quot;</span><span class="p">)</span>
+
+<span class="n">cmdOptions</span> <span class="o">=</span> <span class="n">getOptionsParser</span><span class="p">()</span>
+
+<span class="n">tornado</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">parse_config_file</span><span class="p">(</span><span class="n">cmdOptions</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">])</span>
+
+<span class="n">DB</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">DB</span>  <span class="c1">#: type of database: postgres, oracle, default postgres</span>
+<span class="n">DB_USER_NAME</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">DB_USER_NAME</span>  <span class="c1">#: login to database</span>
+<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">DB_PASSWORD</span>  <span class="c1">#: password to database</span>
+<span class="n">DB_NAME</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">DB_NAME</span>  <span class="c1">#: name of database for postgres, sid name for oracle</span>
+<span class="n">DB_HOST</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">DB_HOST</span>  <span class="c1">#: ip-address of database</span>
+<span class="n">DB_PORT</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">DB_PORT</span>  <span class="c1">#: database listener port, 5432 - default port of postgres,</span>
+<span class="c1"># 1521 - default port of oracle</span>
+
+
+<span class="n">LUNA_FACES_ORIGIN</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">LUNA_FACES_ORIGIN</span>   <span class="c1">#: LUNA Faces origin</span>
+<span class="n">LUNA_FACES_API_VERSION</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">LUNA_FACES_API_VERSION</span>  <span class="c1">#: LUNA Faces Store api version</span>
+
+<span class="n">LUNA_CORE_ORIGIN</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">LUNA_CORE_ORIGIN</span>   <span class="c1">#: protocol to LUNA Core</span>
+<span class="n">LUNA_CORE_API_VERSION</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">LUNA_CORE_API_VERSION</span>  <span class="c1">#: api of LUNA Faces Core</span>
+
+<span class="n">LUNA_MATCHER_DAEMONS</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">LUNA_MATCHER_DAEMONS</span>     <span class="c1">#: list of luna-matcher-daemon endpoint</span>
+
+
+<span class="n">MIN_FACES_IN_LIST_FOR_INDEXING</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">MIN_FACES_IN_LIST_FOR_INDEXING</span>  <span class="c1">#: min face count in list for indexing</span>
+<span class="n">INDEXED_FACES_LISTS</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">INDEXED_FACES_LISTS</span>  <span class="c1">#: lists for indexation</span>
+
+<span class="k">if</span> <span class="n">DB</span> <span class="o">==</span> <span class="s2">&quot;postgres&quot;</span><span class="p">:</span>
+    <span class="n">SQLALCHEMY_DATABASE_URI</span> <span class="o">=</span> <span class="s1">&#39;postgresql://</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">@</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DB_USER_NAME</span><span class="p">,</span> <span class="n">DB_PASSWORD</span><span class="p">,</span> <span class="n">DB_HOST</span><span class="p">,</span> <span class="n">DB_PORT</span><span class="p">,</span>
+                                                                   <span class="n">DB_NAME</span><span class="p">)</span>  <span class="c1">#: postgresql address</span>
+<span class="k">elif</span> <span class="n">DB</span> <span class="o">==</span> <span class="s2">&quot;oracle&quot;</span><span class="p">:</span>
+    <span class="n">SQLALCHEMY_DATABASE_URI</span> <span class="o">=</span> <span class="s1">&#39;oracle+cx_oracle://</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">@</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DB_USER_NAME</span><span class="p">,</span> <span class="n">DB_PASSWORD</span><span class="p">,</span> <span class="n">DB_HOST</span><span class="p">,</span> <span class="n">DB_PORT</span><span class="p">,</span>
+                                                                         <span class="n">DB_NAME</span><span class="p">)</span>  <span class="c1">#: oracle address</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Bad DB name: </span><span class="si">{}</span><span class="s2">, supports: postgres or oracle&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DB</span><span class="p">))</span>
+
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">LOG_LEVEL</span>
+<span class="n">LOG_TIME</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">LOG_TIME</span>  <span class="c1"># time in logs: &quot;LOCAL&quot; or &quot;UTC&quot;</span>
+<span class="n">FOLDER_WITH_LOGS</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">FOLDER_WITH_LOGS</span>
+<span class="n">CRAWLER_PERIOD</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#: crawler period, minutes</span>
+<span class="n">APP_NAME</span> <span class="o">=</span> <span class="s1">&#39;luna-index-mngr&#39;</span>  <span class="c1">#: application name</span>
+<span class="n">REQUEST_TIMEOUT</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">REQUEST_TIMEOUT</span>  <span class="c1">#: timeout for http-request to external services (LUNA-Faces, LUNA-Core, daemon-matchers)</span>
+<span class="n">CONNECT_TIMEOUT</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">CONNECT_TIMEOUT</span>  <span class="c1">#: timeout for connect to external services (LUNA-Faces, LUNA-Core, daemon-matchers)</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

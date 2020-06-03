@@ -1,0 +1,198 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>luna_api.app.rest_handlers.registration_handler &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>luna_api.app.rest_handlers.registration_handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for luna_api.app.rest_handlers.registration_handler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">ujson</span> <span class="k">as</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">email.utils</span> <span class="k">import</span> <span class="n">parseaddr</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">tornado</span>
+<span class="kn">from</span> <span class="nn">tornado</span> <span class="k">import</span> <span class="n">web</span>
+
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.errors</span> <span class="k">import</span> <span class="n">Error</span>
+<span class="kn">from</span> <span class="nn">crutches_on_wheels.errors.exception</span> <span class="k">import</span> <span class="n">VLException</span>
+<span class="kn">from</span> <span class="nn">app.rest_handlers.base_handler_class</span> <span class="k">import</span> <span class="n">BaseRequestHandler</span>
+
+
+<div class="viewcode-block" id="parseJsonArg"><a class="viewcode-back" href="../../../../registration.html#luna_api.app.rest_handlers.registration_handler.parseJsonArg">[docs]</a><span class="k">def</span> <span class="nf">parseJsonArg</span><span class="p">(</span><span class="n">inputJson</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get arguments from JSON.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inputJson: input json(dict)</span>
+<span class="sd">        field: required field.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        getting value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">field</span> <span class="ow">in</span> <span class="n">inputJson</span><span class="p">):</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">FieldNotInJSON</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="n">inputJson</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">Error</span><span class="o">.</span><span class="n">formatError</span><span class="p">(</span><span class="n">Error</span><span class="o">.</span><span class="n">EmptyField</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">VLException</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">arg</span></div>
+
+
+<div class="viewcode-block" id="validateEmail"><a class="viewcode-back" href="../../../../registration.html#luna_api.app.rest_handlers.registration_handler.validateEmail">[docs]</a><span class="k">def</span> <span class="nf">validateEmail</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    E-mail validation function</span>
+<span class="sd">    </span>
+<span class="sd">    :param email: str with email</span>
+<span class="sd">    :return: True, if validation is successful, else False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$&#39;</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="validatePassword"><a class="viewcode-back" href="../../../../registration.html#luna_api.app.rest_handlers.registration_handler.validatePassword">[docs]</a><span class="k">def</span> <span class="nf">validatePassword</span><span class="p">(</span><span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate length of password.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        password: password</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if length of password  is correct otherwise False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">8</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">32</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="RegistrationHandler"><a class="viewcode-back" href="../../../../registration.html#luna_api.app.rest_handlers.registration_handler.RegistrationHandler">[docs]</a><span class="k">class</span> <span class="nc">RegistrationHandler</span><span class="p">(</span><span class="n">BaseRequestHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handler to register accounts</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RegistrationHandler.post"><a class="viewcode-back" href="../../../../registration.html#luna_api.app.rest_handlers.registration_handler.RegistrationHandler.post">[docs]</a>    <span class="nd">@tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">asynchronous</span>
+    <span class="nd">@BaseRequestHandler</span><span class="o">.</span><span class="n">requestExceptionWrap</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resource is available at &#39;/accounts&#39;</span>
+
+<span class="sd">        .. http:post:: /accounts</span>
+
+<span class="sd">            Request for registration.</span>
+
+<span class="sd">            **Example request**:</span>
+
+<span class="sd">            :reqheader LUNA-Request-Id: request id</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                POST /accounts HTTP/1.1</span>
+<span class="sd">                Accept: application/json</span>
+
+<span class="sd">            .. json:object:: json for registration</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property organization_name: name of registration organization</span>
+<span class="sd">                :proptype organization_name: user_name</span>
+<span class="sd">                :property email: email of registration organization</span>
+<span class="sd">                :proptype email: email</span>
+<span class="sd">                :property password: password for access to account</span>
+<span class="sd">                :proptype password: string</span>
+<span class="sd">                :options  password: minlength=8,maxlength=32</span>
+
+<span class="sd">            **Example response**:</span>
+
+<span class="sd">            .. sourcecode:: http</span>
+
+<span class="sd">                HTTP/1.1 201 Created</span>
+<span class="sd">                Vary: Accept</span>
+<span class="sd">                Content-Type: application/json</span>
+<span class="sd">                LUNA-Request-Id: 1516179740,c06887a2</span>
+
+<span class="sd">            .. json:object:: response</span>
+<span class="sd">                :showexample:</span>
+
+<span class="sd">                :property token: token for access</span>
+<span class="sd">                :proptype token: uuid4</span>
+
+<span class="sd">            Error message is returned in format :json:object:`server_error`.</span>
+<span class="sd">            </span>
+<span class="sd">            :statuscode 201: registration is successful</span>
+<span class="sd">            :statuscode 409: e-mail is already taken</span>
+<span class="sd">            :statuscode 400: request does not contain json</span>
+<span class="sd">            :statuscode 400: password is too short or too long</span>
+<span class="sd">            :statuscode 400: password field was not found in json</span>
+<span class="sd">            :statuscode 400: password is empty</span>
+<span class="sd">            :statuscode 400: email could not be parsed</span>
+<span class="sd">            :statuscode 400: email was not found in json</span>
+<span class="sd">            :statuscode 400: email is empty</span>
+<span class="sd">            :statuscode 400: organization_name could not be parsed</span>
+<span class="sd">            :statuscode 400: organization name is empty</span>
+<span class="sd">            :statuscode 500: internal server error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reqJson</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getInputJson</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">reqJson</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">EmptyJson</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">parseJsonArg</span><span class="p">(</span><span class="n">reqJson</span><span class="p">,</span> <span class="s1">&#39;organization_name&#39;</span><span class="p">)</span>
+
+            <span class="n">password</span> <span class="o">=</span> <span class="n">parseJsonArg</span><span class="p">(</span><span class="n">reqJson</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">validatePassword</span><span class="p">(</span><span class="n">password</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">Error</span><span class="o">.</span><span class="n">PasswordBadLength</span><span class="p">)</span>
+
+            <span class="n">email</span> <span class="o">=</span> <span class="n">parseJsonArg</span><span class="p">(</span><span class="n">reqJson</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">validateEmail</span><span class="p">(</span><span class="n">parseaddr</span><span class="p">(</span><span class="n">email</span><span class="p">)[</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">IncorrectEmail</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">Error</span><span class="o">.</span><span class="n">RequestNotContainsJson</span><span class="p">)</span>
+
+        <span class="n">accId</span><span class="p">,</span> <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbContext</span><span class="o">.</span><span class="n">registerAccount</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">token</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="mi">201</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

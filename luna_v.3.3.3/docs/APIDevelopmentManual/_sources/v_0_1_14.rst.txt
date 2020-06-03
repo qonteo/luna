@@ -1,0 +1,24 @@
+v.0.1.13
+========
+
+Improvements:
+-------------
+
+	1) Added test for check duplicate id of persons and descriptors in matching result.
+
+    2)  Added test for checking of linking descriptor with person with other person.
+
+
+Bugs fixed:
+-----------
+
+	1) Fix duplicate of descriptor id in reply (match person vs  list descriptors "/match").
+
+    2) Fix ability link descriptor with person to other person.
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, error, base_scripts, tests, raml* and \
+file *version.py*. It is strongly recommended to backup DB postgres and server.

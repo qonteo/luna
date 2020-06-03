@@ -1,0 +1,199 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Faces attributes handler &#8212; luna-faces v.1.0.10 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Face handler" href="face_handler.html" />
+    <link rel="prev" title="Faces handler" href="faces_handler.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>luna-faces v.1.0.10 documentation</span></a></h1>
+        <h2 class="heading"><span>Faces attributes handler</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="faces_handler.html">Faces handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="face_handler.html">Face handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-luna_faces.app.handlers.faces_attributes_handler">
+<span id="faces-attributes-handler"></span><h1>Faces attributes handler<a class="headerlink" href="#module-luna_faces.app.handlers.faces_attributes_handler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="luna_faces.app.handlers.faces_attributes_handler.FaceAttributesHandler">
+<em class="property">class </em><code class="descclassname">luna_faces.app.handlers.faces_attributes_handler.</code><code class="descname">FaceAttributesHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_attributes_handler.html#FaceAttributesHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_attributes_handler.FaceAttributesHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for work with face attributes</p>
+<dl class="method">
+<dt id="luna_faces.app.handlers.faces_attributes_handler.FaceAttributesHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>faceId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_attributes_handler.html#FaceAttributesHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_attributes_handler.FaceAttributesHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request to get the face attributes id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>faceId</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – face id</td>
+</tr>
+</tbody>
+</table>
+<p>Resource is reached by address ‘/faces/{faceId}/attributes’</p>
+<dl class="get">
+<dt id="get--faces-faceId-attributes">
+<code class="descname">GET </code><code class="descname">/faces/{faceId}/attributes</code><a class="headerlink" href="#get--faces-faceId-attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>faceId</strong> – face id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><strong>account_id</strong> – account id, this parameter determine, that action must be done with only with objects
+of this account.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/faces/{faceId}/attributes</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 200
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+Begin-Request-Time: 1526039272.9173293
+End-Request-Time: 1526039272.9505265
+Content-Type: application/json
+</pre></div>
+</div>
+<p>Output face will be represent in <a class="reference internal" href="handlers.html#luna_face_attributes"><code class="xref json json-object docutils literal notranslate"><span class="pre">luna_face_attributes</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">404 Not Found</a> – face not found</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="luna_faces.app.handlers.faces_attributes_handler.FacesAttributesHandler">
+<em class="property">class </em><code class="descclassname">luna_faces.app.handlers.faces_attributes_handler.</code><code class="descname">FacesAttributesHandler</code><span class="sig-paren">(</span><em>application</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_attributes_handler.html#FacesAttributesHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_attributes_handler.FacesAttributesHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for work with faces attributes</p>
+<dl class="method">
+<dt id="luna_faces.app.handlers.faces_attributes_handler.FacesAttributesHandler.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/luna_faces/app/handlers/faces_attributes_handler.html#FacesAttributesHandler.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#luna_faces.app.handlers.faces_attributes_handler.FacesAttributesHandler.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request to get list of faces attributes id.</p>
+<p>Resource is reached by address ‘/faces/attributes’</p>
+<dl class="get">
+<dt id="get--faces-attributes">
+<code class="descname">GET </code><code class="descname">/faces/attributes</code><a class="headerlink" href="#get--faces-attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Request Headers:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><ul class="first simple">
+<li><em>LUNA-Request-Id</em> – request id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Query Parameters:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><strong>account_id</strong> – account id, this parameter determine, that action must be done with only with objects
+of this account.</li>
+<li><strong>faces_ids</strong> – coma-separated face id list.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/faces/attributes</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</pre></div>
+</div>
+<p><strong>Example response</strong>:</p>
+<div class="highlight-http notranslate"><div class="highlight"><pre><span></span>HTTP/1.1 200
+LUNA-Request-Id: 1516179740,af3fb041-1a55-43e6-9ac2-a361aa43295f
+Begin-Request-Time: 1526039272.9173293
+End-Request-Time: 1526039272.9505265
+Content-Type: application/json
+</pre></div>
+</div>
+<p>Output face will be represent in list of <a class="reference internal" href="handlers.html#luna_face_attributes"><code class="xref json json-object docutils literal notranslate"><span class="pre">luna_face_attributes</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Status Codes:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a> – Ok</li>
+<li><a class="reference external" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a> – internal server error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="faces_handler.html">Faces handler</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="face_handler.html">Face handler</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

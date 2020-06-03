@@ -1,0 +1,13 @@
+﻿[Unit]
+Description=Luna Index Manager
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+SyslogIdentifier=luna-index-manager
+WorkingDirectory=/var/lib/luna/current/luna-index-manager/luna_index_manager
+ExecStart=/var/lib/luna/current/luna-index-manager/venv/bin/python3 /var/lib/luna/current/luna-index-manager/luna_index_manager/run.py --port=5060
+
+[Install]
+WantedBy=multi-user.target

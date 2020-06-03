@@ -1,0 +1,34 @@
+v.1.2.6
+=======
+
+Improvements:
+-------------
+
+    1) Added ability of bucket deletion.
+
+    #) Added ability of cache for images.
+
+    #) Added ability of work with text and json objects.
+
+    #) Added check connection to database on startup
+
+    #) Remove loggers for each file handler, make global logger
+
+    #) Update tornado version (5.0.1).
+
+    #) Now ORIGIN is used in configs. Origin consists of "<schema>://<ip-address>:<port>"
+
+    #) Add method HEAD for */buckets/{bucketName}/images/{imageId}{thumbnail}* and */buckets/{bucketName}/objects/{objectId}*
+
+Bugs fixed:
+-----------
+
+
+    1) Fix integration with S3-compitable storage.
+
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *app, errors, image, preview, storage, tests, docs* and \
+file *version.py*.

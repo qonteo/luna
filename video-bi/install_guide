@@ -1,0 +1,33 @@
+########Создаём каталог для CROC-VBI
+cd ./var/lib/luna
+#wget --http-user=<LOGIN> --http-password=<PASSWORD> http://download.visionlabs.ai/crocvbi/video-bi.zip
+#wget http://download.visionlabs.ai/crocvbi/video-bi.zip
+unzip video-bi.zip
+docker load -i cfc.tar
+docker tag cfc/app:latest video-bi/app:latest
+docker-compose up -d
+#-------------------------------------------------------------------------------------
+########Создаём нового пользователя
+docker-compose exec app rails users:create_user
+########Надо будет ввести логин, пароль, подтверждение пароля
+
+########Запускаем консоль rails в контейнере app
+docker-compose exec app rails c
+########Создаём первое подразделение "Main"
+Subdivision.create(name: 'Main')
+UserSubdivision.create(user_id: 1, subdivision_id: 1)
+exit
+
+########Настройка интерфейса
+#web-интерфейс доступен по адресу https://<VM_IP>:5205
+#необходимо создать в веб-интерфейсе список и камеру
+#надо обязательно указать ID камеры, т.к. идентификация видеопотока осущствляется на основании "camera-id" из FaceStream'а.
+########Настройка FS:
+#отправлять данные необходимо в формате json
+#необходимо указать "camera-id" такое же, как и в web-интерфейсе
+########Параметры FS для передачи данных в CROC-VBI:
+#./FaceStream2 -Src <VIDEO_SOURCE> -Dst https://<VM_IP>:5205/face_stream
+
+
+
+

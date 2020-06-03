@@ -1,0 +1,470 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pluginbase &#8212; Luna python server v.2.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>Luna python server v.2.2.2 documentation</span></a></h1>
+        <h2 class="heading"><span>pluginbase</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for pluginbase</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    pluginbase</span>
+<span class="sd">    ~~~~~~~~~~</span>
+
+<span class="sd">    Pluginbase is a module for Python that provides a system for building</span>
+<span class="sd">    plugin based applications.</span>
+
+<span class="sd">    :copyright: (c) Copyright 2014 by Armin Ronacher.</span>
+<span class="sd">    :license: BSD, see LICENSE for more details.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="kn">from</span> <span class="nn">types</span> <span class="k">import</span> <span class="n">ModuleType</span>
+<span class="kn">from</span> <span class="nn">weakref</span> <span class="k">import</span> <span class="n">ref</span> <span class="k">as</span> <span class="n">weakref</span>
+
+
+<span class="n">PY2</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="k">if</span> <span class="n">PY2</span><span class="p">:</span>
+    <span class="n">text_type</span> <span class="o">=</span> <span class="n">unicode</span>
+    <span class="n">string_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">unicode</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">cStringIO</span> <span class="k">import</span> <span class="n">StringIO</span> <span class="k">as</span> <span class="n">NativeBytesIO</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">text_type</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">string_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">,)</span>
+    <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">BytesIO</span> <span class="k">as</span> <span class="n">NativeBytesIO</span>
+
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.5&#39;</span>
+<span class="n">_local</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+
+<span class="n">_internalspace</span> <span class="o">=</span> <span class="n">ModuleType</span><span class="p">(</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;._internalspace&#39;</span><span class="p">)</span>
+<span class="n">_internalspace</span><span class="o">.</span><span class="n">__path__</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">_internalspace</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">_internalspace</span>
+
+
+<span class="k">def</span> <span class="nf">get_plugin_source</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the :class:`PluginSource` for the current module or the given</span>
+<span class="sd">    module.  The module can be provided by name (in which case an import</span>
+<span class="sd">    will be attempted) or as a module object.</span>
+
+<span class="sd">    If no plugin source can be discovered, the return value from this method</span>
+<span class="sd">    is `None`.</span>
+
+<span class="sd">    This function can be very useful if additional data has been attached</span>
+<span class="sd">    to the plugin source.  For instance this could allow plugins to get</span>
+<span class="sd">    access to a back reference to the application that created them.</span>
+
+<span class="sd">    :param module: optionally the module to locate the plugin source of.</span>
+<span class="sd">    :param stacklevel: defines how many levels up the module should search</span>
+<span class="sd">                       for before it discovers the plugin frame.  The</span>
+<span class="sd">                       default is 0.  This can be useful for writing wrappers</span>
+<span class="sd">                       around this function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">frm</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">((</span><span class="n">stacklevel</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">frm</span><span class="o">.</span><span class="n">f_globals</span><span class="p">[</span><span class="s1">&#39;__name__&#39;</span><span class="p">]</span>
+        <span class="n">glob</span> <span class="o">=</span> <span class="n">frm</span><span class="o">.</span><span class="n">f_globals</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+        <span class="n">frm</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">module</span>
+        <span class="n">glob</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">frm</span><span class="o">.</span><span class="n">f_globals</span><span class="p">,</span>
+                          <span class="n">frm</span><span class="o">.</span><span class="n">f_locals</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;__dict__&#39;</span><span class="p">])</span><span class="o">.</span><span class="vm">__dict__</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">glob</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span>
+    <span class="k">return</span> <span class="n">_discover_space</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">glob</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_discover_space</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">globals</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_local</span><span class="o">.</span><span class="n">space_stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="s1">&#39;__pluginbase_state__&#39;</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">globals</span><span class="p">[</span><span class="s1">&#39;__pluginbase_state__&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">source</span>
+
+    <span class="n">mod_name</span> <span class="o">=</span> <span class="nb">globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__name__&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mod_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+       <span class="n">mod_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_internalspace</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">mod_name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">_internalspace</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mod_name</span><span class="p">[:</span><span class="n">end</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">space</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">space</span><span class="o">.</span><span class="n">__pluginbase_state__</span><span class="o">.</span><span class="n">source</span>
+
+
+<span class="k">def</span> <span class="nf">_shutdown_module</span><span class="p">(</span><span class="n">mod</span><span class="p">):</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;_&#39;</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_to_bytes</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">text_type</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+
+<span class="k">class</span> <span class="nc">_IntentionallyEmptyModule</span><span class="p">(</span><span class="n">ModuleType</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ModuleType</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;__&#39;</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;Attempted to import from a plugin base module (</span><span class="si">%s</span><span class="s1">) without &#39;</span>
+                <span class="s1">&#39;having a plugin source activated.  To solve this error &#39;</span>
+                <span class="s1">&#39;you have to move the import into a &quot;with&quot; block of the &#39;</span>
+                <span class="s1">&#39;associated plugin source.&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_PluginSourceModule</span><span class="p">(</span><span class="n">ModuleType</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="n">modname</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_internalspace</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">spaceid</span><span class="p">)</span>
+        <span class="n">ModuleType</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pluginbase_state__</span> <span class="o">=</span> <span class="n">PluginBaseState</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__path__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pluginbase_state__</span><span class="o">.</span><span class="n">source</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">ps</span><span class="o">.</span><span class="n">searchpath</span> <span class="o">+</span> <span class="n">ps</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">searchpath</span>
+
+
+<span class="k">def</span> <span class="nf">_setup_base_package</span><span class="p">(</span><span class="n">module_name</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;__name__&#39;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">module_name</span><span class="p">:</span>
+            <span class="n">parent_mod</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">module_name</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                                    <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;__name__&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parent_mod</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">mod</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="n">_IntentionallyEmptyModule</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parent_mod</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">parent_mod</span><span class="p">,</span> <span class="n">module_name</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">mod</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod</span>
+
+
+<span class="k">class</span> <span class="nc">PluginBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The plugin base acts as a control object around a dummy Python</span>
+<span class="sd">    package that acts as a container for plugins.  Usually each</span>
+<span class="sd">    application creates exactly one base object for all plugins.</span>
+
+<span class="sd">    :param package: the name of the package that acts as the plugin base.</span>
+<span class="sd">                    Usually this module does not exist.  Unless you know</span>
+<span class="sd">                    what you are doing you should not create this module</span>
+<span class="sd">                    on the file system.</span>
+<span class="sd">    :param searchpath: optionally a shared search path for modules that</span>
+<span class="sd">                       will be used by all plugin sources registered.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="n">searchpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1">#: the name of the dummy package.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">package</span> <span class="o">=</span> <span class="n">package</span>
+        <span class="k">if</span> <span class="n">searchpath</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">searchpath</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#: the default search path shared by all plugins as list.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchpath</span> <span class="o">=</span> <span class="n">searchpath</span>
+        <span class="n">_setup_base_package</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">make_plugin_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creats a plugin source for this plugin base and returns it.</span>
+<span class="sd">        All parameters are forwarded to :class:`PluginSource`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">PluginSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">PluginSource</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The plugin source is what ultimately decides where plugins are</span>
+<span class="sd">    loaded from.  Plugin bases can have multiple plugin sources which act</span>
+<span class="sd">    as isolation layer.  While this is not a security system it generally</span>
+<span class="sd">    is not possible for plugins from different sources to accidentally</span>
+<span class="sd">    cross talk.</span>
+
+<span class="sd">    Once a plugin source has been created it can be used in a ``with``</span>
+<span class="sd">    statement to change the behavior of the ``import`` statement in the</span>
+<span class="sd">    block to define which source to load the plugins from::</span>
+
+<span class="sd">        plugin_source = plugin_base.make_plugin_source(</span>
+<span class="sd">            searchpath=[&#39;./path/to/plugins&#39;, &#39;./path/to/more/plugins&#39;])</span>
+
+<span class="sd">        with plugin_source:</span>
+<span class="sd">            from myapplication.plugins import my_plugin</span>
+
+<span class="sd">    :param base: the base this plugin source belongs to.</span>
+<span class="sd">    :param identifier: optionally a stable identifier.  If it&#39;s not defined</span>
+<span class="sd">                       a random identifier is picked.  It&#39;s useful to set this</span>
+<span class="sd">                       to a stable value to have consistent tracebacks</span>
+<span class="sd">                       between restarts and to support pickle.</span>
+<span class="sd">    :param searchpath: a list of paths where plugins are looked for.</span>
+<span class="sd">    :param persist: optionally this can be set to `True` and the plugins</span>
+<span class="sd">                    will not be cleaned up when the plugin source gets</span>
+<span class="sd">                    garbage collected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set these here to false by default so that a completely failing</span>
+    <span class="c1"># constructor does not fuck up the destructor.</span>
+    <span class="n">persist</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">mod</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">searchpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">persist</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1">#: indicates if this plugin source persists or not.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">persist</span> <span class="o">=</span> <span class="n">persist</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">identifier</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="c1">#: the identifier for this source.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">identifier</span> <span class="o">=</span> <span class="n">identifier</span>
+        <span class="c1">#: A reference to the plugin base that created this source.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base</span>
+        <span class="c1">#: a list of paths where plugins are searched in.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchpath</span> <span class="o">=</span> <span class="n">searchpath</span>
+        <span class="c1">#: The internal module name of the plugin source as it appears</span>
+        <span class="c1">#: in the :mod:`pluginsource._internalspace`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spaceid</span> <span class="o">=</span> <span class="s1">&#39;_sp&#39;</span> <span class="o">+</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span>
+            <span class="n">_to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">package</span><span class="p">)</span> <span class="o">+</span> <span class="sa">b</span><span class="s1">&#39;|&#39;</span> <span class="o">+</span>
+            <span class="n">_to_bytes</span><span class="p">(</span><span class="n">identifier</span><span class="p">),</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="c1">#: a reference to the module on the internal</span>
+        <span class="c1">#: :mod:`pluginsource._internalspace`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">_PluginSourceModule</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_internalspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaceid</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This plugin source already exists.&#39;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">_internalspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaceid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">persist</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">list_plugins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a sorted list of all plugins that are available in this</span>
+<span class="sd">        plugin source.  This can be useful to automatically discover plugins</span>
+<span class="sd">        that are available and is usually used together with</span>
+<span class="sd">        :meth:`load_plugin`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">modname</span><span class="p">,</span> <span class="n">ispkg</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">__path__</span><span class="p">):</span>
+            <span class="n">rv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">load_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This automatically loads a plugin by the given name from the</span>
+<span class="sd">        current source and returns the module.  This is a convenient</span>
+<span class="sd">        alternative to the import statement and saves you from invoking</span>
+<span class="sd">        ``__import__`` or a similar function yourself.</span>
+
+<span class="sd">        :param name: the name of the plugin to load.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Plugin names cannot contain dots.&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">__import__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">package</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span>
+                              <span class="nb">globals</span><span class="p">(),</span> <span class="p">{},</span> <span class="p">[</span><span class="s1">&#39;__name__&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">open_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function locates a resource inside the plugin and returns</span>
+<span class="sd">        a byte stream to the contents of it.  If the resource cannot be</span>
+<span class="sd">        loaded an :exc:`IOError` will be raised.  Only plugins that are</span>
+<span class="sd">        real Python packages can contain resources.  Plain old Python</span>
+<span class="sd">        modules do not allow this for obvious reasons.</span>
+
+<span class="sd">        .. versionadded:: 0.3</span>
+
+<span class="sd">        :param plugin: the name of the plugin to open the resource of.</span>
+<span class="sd">        :param filename: the name of the file within the plugin to open.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_plugin</span><span class="p">(</span><span class="n">plugin</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fn</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;.pyc&#39;</span><span class="p">,</span> <span class="s1">&#39;.pyo&#39;</span><span class="p">)):</span>
+                <span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fn</span><span class="p">),</span> <span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">plugin</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">buf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;Could not find resource&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">NativeBytesIO</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cleans up all loaded plugins manually.  This is necessary to</span>
+<span class="sd">        call only if :attr:`persist` is enabled.  Otherwise this happens</span>
+<span class="sd">        automatically when the source gets garbage collected.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cleanup</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_sys</span><span class="o">=</span><span class="n">sys</span><span class="p">,</span> <span class="n">_shutdown_module</span><span class="o">=</span><span class="n">_shutdown_module</span><span class="p">):</span>
+        <span class="c1"># The default parameters are necessary because this can be fired</span>
+        <span class="c1"># from the destructor and so late when the interpreter shuts down</span>
+        <span class="c1"># that these functions and modules might be gone.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">modname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">__pluginbase_state__</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="n">_internalspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spaceid</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">modname</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span>
+        <span class="c1"># avoid the bug described in issue #6</span>
+        <span class="k">if</span> <span class="n">modname</span> <span class="ow">in</span> <span class="n">_sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">_sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">modname</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">_sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="n">_sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mod</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">_shutdown_module</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__assert_not_cleaned_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;The plugin source was already cleaned up.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__assert_not_cleaned_up</span><span class="p">()</span>
+        <span class="n">_local</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;space_stack&#39;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_local</span><span class="o">.</span><span class="n">space_stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_rewrite_module_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modname</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__assert_not_cleaned_up</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">modname</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">package</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">elif</span> <span class="n">modname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">package</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">):</span>
+            <span class="n">pieces</span> <span class="o">=</span> <span class="n">modname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">pieces</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:])</span>
+
+
+<span class="k">class</span> <span class="nc">PluginBaseState</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_source&#39;</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">persist</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">source</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">weakref</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Plugin source went away&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rv</span>
+
+
+<span class="k">class</span> <span class="nc">_ImportHook</span><span class="p">(</span><span class="n">ModuleType</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">system_import</span><span class="p">):</span>
+        <span class="n">ModuleType</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_system_import</span> <span class="o">=</span> <span class="n">system_import</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">enable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables the import hook which drives the plugin base system.</span>
+<span class="sd">        This is the default.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">disable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Disables the import hook and restores the default import system</span>
+<span class="sd">        behavior.  This effectively breaks pluginbase but can be useful</span>
+<span class="sd">        for testing purposes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">plugin_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">fromlist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># set the level to the default value specific to this python version</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">PY2</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">import_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+            <span class="n">ref_globals</span> <span class="o">=</span> <span class="nb">globals</span>
+            <span class="k">if</span> <span class="n">ref_globals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ref_globals</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">f_globals</span>
+            <span class="n">space</span> <span class="o">=</span> <span class="n">_discover_space</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ref_globals</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">space</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">actual_name</span> <span class="o">=</span> <span class="n">space</span><span class="o">.</span><span class="n">_rewrite_module_path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">actual_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">import_name</span> <span class="o">=</span> <span class="n">actual_name</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_system_import</span><span class="p">(</span><span class="n">import_name</span><span class="p">,</span> <span class="nb">globals</span><span class="p">,</span> <span class="nb">locals</span><span class="p">,</span>
+                                   <span class="n">fromlist</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">__builtin__</span> <span class="k">as</span> <span class="nn">builtins</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">builtins</span>
+<span class="n">import_hook</span> <span class="o">=</span> <span class="n">_ImportHook</span><span class="p">(</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39;.import_hook&#39;</span><span class="p">,</span> <span class="n">builtins</span><span class="o">.</span><span class="fm">__import__</span><span class="p">)</span>
+<span class="n">builtins</span><span class="o">.</span><span class="fm">__import__</span> <span class="o">=</span> <span class="n">import_hook</span><span class="o">.</span><span class="n">plugin_import</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">import_hook</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">import_hook</span>
+<span class="k">del</span> <span class="n">builtins</span>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, VisionLabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.9.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,2187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Other database objects structures &#8212; Facestreammanager2 2.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Database structure" href="es.html" /> 
+  </head>
+  <body role="document">
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>Facestreammanager2 2.0.0 documentation</span></a></h1>
+        <h2 class="heading"><span>Other database objects structures</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="es.html">Database structure</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="other-database-objects-structures">
+<h1>Other database objects structures<a class="headerlink" href="#other-database-objects-structures" title="Permalink to this headline">¶</a></h1>
+<dl class="object">
+<dt id="crossmatchreference">
+<!--[crossmatchreference]--><code class="descname">crossMatchReference</code><a class="headerlink" href="#crossmatchreference" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>reference</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; object id</li>
+<li><strong>source</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; the source of the object, if the reference was an event or group</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The last descriptor update time, if the reference was a descriptor</li>
+<li><strong>tags</strong> (<code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">string</span></code>) &#8211; object tags, if the reference was an event or group</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; person user_data, if the reference was a person</li>
+<li><strong>candidates</strong> (<a class="reference internal" href="#crossmatchcandidate"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">crossmatchcandidate</span></code></a>) &#8211; The match candidates list.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; the creation time of the reference, if the reference was a person, event or group</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;reference&quot;</span><span class="p">:</span> <span class="s2">&quot;c3c070ff-00cd-4399-bc30-d835db6cde84&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;grodriguez&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;1984-05-02T11:47:02&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;shannon75&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rossmatchcandidat&quot;</span><span class="p">:</span> <span class="s2">&quot;{rossmatchcandidat object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rossmatchcandidat&quot;</span><span class="p">:</span> <span class="s2">&quot;{rossmatchcandidat object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rossmatchcandidat&quot;</span><span class="p">:</span> <span class="s2">&quot;{rossmatchcandidat object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1989-08-09T03:03:24&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="crossmatchcandidate">
+<!--[crossmatchcandidate]--><code class="descname">crossMatchCandidate</code><a class="headerlink" href="#crossmatchcandidate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; id of the candidate-person, indicated if the a list of persons was matched</li>
+<li><strong>similarity</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Similarity with the reference descriptor. * 1 means that descriptors are obtained from identical images * numbers close to 1 mean the descriptors a from the same person * numbers close to 0 mean the descriptors from different people</li>
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; id of the descriptor, specified if a list of descriptors was matched</li>
+<li><strong>descriptor_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; descriptor of the candidate person, specified if a list of persons was matched</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; user_data of the candidate-person, specified if a list of persons was matched</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0cb1b42f-700f-44e6-90a9-8c3905aa5ee2&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">573646234.45334</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;d51a3f7b-7c56-4741-b93e-fe1453c89752&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;9c3bd1b3-5a7a-47d2-953a-da0bef7dba7d&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;jessica95&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="match_handler">
+<!--[match_handler]--><code class="descname">match_handler</code><a class="headerlink" href="#match_handler" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_policy</strong> (<a class="reference internal" href="#person_policy"><code class="xref json json-object docutils literal"><span class="pre">person_policy</span></code></a>) &#8211; rules for creating a person from the descriptor and then attaching it to the lists</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; </li>
+<li><strong>grouping_policy</strong> (<a class="reference internal" href="#grouping_policy"><code class="xref json json-object docutils literal"><span class="pre">grouping_policy</span></code></a>) &#8211; rules for grouping events into groups, creating persons from a group and attaching events to persons</li>
+<li><strong>descriptor_policy</strong> (<a class="reference internal" href="#descriptor_policy"><code class="xref json json-object docutils literal"><span class="pre">descriptor_policy</span></code></a>) &#8211; rules for attaching the extracted descriptor to descriptor lists</li>
+<li><strong>search_policy</strong> (<a class="reference internal" href="#search_policy"><code class="xref json json-object docutils literal"><span class="pre">search_policy</span></code></a>) &#8211; rules for searching similar descriptors</li>
+<li><strong>handler_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; handle id</li>
+<li><strong>extract_policy</strong> (<a class="reference internal" href="#extract_policy"><code class="xref json json-object docutils literal"><span class="pre">extract_policy</span></code></a>) &#8211; Set the extract flags to be included when extracting the descriptor.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; the name of the handler</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">8202</span><span class="p">,</span>
+                <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">5543</span><span class="p">,</span>
+                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">8102</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">4206</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">5573</span><span class="p">,</span>
+            <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;roy69&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;grouping_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">6286</span><span class="p">,</span>
+        <span class="nt">&quot;grouper&quot;</span><span class="p">:</span> <span class="mi">9200</span><span class="p">,</span>
+        <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">2409</span><span class="p">,</span>
+                <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">6109</span><span class="p">,</span>
+                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">1155</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">7329</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">9138</span><span class="p">,</span>
+            <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;ttl&quot;</span><span class="p">:</span> <span class="mi">5034</span><span class="p">,</span>
+        <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">466.76</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">275</span><span class="p">,</span>
+        <span class="nt">&quot;search&quot;</span><span class="p">:</span> <span class="mi">1460</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;descriptor_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;search_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;search_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;search_priority&quot;</span><span class="p">:</span> <span class="mi">4943</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;handler_id&quot;</span><span class="p">:</span> <span class="s2">&quot;86471130-a4ea-499f-8358-f03e88889b62&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;extract_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;score_threshold&quot;</span><span class="p">:</span> <span class="mf">6942864.5356476</span><span class="p">,</span>
+        <span class="nt">&quot;estimate_quality&quot;</span><span class="p">:</span> <span class="mi">6294</span><span class="p">,</span>
+        <span class="nt">&quot;estimate_attributes&quot;</span><span class="p">:</span> <span class="mi">1746</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;robertjohnson&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="lists_filter">
+<!--[lists_filter]--><code class="descname">lists_filter</code><a class="headerlink" href="#lists_filter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>lists</strong> (<a class="reference internal" href="#list_filter"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">list_filter</span></code></a>) &#8211; </li>
+<li><strong>policy</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the policy of checking the result of the match. * 1 - the filter is recognized passed successfully, if at least one list we found a similar object with similarity greater than specified for this list. * 2 -  we did not find a similar object for all lists.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">6052</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="person_policy">
+<!--[person_policy]--><code class="descname">person_policy</code><a class="headerlink" href="#person_policy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>create_person_policy</strong> (<a class="reference internal" href="#create_person_policy"><code class="xref json json-object docutils literal"><span class="pre">create_person_policy</span></code></a>) &#8211; The policy of creating a person from the descriptor. This policy is incompatible with the creation of a person from the group</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">8867</span><span class="p">,</span>
+            <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">9436</span><span class="p">,</span>
+                <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">6033</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">2017</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">1537</span><span class="p">,</span>
+        <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="reports">
+<!--[reports]--><code class="descname">reports</code><a class="headerlink" href="#reports" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>task_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the report task id</li>
+<li><strong>params</strong> (<a class="reference internal" href="es.html#report_params"><code class="xref json json-object docutils literal"><span class="pre">report_params</span></code></a>) &#8211; </li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; the time the task was created</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;task_id&quot;</span><span class="p">:</span> <span class="mi">8880</span><span class="p">,</span>
+    <span class="nt">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;emilyhardin&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;task_id&quot;</span><span class="p">:</span> <span class="mi">1365</span><span class="p">,</span>
+        <span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;lporter&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;save_portraits&quot;</span><span class="p">:</span> <span class="mi">4340</span><span class="p">,</span>
+            <span class="nt">&quot;colors_bounds&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;green&quot;</span><span class="p">:</span> <span class="mf">752632919.8</span><span class="p">,</span>
+                <span class="nt">&quot;red&quot;</span><span class="p">:</span> <span class="mf">1985792.314</span><span class="p">,</span>
+                <span class="nt">&quot;orange&quot;</span><span class="p">:</span> <span class="mf">9720858766511.0</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1971-07-03T02:09:20&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="basic_filters">
+<!--[basic_filters]--><code class="descname">basic_filters</code><a class="headerlink" href="#basic_filters" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>gender</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Filter by sex. Allowed values are: 1 for man, 0 for woman</li>
+<li><strong>age_range</strong> (<a class="reference internal" href="#age_range"><code class="xref json json-object docutils literal"><span class="pre">age_range</span></code></a>) &#8211; filter by age</li>
+<li><strong>similarity_filter</strong> (<a class="reference internal" href="#lists_filter"><code class="xref json json-object docutils literal"><span class="pre">lists_filter</span></code></a>) &#8211; filter based on search results</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">7258</span><span class="p">,</span>
+    <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">7245</span><span class="p">,</span>
+        <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">296</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">1442</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="attributes">
+<!--[attributes]--><code class="descname">attributes</code><a class="headerlink" href="#attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>age</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Age estimation (in years).</li>
+<li><strong>gender</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Gender estimation. * 0 - female * 1 - male</li>
+<li><strong>eyeGlasses</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Estimates are the persons wears eye glasses. * 0 - no glasses * 1 - eye glasses This attribute does not classify eyewear, ie both sunglasses and transparent glasses are reported as 1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mf">77411.1586</span><span class="p">,</span>
+    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mf">18441.9723658</span><span class="p">,</span>
+    <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">91984354.82722</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="events">
+<!--[events]--><code class="descname">events</code><a class="headerlink" href="#events" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>events</strong> (<a class="reference internal" href="es.html#event"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">event</span></code></a>) &#8211; event list</li>
+<li><strong>total</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; total number of events</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;events&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ven&quot;</span><span class="p">:</span> <span class="s2">&quot;{ven object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ven&quot;</span><span class="p">:</span> <span class="s2">&quot;{ven object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ven&quot;</span><span class="p">:</span> <span class="s2">&quot;{ven object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">2656</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="markup_filters">
+<!--[markup_filters]--><code class="descname">markup_filters</code><a class="headerlink" href="#markup_filters" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>age__lt</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; upper age limit.</li>
+<li><strong>create_time__lt</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; end of the interesting period in which the event occurred</li>
+<li><strong>age__gt</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the lower age limit.</li>
+<li><strong>tags</strong> (<code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">string</span></code>) &#8211; a set of tags for filtering.</li>
+<li><strong>similarity__gt</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; lower threshold of similary.</li>
+<li><strong>handler_ids</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; list of id handlers, as a result, events will be displayed with any of the indicated handlers.</li>
+<li><strong>create_time__gt</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; start of the interesting period in which the event occurred</li>
+<li><strong>gender</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Filter by sex. Allowed values are: 1 for man, 0 for woman</li>
+<li><strong>sources</strong> (<code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">string</span></code>) &#8211; a list of event sources, as a result, events from any of the specified sources will be output.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;age__lt&quot;</span><span class="p">:</span> <span class="mi">9781</span><span class="p">,</span>
+    <span class="nt">&quot;create_time__lt&quot;</span><span class="p">:</span> <span class="s2">&quot;2012-07-07T03:34:37&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;age__gt&quot;</span><span class="p">:</span> <span class="mi">3206</span><span class="p">,</span>
+    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;similarity__gt&quot;</span><span class="p">:</span> <span class="mf">475448.63</span><span class="p">,</span>
+    <span class="nt">&quot;handler_ids&quot;</span><span class="p">:</span> <span class="s2">&quot;12c6e036-1199-4b50-b125-ae800d6f14fe&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;create_time__gt&quot;</span><span class="p">:</span> <span class="s2">&quot;1974-04-14T17:44:47&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">3015</span><span class="p">,</span>
+    <span class="nt">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="list_clusters">
+<!--[list_clusters]--><code class="descname">list_clusters</code><a class="headerlink" href="#list_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>clusters</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; clusters</li>
+<li><strong>total_clusters</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; number of clusters</li>
+<li><strong>objects</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;clusters&quot;</span><span class="p">:</span> <span class="s2">&quot;c7485b8b-fc3e-497b-889e-920217de74e7&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;total_clusters&quot;</span><span class="p">:</span> <span class="mi">7589</span><span class="p">,</span>
+    <span class="nt">&quot;objects&quot;</span><span class="p">:</span> <span class="s2">&quot;aaron43&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="descriptor_policy">
+<!--[descriptor_policy]--><code class="descname">descriptor_policy</code><a class="headerlink" href="#descriptor_policy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>attach_policy</strong> (<a class="reference internal" href="#attach_to_list"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">attach_to_list</span></code></a>) &#8211; set of lists to attach the descriptor to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="search_policy">
+<!--[search_policy]--><code class="descname">search_policy</code><a class="headerlink" href="#search_policy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>search_lists</strong> (<a class="reference internal" href="#search_list"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">search_list</span></code></a>) &#8211; list of Luna API lists, which are supposed to match</li>
+<li><strong>search_priority</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The search by lists priority.
+* 1 - Search is on all lists, the results are combined.
+* 2 - the search is in order, if the result of the match on some list has exceeded <em>threshold</em>, the search stops.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;search_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;search_priority&quot;</span><span class="p">:</span> <span class="mi">5948</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="search_result">
+<!--[search_result]--><code class="descname">search_result</code><a class="headerlink" href="#search_result" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; list in the Luna API which looked for similar objects</li>
+<li><strong>candidates</strong> (<a class="reference internal" href="#core_match"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">core_match</span></code></a> | <a class="reference internal" href="#match"><code class="xref json json-object docutils literal"><span class="pre">_list_match</span></code></a>) &#8211; search result</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;f7a5a2f5-0868-41ca-b127-c38fc60038f1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="match">
+<!--[match]--><code class="descname">match</code><a class="headerlink" href="#match" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; Matched descriptor identifier.</li>
+<li><strong>similarity</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Similarity with the reference descriptor.
+* 1 means that descriptors are obtained from identical images
+* numbers close to 1 mean the descriptors a from the same person
+* numbers close to 0 mean the descriptors from different people</li>
+<li><strong>person_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; Matched person identifier.</li>
+<li><strong>user_data</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; Matched person user data.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;descriptor_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0ef19efb-89f9-497c-bebf-10c414117292&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">3431332.0</span><span class="p">,</span>
+    <span class="nt">&quot;person_id&quot;</span><span class="p">:</span> <span class="s2">&quot;753a1005-37e9-4b0d-9994-c1f8835a6f2b&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;user_data&quot;</span><span class="p">:</span> <span class="s2">&quot;mercervanessa&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="search_list">
+<!--[search_list]--><code class="descname">search_list</code><a class="headerlink" href="#search_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; the Luna API list id</li>
+<li><strong>list_type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; in the Luna API list type, sheet of descriptors or persons</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; the threshold for filtering search results and recognizing a successful search</li>
+<li><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the number of results that are needed to search this list</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;6356ba9d-8c7d-4234-91a2-ee891405fd1c&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;list_type&quot;</span><span class="p">:</span> <span class="s2">&quot;dalemathews&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">3.260506344</span><span class="p">,</span>
+    <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">6273</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="search_result_for_group">
+<!--[search_result_for_group]--><code class="descname">search_result_for_group</code><a class="headerlink" href="#search_result_for_group" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; list in the Luna API which was searched for similar objects</li>
+<li><strong>candidate</strong> (<a class="reference internal" href="#core_match"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">core_match</span></code></a> | <a class="reference internal" href="#match"><code class="xref json json-object docutils literal"><span class="pre">_list_match</span></code></a>) &#8211; search result</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;15593e47-c124-4c0e-9196-63b38edaffb2&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;candidate&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="abstractsuccess">
+<!--[abstractsuccess]--><code class="descname">abstractSuccess</code><a class="headerlink" href="#abstractsuccess" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>succeed</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the number of successful operations</li>
+<li><strong>failed</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; number of unsuccessful operations</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;succeed&quot;</span><span class="p">:</span> <span class="mi">7243</span><span class="p">,</span>
+    <span class="nt">&quot;failed&quot;</span><span class="p">:</span> <span class="mi">8976</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="reportsuccess">
+<!--[reportsuccess]--><code class="descname">reportSuccess</code><a class="headerlink" href="#reportsuccess" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>Location</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3986" title="URI as described in RFC3986"><em>url</em></a>) &#8211; the address where you can pick up the done report</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;Location&quot;</span><span class="p">:</span> <span class="s2">&quot;http://www.smith.com/&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="task_filters">
+<!--[task_filters]--><code class="descname">task_filters</code><a class="headerlink" href="#task_filters" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>age__lt</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; upper age limit.</li>
+<li><strong>create_time__lt</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; end of the required period in which the event occurred</li>
+<li><strong>age__gt</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the lower age limit.</li>
+<li><strong>tags</strong> (<code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">string</span></code>) &#8211; a list of tags for filtering.</li>
+<li><strong>similarity__gt</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; lower threshold of similary.</li>
+<li><strong>handler_ids</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>_list_uuid4</em></a>) &#8211; list of handler ids, events will be displayed with any of the indicated handlers in the result.</li>
+<li><strong>create_time__gt</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; start of the required period in which the event occurred</li>
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; Luna API list id, all other filters are ignored if this option is specified.</li>
+<li><strong>gender</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Filter by sex. Allowed values are: 1 for man, 0 for woman</li>
+<li><strong>sources</strong> (<code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">string</span></code>) &#8211; a list of event sources, events from any of the specified sources will be displayed in the result.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;age__lt&quot;</span><span class="p">:</span> <span class="mi">1584</span><span class="p">,</span>
+    <span class="nt">&quot;create_time__lt&quot;</span><span class="p">:</span> <span class="s2">&quot;2008-12-28T01:09:10&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;age__gt&quot;</span><span class="p">:</span> <span class="mi">8918</span><span class="p">,</span>
+    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;similarity__gt&quot;</span><span class="p">:</span> <span class="mf">230646.795092112</span><span class="p">,</span>
+    <span class="nt">&quot;handler_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;create_time__gt&quot;</span><span class="p">:</span> <span class="s2">&quot;1982-02-01T06:21:56&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;96a93baf-af17-44cc-ab3f-80a4c45296c6&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">385</span><span class="p">,</span>
+    <span class="nt">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="attach_to_list">
+<!--[attach_to_list]--><code class="descname">attach_to_list</code><a class="headerlink" href="#attach_to_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; the Luna API list id to attach the object to is supposed</li>
+<li><strong>filters</strong> (<a class="reference internal" href="#basic_filters"><code class="xref json json-object docutils literal"><span class="pre">basic_filters</span></code></a>) &#8211; A list of filters regulating to attach an object to the Luna API list or not.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;15fc8fb7-2f6f-45bd-a812-8fdefd378646&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">2887</span><span class="p">,</span>
+        <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">7411</span><span class="p">,</span>
+            <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">1431</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">7076</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="age_range">
+<!--[age_range]--><code class="descname">age_range</code><a class="headerlink" href="#age_range" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the start of the age range filter.</li>
+<li><strong>end</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; the end of the age range filter.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">6526</span><span class="p">,</span>
+    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">8910</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="ended_report_for_list">
+<!--[ended_report_for_list]--><code class="descname">ended_report_for_list</code><a class="headerlink" href="#ended_report_for_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>progress</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The task completion percentage.</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task user comment.</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task status, can be done, canceled, or failed.</li>
+<li><strong>format</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The report format. Can be <cite>pdf</cite> or <cite>csv</cite>.</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The report id.</li>
+<li><strong>task_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The source task id for the report.</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The last update time, the task finish time also if the task is finished.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The task create time.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">9142184.3</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;woodcourtney&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;lclark&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;watsonrobert&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">8416</span><span class="p">,</span>
+    <span class="nt">&quot;task_id&quot;</span><span class="p">:</span> <span class="mi">4675</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;1979-04-17T07:53:09&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1973-04-24T06:14:40&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="group_search_result">
+<!--[group_search_result]--><code class="descname">group_search_result</code><a class="headerlink" href="#group_search_result" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>candidates</strong> (<a class="reference internal" href="#core_match"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">core_match</span></code></a> | <a class="reference internal" href="#match"><code class="xref json json-object docutils literal"><span class="pre">_list_match</span></code></a>) &#8211; The search result candidates.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="group_attributes">
+<!--[group_attributes]--><code class="descname">group_attributes</code><a class="headerlink" href="#group_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>age</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The age of the groups calculated according to the rules established in the handler.</li>
+<li><strong>gender</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The gender of the group, is calculated according to the rules established in the handler.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">3312</span><span class="p">,</span>
+    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mf">657258887.8428</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="face">
+<!--[face]--><code class="descname">face</code><a class="headerlink" href="#face" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>rectISO</strong> (<a class="reference internal" href="#rect"><code class="xref json json-object docutils literal"><span class="pre">rect</span></code></a>) &#8211; Face portrait bounding box.</li>
+<li><strong>score</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Face detection confidence.</li>
+<li><strong>attributes</strong> &#8211; Face attributes estimation.</li>
+<li><strong>quality?</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Image quality estimation.</li>
+<li><strong>rect</strong> (<a class="reference internal" href="#rect"><code class="xref json json-object docutils literal"><span class="pre">rect</span></code></a>) &#8211; Face detection bounding box.</li>
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; Face descriptor unique identifier.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;rectISO&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">3698</span><span class="p">,</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">9999</span><span class="p">,</span>
+        <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">2088</span><span class="p">,</span>
+        <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">3153</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;score&quot;</span><span class="p">:</span> <span class="mf">26.42786471087</span><span class="p">,</span>
+    <span class="nt">&quot;attributes&quot;</span><span class="p">:</span> <span class="s2">&quot;� (Unspecified)&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;attributes?&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mf">0.4341</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mf">4771.79</span><span class="p">,</span>
+        <span class="nt">&quot;eyeGlasses&quot;</span><span class="p">:</span> <span class="mf">118043282287.73</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;quality?&quot;</span><span class="p">:</span> <span class="mf">612357.675246776</span><span class="p">,</span>
+    <span class="nt">&quot;rect&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">4390</span><span class="p">,</span>
+        <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1217</span><span class="p">,</span>
+        <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">7698</span><span class="p">,</span>
+        <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">7784</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;5ab993ed-aa82-4385-80fd-775ef836341c&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="groups">
+<!--[groups]--><code class="descname">groups</code><a class="headerlink" href="#groups" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>groups</strong> (<a class="reference internal" href="es.html#group"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">group</span></code></a>) &#8211; List of groups.</li>
+<li><strong>total</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Total number of groups.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;groups&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rou&quot;</span><span class="p">:</span> <span class="s2">&quot;{rou object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rou&quot;</span><span class="p">:</span> <span class="s2">&quot;{rou object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rou&quot;</span><span class="p">:</span> <span class="s2">&quot;{rou object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">2073</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="core_match_result">
+<!--[core_match_result]--><code class="descname">core_match_result</code><a class="headerlink" href="#core_match_result" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>candidates</strong> (<a class="reference internal" href="#core_match"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">core_match</span></code></a>) &#8211; Matching results list.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ore_matc&quot;</span><span class="p">:</span> <span class="s2">&quot;{ore_matc object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="handler_id">
+<!--[handler_id]--><code class="descname">handler_id</code><a class="headerlink" href="#handler_id" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>handler_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The id of the created handler.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;handler_id&quot;</span><span class="p">:</span> <span class="s2">&quot;a29a0269-3f8e-4dfb-81e1-981110cf918c&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="ended_task_for_list">
+<!--[ended_task_for_list]--><code class="descname">ended_task_for_list</code><a class="headerlink" href="#ended_task_for_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>progress</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The task completion percentage.</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task user comment.</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The last update time, the task finish time also if the task is finished.</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; task type</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; the status of the task, can be either done, or canceled, or completed with an error</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; task id</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The task create time.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">90797629631074.1</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;dunnbrandon&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;2003-07-17T12:09:17&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ashleythompson&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;andrewtaylor&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1957</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;2018-05-31T17:22:25&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="create_person_policy">
+<!--[create_person_policy]--><code class="descname">create_person_policy</code><a class="headerlink" href="#create_person_policy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>create_filters</strong> (<a class="reference internal" href="#basic_filters"><code class="xref json json-object docutils literal"><span class="pre">basic_filters</span></code></a>) &#8211; The list of filters regulating a person creation.</li>
+<li><strong>create_person</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Create a person or not. Allowed values are <cite>1</cite> or <cite>0</cite>.</li>
+<li><strong>attach_policy</strong> (<a class="reference internal" href="#attach_to_list"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">attach_to_list</span></code></a>) &#8211; A list of rules for attaching the created person to the lists.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">1774</span><span class="p">,</span>
+        <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">5743</span><span class="p">,</span>
+            <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">9462</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">],</span>
+            <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">8855</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">5510</span><span class="p">,</span>
+    <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="extract_policy">
+<!--[extract_policy]--><code class="descname">extract_policy</code><a class="headerlink" href="#extract_policy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>score_threshold</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The extracted face quality threshold value. The descriptor will not be extracted if face quality is smaller than threshold.</li>
+<li><strong>estimate_quality</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Calculate the &#8220;quality&#8221; of the extracted face or not. Allowed values are <cite>1</cite> or <cite>0</cite>.</li>
+<li><strong>estimate_attributes</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Calculate attributes of the extracted face: sex, age, the presence of glasses or not. Allowed values are <cite>1</cite> or <cite>0</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;score_threshold&quot;</span><span class="p">:</span> <span class="mf">320.960595229</span><span class="p">,</span>
+    <span class="nt">&quot;estimate_quality&quot;</span><span class="p">:</span> <span class="mi">7183</span><span class="p">,</span>
+    <span class="nt">&quot;estimate_attributes&quot;</span><span class="p">:</span> <span class="mi">2253</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="rect">
+<!--[rect]--><code class="descname">rect</code><a class="headerlink" href="#rect" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>width</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Rectangle width.</li>
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Rectangle height.</li>
+<li><strong>y</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Top left corner y coordinate.</li>
+<li><strong>x</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Top left corner x coordinate.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;width&quot;</span><span class="p">:</span> <span class="mi">6586</span><span class="p">,</span>
+    <span class="nt">&quot;height&quot;</span><span class="p">:</span> <span class="mi">2681</span><span class="p">,</span>
+    <span class="nt">&quot;y&quot;</span><span class="p">:</span> <span class="mi">437</span><span class="p">,</span>
+    <span class="nt">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1216</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="cross_matching_reference">
+<!--[cross_matching_reference]--><code class="descname">cross_matching_reference</code><a class="headerlink" href="#cross_matching_reference" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>filters</strong> (<a class="reference internal" href="#task_filters"><code class="xref json json-object docutils literal"><span class="pre">task_filters</span></code></a>) &#8211; The reference selection filters.</li>
+<li><strong>objects</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The references objects. Allowed values are <cite>events</cite>, <cite>groups</cite> or <cite>luna_list</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age__lt&quot;</span><span class="p">:</span> <span class="mi">5553</span><span class="p">,</span>
+        <span class="nt">&quot;create_time__lt&quot;</span><span class="p">:</span> <span class="s2">&quot;2007-04-13T12:05:34&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;age__gt&quot;</span><span class="p">:</span> <span class="mi">8789</span><span class="p">,</span>
+        <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;similarity__gt&quot;</span><span class="p">:</span> <span class="mf">96770311.784</span><span class="p">,</span>
+        <span class="nt">&quot;handler_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;{uid object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;create_time__gt&quot;</span><span class="p">:</span> <span class="s2">&quot;1998-05-17T08:38:09&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;6dadac87-9a50-4714-bb3b-c6a766b95a49&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">7048</span><span class="p">,</span>
+        <span class="nt">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;objects&quot;</span><span class="p">:</span> <span class="s2">&quot;warnerrichard&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="cross_matching_candidate">
+<!--[cross_matching_candidate]--><code class="descname">cross_matching_candidate</code><a class="headerlink" href="#cross_matching_candidate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The candidates Luna API list to match with.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2b1b64cd-85a6-4775-9a4a-db6a71c6c584&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="searchresponse">
+<!--[searchresponse]--><code class="descname">searchResponse</code><a class="headerlink" href="#searchresponse" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first simple">
+<li><strong>total</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The results number in the response.</li>
+<li><strong>hits</strong> (<em>_list_object</em>) &#8211; Result array. Result is an ordered key-value pair: the key format depends on the grouping method, the format of the value is number. Pay attention that day grouping periods start as in GMT time zone. For example, if the Facestreammanager 2 is located in time zone GMT+03:00, than day starts is at 03:00 in local time.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Examples:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">groupStep1d:</th><td class="field-body"><div class="first highlight-js"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;hits&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;2017-11-14T03:00:00Z&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;2017-11-15T03:00:00Z&quot;</span><span class="p">,</span> <span class="mi">47</span><span class="p">]],</span> <span class="s2">&quot;total&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">groupStep1dAvgAge:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><div class="first highlight-js"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;hits&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;2017-11-14T03:00:00Z&quot;</span><span class="p">,</span> <span class="mf">27.96410233322184</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;2017-11-15T03:00:00Z&quot;</span><span class="p">,</span> <span class="mf">34.33495368785891</span><span class="p">]],</span> <span class="s2">&quot;total&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">groupStep1dMaxGender:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><div class="first highlight-js"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;hits&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;2017-11-14T03:00:00Z&quot;</span><span class="p">,</span> <span class="mf">0.8214666400490959</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;2017-11-15T03:00:00Z&quot;</span><span class="p">,</span> <span class="mf">0.7103766001908647</span><span class="p">]],</span> <span class="s2">&quot;total&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">daysOfWeek:</th><td class="field-body"><div class="first last highlight-js"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;hits&quot;</span><span class="o">:</span> <span class="p">[[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="mi">41</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;6&quot;</span> <span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;7&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">]],</span> <span class="s2">&quot;total&quot;</span><span class="o">:</span> <span class="mi">7</span><span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="object">
+<dt id="hittopsuccess">
+<!--[hittopsuccess]--><code class="descname">hitTopSuccess</code><a class="headerlink" href="#hittopsuccess" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>tops</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>_list_float</em></a>) &#8211; The ordered array of <em>n</em> elements containing probabilities of hits in the first <em>n</em> results</li>
+<li><strong>total</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The number <em>n</em> of items.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;tops&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;loa&quot;</span><span class="p">:</span> <span class="s2">&quot;{loa object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;loa&quot;</span><span class="p">:</span> <span class="s2">&quot;{loa object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;loa&quot;</span><span class="p">:</span> <span class="s2">&quot;{loa object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">293</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="handler_create">
+<!--[handler_create]--><code class="descname">handler_create</code><a class="headerlink" href="#handler_create" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_policy</strong> (<a class="reference internal" href="#person_policy"><code class="xref json json-object docutils literal"><span class="pre">person_policy</span></code></a>) &#8211; A person creation from the descriptor and person attaching to the lists rules.</li>
+<li><strong>multiple_faces_policy</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Handle multiple entities in the incoming event or not. Allowed values are <cite>1</cite> or <cite>0</cite>.</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The handler type. Allowed values are <cite>extract</cite> or <cite>search</cite></li>
+<li><strong>grouping_policy</strong> (<a class="reference internal" href="#grouping_policy"><code class="xref json json-object docutils literal"><span class="pre">grouping_policy</span></code></a>) &#8211; Combining events into groups, creating persons from the groups and attaching the created persons to Luna API lists.</li>
+<li><strong>descriptor_policy</strong> (<a class="reference internal" href="#descriptor_policy"><code class="xref json json-object docutils literal"><span class="pre">descriptor_policy</span></code></a>) &#8211; Attaching the extracted descriptor to Luna API descriptor lists rules.</li>
+<li><strong>search_policy</strong> (<a class="reference internal" href="#search_policy"><code class="xref json json-object docutils literal"><span class="pre">search_policy</span></code></a>) &#8211; rules for Search similar descriptors rules. Is required if the handler type is &#8220;search&#8221;.</li>
+<li><strong>extract_policy</strong> (<a class="reference internal" href="#extract_policy"><code class="xref json json-object docutils literal"><span class="pre">extract_policy</span></code></a>) &#8211; The flags list to be included when extracting the descriptor.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The handler name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">5176</span><span class="p">,</span>
+                <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">3355</span><span class="p">,</span>
+                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">9959</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">2256</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">6553</span><span class="p">,</span>
+            <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;multiple_faces_policy&quot;</span><span class="p">:</span> <span class="mi">851</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;reillyrebecca&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;grouping_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">3696</span><span class="p">,</span>
+        <span class="nt">&quot;grouper&quot;</span><span class="p">:</span> <span class="mi">350</span><span class="p">,</span>
+        <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">5486</span><span class="p">,</span>
+                <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">2705</span><span class="p">,</span>
+                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">6830</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">1608</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">7678</span><span class="p">,</span>
+            <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;ttl&quot;</span><span class="p">:</span> <span class="mi">6303</span><span class="p">,</span>
+        <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">72365263.0</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">5387</span><span class="p">,</span>
+        <span class="nt">&quot;search&quot;</span><span class="p">:</span> <span class="mi">5736</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;descriptor_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;search_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;search_lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;earch_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{earch_lis object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;search_priority&quot;</span><span class="p">:</span> <span class="mi">4838</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;extract_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;score_threshold&quot;</span><span class="p">:</span> <span class="mf">4721.262701672</span><span class="p">,</span>
+        <span class="nt">&quot;estimate_quality&quot;</span><span class="p">:</span> <span class="mi">737</span><span class="p">,</span>
+        <span class="nt">&quot;estimate_attributes&quot;</span><span class="p">:</span> <span class="mi">5805</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;turnerrandy&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="taskerrors">
+<!--[taskerrors]--><code class="descname">taskErrors</code><a class="headerlink" href="#taskerrors" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>errors</strong> (<a class="reference internal" href="#error_response"><code class="xref json json-object docutils literal"><span class="pre">list</span> <span class="pre">of</span> <span class="pre">error_response</span></code></a>) &#8211; An error list.</li>
+<li><strong>total</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The errors number.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;errors&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rror_respons&quot;</span><span class="p">:</span> <span class="s2">&quot;{rror_respons object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rror_respons&quot;</span><span class="p">:</span> <span class="s2">&quot;{rror_respons object}&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;rror_respons&quot;</span><span class="p">:</span> <span class="s2">&quot;{rror_respons object}&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;total&quot;</span><span class="p">:</span> <span class="mi">2013</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="error_response">
+<!--[error_response]--><code class="descname">error_response</code><a class="headerlink" href="#error_response" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>error_code</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; System error code.</li>
+<li><strong>detail</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; Error description.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;error_code&quot;</span><span class="p">:</span> <span class="mi">9918</span><span class="p">,</span>
+    <span class="nt">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;kbaird&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="list_filter">
+<!--[list_filter]--><code class="descname">list_filter</code><a class="headerlink" href="#list_filter" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The Luna API list id.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Similarity threshold for the list.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;fb2cba26-7884-4991-a93a-ec3fa4e60219&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">4844.6</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="grouping_policy">
+<!--[grouping_policy]--><code class="descname">grouping_policy</code><a class="headerlink" href="#grouping_policy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>age</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Age aggregator for the group of events. Now the only kind of aggregator is available - mean value.</li>
+<li><strong>grouper</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The events grouping policy: * 1 - by the face track id from which the image was obtained; * 2 - by the similarity to last events from this handler and the given source; 3 - mixed grouping, by id of the track and similarity.</li>
+<li><strong>create_person_policy</strong> (<a class="reference internal" href="#create_person_policy"><code class="xref json json-object docutils literal"><span class="pre">create_person_policy</span></code></a>) &#8211; The creating a person from the group policy. The person is created when the group closes. It is impossible to create a person from the group, if a person is created from the descriptor.</li>
+<li><strong>ttl</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; A group time to live. Group closes if no events added during this period. Period in seconds.</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The events grouping similarity threshold for the second and third grouping policy. The new event is assigned to the group if the new event is similar to any of the events from the group with similarity more than this number. If there are several proper groups, then event is attached to the one to which the most similar descriptor belongs.</li>
+<li><strong>gender</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; An events&#8217; group gender aggregator. Now two types of aggregators are available: * 1 - maximum deviation from 0.5; * 2 - average value.</li>
+<li><strong>search</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The search results aggregator. Now there are two types of aggregators available: * 1 - top 3 results by similarity; * 2 - top 3 results by the majority voting.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">8766</span><span class="p">,</span>
+    <span class="nt">&quot;grouper&quot;</span><span class="p">:</span> <span class="mi">66</span><span class="p">,</span>
+    <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">7071</span><span class="p">,</span>
+            <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">7705</span><span class="p">,</span>
+                <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">7236</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">5660</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">1789</span><span class="p">,</span>
+        <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;ttl&quot;</span><span class="p">:</span> <span class="mi">6494</span><span class="p">,</span>
+    <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">34286.671</span><span class="p">,</span>
+    <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">9596</span><span class="p">,</span>
+    <span class="nt">&quot;search&quot;</span><span class="p">:</span> <span class="mi">6361</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="taskid">
+<!--[taskid]--><code class="descname">taskId</code><a class="headerlink" href="#taskid" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>task_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Task number in the system.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;task_id&quot;</span><span class="p">:</span> <span class="mi">9779</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="core_match">
+<!--[core_match]--><code class="descname">core_match</code><a class="headerlink" href="#core_match" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>similarity</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Similarity with the reference descriptor. * 1 means that descriptors are extracted from the same images * numbers close to 1 mean the descriptors belong the same person * numbers close to 0 mean the descriptors belong different persons</li>
+<li><strong>id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; Matched descriptor identifier.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">11.1838253</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;3f5f10dd-a778-4d02-bb68-34cdb6120ed0&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="extract_handler">
+<!--[extract_handler]--><code class="descname">extract_handler</code><a class="headerlink" href="#extract_handler" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>person_policy</strong> (<a class="reference internal" href="#person_policy"><code class="xref json json-object docutils literal"><span class="pre">person_policy</span></code></a>) &#8211; Person creation from the descriptor and person attaching to the lists rules.</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The handler type. Allowed values are <cite>extract</cite> or <cite>search</cite>.</li>
+<li><strong>multiple_faces_policy</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; Handle or not multiple faces in the incoming event, only available if the handler type is extract. Allowed values are <cite>1</cite> or <cite>0</cite>.</li>
+<li><strong>grouping_policy</strong> (<a class="reference internal" href="#grouping_policy"><code class="xref json json-object docutils literal"><span class="pre">grouping_policy</span></code></a>) &#8211; Events combining into groups, creating persons from the groups and attaching created persons to Luna API lists rules.</li>
+<li><strong>descriptor_policy</strong> (<a class="reference internal" href="#descriptor_policy"><code class="xref json json-object docutils literal"><span class="pre">descriptor_policy</span></code></a>) &#8211; The extracted descriptor attach to Luna API descriptor lists rules.</li>
+<li><strong>handler_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The handler id.</li>
+<li><strong>extract_policy</strong> (<a class="reference internal" href="#extract_policy"><code class="xref json json-object docutils literal"><span class="pre">extract_policy</span></code></a>) &#8211; Set of the extract flags to be included when extracting the descriptor.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The handler name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">9444</span><span class="p">,</span>
+                <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">2537</span><span class="p">,</span>
+                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">6355</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">4099</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">9888</span><span class="p">,</span>
+            <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;smithchristopher&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;multiple_faces_policy&quot;</span><span class="p">:</span> <span class="mi">7539</span><span class="p">,</span>
+    <span class="nt">&quot;grouping_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">8492</span><span class="p">,</span>
+        <span class="nt">&quot;grouper&quot;</span><span class="p">:</span> <span class="mi">2912</span><span class="p">,</span>
+        <span class="nt">&quot;create_person_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;create_filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">9156</span><span class="p">,</span>
+                <span class="nt">&quot;age_range&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">6791</span><span class="p">,</span>
+                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">4738</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;similarity_filter&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;lists&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;ist_filte&quot;</span><span class="p">:</span> <span class="s2">&quot;{ist_filte object}&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="nt">&quot;policy&quot;</span><span class="p">:</span> <span class="mi">4146</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;create_person&quot;</span><span class="p">:</span> <span class="mi">9918</span><span class="p">,</span>
+            <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;ttl&quot;</span><span class="p">:</span> <span class="mi">1466</span><span class="p">,</span>
+        <span class="nt">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">331212408085.42</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">335</span><span class="p">,</span>
+        <span class="nt">&quot;search&quot;</span><span class="p">:</span> <span class="mi">6936</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;descriptor_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;attach_policy&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;ttach_to_lis&quot;</span><span class="p">:</span> <span class="s2">&quot;{ttach_to_lis object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;handler_id&quot;</span><span class="p">:</span> <span class="s2">&quot;9b8f6d48-f87e-4d6b-b607-dec65300e810&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;extract_policy&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;score_threshold&quot;</span><span class="p">:</span> <span class="mf">85.70916601501</span><span class="p">,</span>
+        <span class="nt">&quot;estimate_quality&quot;</span><span class="p">:</span> <span class="mi">4455</span><span class="p">,</span>
+        <span class="nt">&quot;estimate_attributes&quot;</span><span class="p">:</span> <span class="mi">5922</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;justin29&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="markup_for_list">
+<!--[markup_for_list]--><code class="descname">markup_for_list</code><a class="headerlink" href="#markup_for_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>progress</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The task completion percentage.</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; The task user comment.</li>
+<li><strong>last_update</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The last update time, the task finish time also if the task is finished.</li>
+<li><strong>create_time</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc3339#section-5.6" title="ISO8601 Date/Time"><em>iso8601</em></a>) &#8211; The task create time.</li>
+<li><strong>task_id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The source report task id.</li>
+<li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The markup id.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">1177354384989.2</span><span class="p">,</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;brianwhite&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;last_update&quot;</span><span class="p">:</span> <span class="s2">&quot;2017-03-13T23:33:11&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;create_time&quot;</span><span class="p">:</span> <span class="s2">&quot;1987-01-26T17:46:48&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;task_id&quot;</span><span class="p">:</span> <span class="mi">4973</span><span class="p">,</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">6412</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="markup_params">
+<!--[markup_params]--><code class="descname">markup_params</code><a class="headerlink" href="#markup_params" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>filters</strong> (<a class="reference internal" href="#markup_filters"><code class="xref json json-object docutils literal"><span class="pre">markup_filters</span></code></a>) &#8211; A set of filters that defines the set marking period</li>
+<li><strong>description</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#str" title="Python String"><em>user_name</em></a>) &#8211; user comment on the task</li>
+<li><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; The maximum of reference objects number for matchings.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;age__lt&quot;</span><span class="p">:</span> <span class="mi">270</span><span class="p">,</span>
+        <span class="nt">&quot;create_time__lt&quot;</span><span class="p">:</span> <span class="s2">&quot;2003-07-13T20:42:41&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;age__gt&quot;</span><span class="p">:</span> <span class="mi">2634</span><span class="p">,</span>
+        <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;similarity__gt&quot;</span><span class="p">:</span> <span class="mf">9751.0</span><span class="p">,</span>
+        <span class="nt">&quot;handler_ids&quot;</span><span class="p">:</span> <span class="s2">&quot;cb8b81e4-57ce-413c-9534-f98e389334df&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;create_time__gt&quot;</span><span class="p">:</span> <span class="s2">&quot;1970-04-23T18:48:43&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="mi">8125</span><span class="p">,</span>
+        <span class="nt">&quot;sources&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;trin&quot;</span><span class="p">:</span> <span class="s2">&quot;{trin object}&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;zcruz&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;limit&quot;</span><span class="p">:</span> <span class="mf">71.37</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="success">
+<!--[success]--><code class="descname">success</code><a class="headerlink" href="#success" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>total_clusters</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The clusters number.</li>
+<li><strong>total_objects</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; The objects for clustering number.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;total_clusters&quot;</span><span class="p">:</span> <span class="mi">4453</span><span class="p">,</span>
+    <span class="nt">&quot;total_objects&quot;</span><span class="p">:</span> <span class="mi">9091</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="candidates">
+<!--[candidates]--><code class="descname">candidates</code><a class="headerlink" href="#candidates" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>list_id</strong> (<a class="reference external" href="https://tools.ietf.org/html/rfc4122#section-4.4" title="UUIDv4 in canonical syntax"><em>uuid4</em></a>) &#8211; The Luna API list to search by.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;list_id&quot;</span><span class="p">:</span> <span class="s2">&quot;b5947693-4e3a-4d93-83a3-93134bdaf555&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="parameters">
+<!--[parameters]--><code class="descname">parameters</code><a class="headerlink" href="#parameters" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>save_portraits</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#int" title="Python Integer"><em>integer</em></a>) &#8211; To save or not the photos for report objects if the format is <cite>csv</cite>. Allowed values are <cite>1</cite> or <cite>0</cite>.</li>
+<li><strong>colors_bounds</strong> (<a class="reference internal" href="#colors_bounds"><code class="xref json json-object docutils literal"><span class="pre">colors_bounds</span></code></a>) &#8211; If the type of the task on which to build the report is cross_matching and the format <cite>pdf</cite> is selected, set here the lower boundaries of similarity for each of the colors.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;save_portraits&quot;</span><span class="p">:</span> <span class="mi">3451</span><span class="p">,</span>
+    <span class="nt">&quot;colors_bounds&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;green&quot;</span><span class="p">:</span> <span class="mf">7510543.5</span><span class="p">,</span>
+        <span class="nt">&quot;red&quot;</span><span class="p">:</span> <span class="mf">180180672768725.0</span><span class="p">,</span>
+        <span class="nt">&quot;orange&quot;</span><span class="p">:</span> <span class="mf">7674685460404.0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="object">
+<dt id="colors_bounds">
+<!--[colors_bounds]--><code class="descname">colors_bounds</code><a class="headerlink" href="#colors_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Object Properties:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li><strong>green</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Images with similarity more than this parameter will be marked in green.</li>
+<li><strong>red</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; images with similarity more than this parameter will be marked in red.</li>
+<li><strong>orange</strong> (<a class="reference external" href="https://docs.python.org/library/stdtypes.html#float" title="Python Float"><em>float</em></a>) &#8211; Images with similarity more than this parameter will be marked in orange.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<strong>JSON Example</strong><div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;green&quot;</span><span class="p">:</span> <span class="mf">5051.488302</span><span class="p">,</span>
+    <span class="nt">&quot;red&quot;</span><span class="p">:</span> <span class="mf">85.672528</span><span class="p">,</span>
+    <span class="nt">&quot;orange&quot;</span><span class="p">:</span> <span class="mf">34553.81504273</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="es.html">Database structure</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Visionlabs.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.
+    </div>
+  </body>
+</html>

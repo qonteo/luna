@@ -1,0 +1,13 @@
+[Unit]
+Description=Luna Faces
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5
+SyslogIdentifier=luna-faces
+WorkingDirectory=/var/lib/luna/current/luna-faces/luna_faces
+ExecStart=/var/lib/luna/current/luna-faces/venv/bin/python3 /var/lib/luna/current/luna-faces/luna_faces/run.py --workers=4 --port=5030
+
+[Install]
+WantedBy=multi-user.target

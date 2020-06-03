@@ -1,0 +1,20 @@
+v.1.0.2
+=======
+
+Improvements:
+-------------
+
+    #) DB config for alembic locates in *luna_admin/configs/alembic_config.py*
+
+Bugs fixed:
+-----------
+
+How to update from previous version:
+------------------------------------
+
+To update from previous version simply replace folders *luna_admin, tests, docs* and update dependencies from
+requirements.txt. Then run the commands:
+
+.. code-block:: bash
+
+	alembic upgrade head

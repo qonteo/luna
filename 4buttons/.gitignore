@@ -1,0 +1,6 @@
+*.idea
+*__pycache__*
+*env/*
+*.pyc
+*/static_/*
+app.db
