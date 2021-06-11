@@ -9,7 +9,7 @@ voluptuous==0.9.3
 redis==2.10.5
 aioredis==0.3.0
 python-dateutil==2.6.0
-websockets==3.4
+websockets==9.1
 tzlocal==1.4
 uvloop==0.11.2
 httptools==0.0.11
