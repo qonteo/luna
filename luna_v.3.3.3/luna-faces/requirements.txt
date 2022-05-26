@@ -1,7 +1,7 @@
 requests==2.18.4
 tornado==5.0.1
 logbook==1.1.0
-ujson==1.35
+ujson==5.2.0
 python-interface==1.4.0
 faker==0.7.10
 sqlalchemy-utils==0.32.13
